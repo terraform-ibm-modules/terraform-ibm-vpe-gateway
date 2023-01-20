@@ -8,7 +8,7 @@ import (
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
-const nonDefaultExampleTerraformDir = "examples/non-default"
+const nonDefaultExampleTerraformDir = "examples/default"
 
 func TestRunNonDefaultExample(t *testing.T) {
 	t.Parallel()
