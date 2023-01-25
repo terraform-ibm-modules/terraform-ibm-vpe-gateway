@@ -9,7 +9,7 @@ terraform {
       version = "~>1.43.0"
     }
   }
-  required_version = ">=1.2"
+  required_version = ">=1.3"
   experiments      = [module_variable_optional_attrs]
 }
 
