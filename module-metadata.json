@@ -27,7 +27,7 @@
     "create_vpc": {
       "name": "create_vpc",
       "type": "bool",
-      "description": "Provision a VPC instance.",
+      "description": "Create a VPC instance.",
       "default": false,
       "pos": {
         "filename": "variables.tf",
