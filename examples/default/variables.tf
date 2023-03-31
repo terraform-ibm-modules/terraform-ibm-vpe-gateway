@@ -11,13 +11,13 @@ variable "region" {
 variable "prefix" {
   description = "The prefix that you would like to append to your resources"
   type        = string
-  default     = "my-vpe-instance"
+  default     = "vpe"
 }
 
 variable "vpc_name" {
   description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names."
   type        = string
-  default     = "vpc"
+  default     = "my-vpc-instance"
 }
 
 variable "vpc_id" {
