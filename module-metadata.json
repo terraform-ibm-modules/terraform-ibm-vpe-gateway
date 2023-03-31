@@ -8,7 +8,7 @@
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 80
+        "line": 86
       }
     },
     "cloud_services": {
@@ -21,7 +21,17 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 61
+        "line": 67
+      }
+    },
+    "create_vpc": {
+      "name": "create_vpc",
+      "type": "bool",
+      "description": "Provision a VPC instance.",
+      "default": false,
+      "pos": {
+        "filename": "variables.tf",
+        "line": 17
       }
     },
     "prefix": {
@@ -50,7 +60,7 @@
       "description": "ID of the resource group where endpoint gateways will be provisioned",
       "pos": {
         "filename": "variables.tf",
-        "line": 48
+        "line": 54
       }
     },
     "security_group_ids": {
@@ -59,7 +69,7 @@
       "description": "List of security group ids to attach to each endpoint gateway.",
       "pos": {
         "filename": "variables.tf",
-        "line": 54
+        "line": 60
       }
     },
     "service_endpoints": {
@@ -69,7 +79,7 @@
       "default": "private",
       "pos": {
         "filename": "variables.tf",
-        "line": 91
+        "line": 97
       }
     },
     "subnet_zone_list": {
@@ -79,7 +89,7 @@
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 29
+        "line": 35
       }
     },
     "vpc_id": {
@@ -88,7 +98,7 @@
       "description": "ID of the VPC where the Endpoint Gateways will be created",
       "pos": {
         "filename": "variables.tf",
-        "line": 23
+        "line": 29
       }
     },
     "vpc_name": {
@@ -98,7 +108,7 @@
       "default": "vpc",
       "pos": {
         "filename": "variables.tf",
-        "line": 17
+        "line": 23
       }
     }
   },
@@ -124,7 +134,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 55
+        "line": 76
       }
     },
     "ibm_is_virtual_endpoint_gateway.vpe": {
@@ -134,15 +144,14 @@
       "attributes": {
         "name": "prefix",
         "resource_group": "resource_group_id",
-        "security_groups": "security_group_ids",
-        "vpc": "vpc_id"
+        "security_groups": "security_group_ids"
       },
       "provider": {
         "name": "ibm"
       },
       "pos": {
         "filename": "main.tf",
-        "line": 70
+        "line": 91
       }
     },
     "ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip": {
@@ -154,7 +163,23 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 93
+        "line": 114
+      }
+    },
+    "ibm_is_vpc.vpc": {
+      "mode": "managed",
+      "type": "ibm_is_vpc",
+      "name": "vpc",
+      "attributes": {
+        "count": "create_vpc",
+        "name": "prefix"
+      },
+      "provider": {
+        "name": "ibm"
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 65
       }
     }
   },

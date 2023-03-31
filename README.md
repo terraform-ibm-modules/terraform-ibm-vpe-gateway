@@ -149,6 +149,7 @@ No modules.
 | [ibm_is_subnet_reserved_ip.ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_subnet_reserved_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway) | resource |
 | [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway_ip) | resource |
+| [ibm_is_vpc.vpc](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_vpc) | resource |
 
 ## Inputs
 
@@ -156,6 +157,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). | <pre>list(<br>    object({<br>      name = string # service name<br>      crn  = string # service crn<br>    })<br>  )</pre> | `[]` | no |
 | <a name="input_cloud_services"></a> [cloud\_services](#input\_cloud\_services) | List of cloud services to create an endpoint gateway. | `list(string)` | <pre>[<br>  "kms",<br>  "cloud-object-storage"<br>]</pre> | no |
+| <a name="input_create_vpc"></a> [create\_vpc](#input\_create\_vpc) | Provision a VPC instance. | `bool` | `false` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources | `string` | `"vpe"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where VPC and services are deployed | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group where endpoint gateways will be provisioned | `string` | `null` | no |

@@ -3,8 +3,14 @@
 ##############################################################################
 
 locals {
+  # input variable validation
+  # tflint-ignore: terraform_unused_declarations
+  validate_vpc_inputs = var.vpc_id == null && !var.create_vpc ? tobool("var.create_vpc should be set to true if var.vpc_id is set to null") : true
+  # tflint-ignore: terraform_unused_declarations
+  validate_vpc_id_and_create_vpc_both_not_set_inputs = var.vpc_id != null && var.create_vpc ? tobool("var.vpc_id cannot be set whilst var.create_vpc is set to true") : true
+
   # List of Gateways to create
-  gateway_list = var.vpc_id == null ? [] : concat([
+  gateway_list = concat([
     # Create object for each service
     for service in var.cloud_services :
     {
@@ -24,7 +30,7 @@ locals {
   )
 
   # List of IPs to create
-  endpoint_ip_list = var.vpc_id == null ? [] : flatten([
+  endpoint_ip_list = flatten([
     # Create object for each subnet
     for subnet in var.subnet_zone_list :
     [
@@ -44,6 +50,21 @@ locals {
     cloud-object-storage = "crn:v1:bluemix:public:cloud-object-storage:global:::endpoint:s3.direct.${var.region}.cloud-object-storage.appdomain.cloud"
     container-registry   = "crn:v1:bluemix:public:container-registry:${var.region}:::endpoint:vpe.${var.region}.container-registry.cloud.ibm.com"
   }
+}
+
+##############################################################################
+
+##############################################################################
+# Create VPC
+##############################################################################
+
+locals {
+  vpc_instance_id = var.vpc_id == null ? tolist(ibm_is_vpc.vpc[*].id)[0] : var.vpc_id
+}
+
+resource "ibm_is_vpc" "vpc" {
+  count = var.create_vpc ? 1 : 0
+  name  = "${var.prefix}-${var.vpc_name}"
 }
 
 ##############################################################################
@@ -75,7 +96,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
   }
 
   name            = "${var.prefix}-${each.key}-endpoint-gateway"
-  vpc             = var.vpc_id
+  vpc             = local.vpc_instance_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
   target {

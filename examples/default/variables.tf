@@ -39,6 +39,12 @@ variable "subnet_zone_list" {
   default = []
 }
 
+variable "create_vpc" {
+  description = "Create VPC."
+  type        = bool
+  default     = false
+}
+
 ##############################################################################
 
 ##############################################################################
