@@ -15,7 +15,7 @@ variable "prefix" {
 }
 
 variable "create_vpc" {
-  description = "Provision a VPC instance."
+  description = "Create a VPC instance."
   type        = bool
   default     = false
 }

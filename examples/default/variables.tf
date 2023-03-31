@@ -40,7 +40,7 @@ variable "subnet_zone_list" {
 }
 
 variable "create_vpc" {
-  description = "Create VPC."
+  description = "Create a VPC instance."
   type        = bool
   default     = false
 }
