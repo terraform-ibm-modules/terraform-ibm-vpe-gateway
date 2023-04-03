@@ -8,9 +8,13 @@
 
 This module can be used to create and configure an [Endpoint Gateway](https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-endpoint-gateway&interface=ui).
 
+The module supports creating and updating settings that are applied with the `terraform apply` command. With objects
+affected by the `destroy` command, the module preserves the most recent setting and doesn't change objects that are
+configured outside of Terraform's scope.
+
 ## Usage
 
-```terraform
+```hcl
 provider "ibm" {
   ibmcloud_api_key = "XXXXXXXXXX" # pragma: allowlist secret
   region           = "us-south"
@@ -61,14 +65,11 @@ You need the following permissions to run this module.
     - **VPE Infrastructure** services
         - `Editor` platform access
 
-
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
-- [Default Example](examples/default)
-- [Security Group Example](examples/security-group)
+- [Examples](examples)
 <!-- END EXAMPLES HOOK -->
----
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
