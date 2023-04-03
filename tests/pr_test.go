@@ -13,16 +13,21 @@ const resourceGroup = "geretain-test-resources"
 const defaultExampleTerraformDir = "examples/default"
 const securityGroupExampleTerraformDir = "examples/security-group"
 
+func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  dir,
+		Prefix:        prefix,
+		ResourceGroup: resourceGroup,
+		Region:        region
+	})
+	return options
+}
+
 func TestRunDefaultExample(t *testing.T) {
 	t.Parallel()
 
-	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  defaultExampleTerraformDir,
-		Prefix:        "mod-template",
-		ResourceGroup: resourceGroup,
-	})
-
+	options := setupOptions(t, "vpe-default", defaultExampleTerraformDir)
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
@@ -31,13 +36,7 @@ func TestRunDefaultExample(t *testing.T) {
 func TestRunSecurityGroupExample(t *testing.T) {
 	t.Parallel()
 
-	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  securityGroupExampleTerraformDir,
-		Prefix:        "mod-template",
-		ResourceGroup: resourceGroup,
-	})
-
+	options := setupOptions(t, "vpe-security-group", securityGroupExampleTerraformDir)
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
@@ -46,16 +45,7 @@ func TestRunSecurityGroupExample(t *testing.T) {
 func TestRunUpgradeExample(t *testing.T) {
 	t.Parallel()
 
-	// TODO: Remove this line after the first merge to master branch is complete to enable upgrade test
-	t.Skip("Skipping upgrade test until initial code is in master branch")
-
-	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  defaultExampleTerraformDir,
-		Prefix:        "mod-template-upg",
-		ResourceGroup: resourceGroup,
-	})
-
+	options := setupOptions(t, "vpe-upgrade", defaultExampleTerraformDir)
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {
 		assert.Nil(t, err, "This should not have errored")
