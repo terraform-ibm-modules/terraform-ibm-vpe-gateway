@@ -14,7 +14,7 @@ const defaultExampleTerraformDir = "examples/default"
 const securityGroupExampleTerraformDir = "examples/security-group"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
-	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  dir,
 		Prefix:        prefix,
