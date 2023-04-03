@@ -11,6 +11,7 @@ import (
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
 const defaultExampleTerraformDir = "examples/default"
+const securityGroupExampleTerraformDir = "examples/security-group"
 
 func TestRunDefaultExample(t *testing.T) {
 	t.Parallel()
@@ -18,6 +19,21 @@ func TestRunDefaultExample(t *testing.T) {
 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  defaultExampleTerraformDir,
+		Prefix:        "mod-template",
+		ResourceGroup: resourceGroup,
+	})
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
+
+func TestRunSecurityGroupExample(t *testing.T) {
+	t.Parallel()
+
+	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  securityGroupExampleTerraformDir,
 		Prefix:        "mod-template",
 		ResourceGroup: resourceGroup,
 	})
