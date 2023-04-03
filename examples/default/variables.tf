@@ -21,41 +21,12 @@ variable "prefix" {
 ##############################################################################
 
 variable "vpc_name" {
-  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names."
+  description = "Name of the VPC."
   type        = string
   default     = "my-vpc-instance"
 }
 
-variable "vpc_id" {
-  description = "ID of the VPC where the Endpoint Gateways will be created"
-  type        = string
-  default     = null
-}
-
-variable "create_vpc" {
-  description = "Create a VPC instance."
-  type        = bool
-  default     = true
-}
-
 ##############################################################################
-
-##############################################################################
-# VPE Variables
-##############################################################################
-
-variable "subnet_zone_list" {
-  description = "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the ICSE VPC Subnet Module (https://github.com/Cloud-Schematics/vpc-subnet-module) or from templates using that module for subnet creation."
-  type = list(
-    object({
-      name = string
-      id   = string
-      zone = optional(string)
-      cidr = optional(string)
-    })
-  )
-  default = []
-}
 
 variable "resource_group_id" {
   description = "ID of the resource group where endpoint gateways will be provisioned"

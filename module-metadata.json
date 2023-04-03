@@ -8,7 +8,7 @@
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 86
+        "line": 80
       }
     },
     "cloud_services": {
@@ -21,7 +21,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 67
+        "line": 61
       }
     },
     "prefix": {
@@ -61,7 +61,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 54
+        "line": 48
       },
       "cloud_data_type": "resource_group",
       "immutable": true,
@@ -76,7 +76,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 60
+        "line": 54
       },
       "computed": true,
       "elem": {
@@ -90,17 +90,17 @@
       "default": "private",
       "pos": {
         "filename": "variables.tf",
-        "line": 97
+        "line": 91
       }
     },
     "subnet_zone_list": {
       "name": "subnet_zone_list",
       "type": "list(\n    object({\n      name = string\n      id   = string\n      zone = optional(string)\n      cidr = optional(string)\n    })\n  )",
-      "description": "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the ICSE VPC Subnet Module (https://github.com/Cloud-Schematics/vpc-subnet-module) or from templates using that module for subnet creation.",
+      "description": "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation.",
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 35
+        "line": 29
       }
     },
     "vpc_id": {
@@ -113,7 +113,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 29
+        "line": 23
       },
       "immutable": true
     },
@@ -124,7 +124,7 @@
       "default": "vpc",
       "pos": {
         "filename": "variables.tf",
-        "line": 23
+        "line": 17
       }
     }
   },

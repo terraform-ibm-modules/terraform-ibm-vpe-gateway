@@ -14,12 +14,6 @@ variable "prefix" {
   default     = "vpe"
 }
 
-# variable "create_vpc" {
-#   description = "Create a VPC instance."
-#   type        = bool
-#   default     = false
-# }
-
 variable "vpc_name" {
   description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names."
   type        = string
@@ -33,7 +27,7 @@ variable "vpc_id" {
 }
 
 variable "subnet_zone_list" {
-  description = "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the ICSE VPC Subnet Module (https://github.com/Cloud-Schematics/vpc-subnet-module) or from templates using that module for subnet creation."
+  description = "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation."
   type = list(
     object({
       name = string
