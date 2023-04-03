@@ -172,3 +172,9 @@ variable "add_ibm_cloud_internal_rules" {
   type        = bool
   default     = false
 }
+
+variable "resource_tags" {
+  type        = list(string)
+  description = "Optional list of tags to be added to created resources"
+  default     = []
+}
