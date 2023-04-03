@@ -63,13 +63,6 @@ variable "subnet_zone_list" {
   default = []
 }
 
-variable "security_group_ids" {
-  description = "List of security group ids to attach to each endpoint gateway."
-  type        = list(string)
-  default     = null
-}
-
-
 variable "cloud_services" {
   description = "List of cloud services to create an endpoint gateway."
   type        = list(string)
@@ -112,3 +105,70 @@ variable "service_endpoints" {
 }
 
 ##############################################################################
+
+##############################################################################
+# Security Group Variables
+##############################################################################
+variable "security_group_rules" {
+  description = "A list of security group rules to be added to the default vpc security group"
+  type = list(
+    object({
+      name      = string
+      direction = string
+      remote    = string
+      tcp = optional(
+        object({
+          port_max = optional(number)
+          port_min = optional(number)
+        })
+      )
+      udp = optional(
+        object({
+          port_max = optional(number)
+          port_min = optional(number)
+        })
+      )
+      icmp = optional(
+        object({
+          type = optional(number)
+          code = optional(number)
+        })
+      )
+    })
+  )
+  default = [{
+    name      = "allow-all-inbound"
+    direction = "inbound"
+    remote    = "0.0.0.0/0"
+    }, {
+    name      = "sgr-tcp"
+    direction = "inbound"
+    remote    = "0.0.0.0/0"
+    tcp = {
+      port_min = 8080
+      port_max = 8080
+    }
+    }, {
+    name      = "sgr-udp"
+    direction = "inbound"
+    remote    = "0.0.0.0/0"
+    udp = {
+      port_min = 805
+      port_max = 807
+    }
+    }, {
+    name      = "sgr-icmp"
+    direction = "inbound"
+    remote    = "0.0.0.0/0"
+    icmp = {
+      code = 20
+      type = 30
+    }
+  }]
+}
+
+variable "add_ibm_cloud_internal_rules" {
+  description = "Add IBM cloud Internal rules to the provided security group rules"
+  type        = bool
+  default     = false
+}

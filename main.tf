@@ -4,7 +4,7 @@
 
 locals {
   # List of Gateways to create
-  gateway_list = var.vpc_id == null ? [] : concat([
+  gateway_list = concat([
     # Create object for each service
     for service in var.cloud_services :
     {
@@ -24,7 +24,7 @@ locals {
   )
 
   # List of IPs to create
-  endpoint_ip_list = var.vpc_id == null ? [] : flatten([
+  endpoint_ip_list = flatten([
     # Create object for each subnet
     for subnet in var.subnet_zone_list :
     [

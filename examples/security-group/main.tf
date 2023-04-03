@@ -34,6 +34,19 @@ resource "ibm_is_vpc" "vpc" {
 }
 
 ##############################################################################
+# Update security group
+##############################################################################
+
+module "create_sgr_rule" {
+  source                       = "git::https://github.com/terraform-ibm-modules/terraform-ibm-security-group.git?ref=v1.0.0"
+  add_ibm_cloud_internal_rules = var.add_ibm_cloud_internal_rules
+  security_group_name          = "${var.prefix}-1"
+  security_group_rules         = var.security_group_rules
+  resource_group               = module.resource_group.resource_group_id
+  vpc_id                       = local.vpc_instance_id
+}
+
+##############################################################################
 # Create VPEs in the VPC
 ##############################################################################
 module "vpes" {
@@ -43,11 +56,11 @@ module "vpes" {
   vpc_name             = var.vpc_name
   vpc_id               = local.vpc_instance_id
   subnet_zone_list     = var.subnet_zone_list
-  resource_group_id    = module.resource_group.resource_group_id
-  security_group_ids   = var.security_group_ids
   cloud_services       = var.cloud_services
   cloud_service_by_crn = var.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
+  security_group_ids   = [module.create_sgr_rule.security_group_id]
+  resource_group_id    = module.resource_group.resource_group_id
 }
 
 ##############################################################################

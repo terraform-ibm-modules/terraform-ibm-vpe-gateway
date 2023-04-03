@@ -29,10 +29,18 @@
       "type": "string",
       "description": "The prefix that you would like to append to your resources",
       "default": "vpe",
+      "required": true,
+      "source": [
+        "ibm_is_virtual_endpoint_gateway.vpe.name"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 11
-      }
+      },
+      "immutable": true,
+      "min_length": 1,
+      "max_length": 63,
+      "matches": "^([a-z]|[a-z][-a-z0-9]*[a-z0-9])$"
     },
     "region": {
       "name": "region",
@@ -48,18 +56,31 @@
       "name": "resource_group_id",
       "type": "string",
       "description": "ID of the resource group where endpoint gateways will be provisioned",
+      "source": [
+        "ibm_is_virtual_endpoint_gateway.vpe.resource_group"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 48
-      }
+      },
+      "cloud_data_type": "resource_group",
+      "immutable": true,
+      "computed": true
     },
     "security_group_ids": {
       "name": "security_group_ids",
       "type": "list(string)",
       "description": "List of security group ids to attach to each endpoint gateway.",
+      "source": [
+        "ibm_is_virtual_endpoint_gateway.vpe.security_groups"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 54
+      },
+      "computed": true,
+      "elem": {
+        "type": "TypeString"
       }
     },
     "service_endpoints": {
@@ -75,7 +96,7 @@
     "subnet_zone_list": {
       "name": "subnet_zone_list",
       "type": "list(\n    object({\n      name = string\n      id   = string\n      zone = optional(string)\n      cidr = optional(string)\n    })\n  )",
-      "description": "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the ICSE VPC Subnet Module (https://github.com/Cloud-Schematics/vpc-subnet-module) or from templates using that module for subnet creation.",
+      "description": "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation.",
       "default": [],
       "pos": {
         "filename": "variables.tf",
@@ -86,10 +107,15 @@
       "name": "vpc_id",
       "type": "string",
       "description": "ID of the VPC where the Endpoint Gateways will be created",
+      "required": true,
+      "source": [
+        "ibm_is_virtual_endpoint_gateway.vpe.vpc"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 23
-      }
+      },
+      "immutable": true
     },
     "vpc_name": {
       "name": "vpc_name",
@@ -110,7 +136,7 @@
     "ibm": {
       "source": "IBM-Cloud/ibm",
       "version_constraints": [
-        "~\u003e1.43.0"
+        "\u003e=1.43.0"
       ]
     }
   },
