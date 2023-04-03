@@ -1,6 +1,8 @@
-##############################################################################
-# VPC Variables
-##############################################################################
+variable "ibmcloud_api_key" {
+  type        = string
+  description = "The IBM Cloud API Key"
+  sensitive   = true
+}
 
 variable "region" {
   description = "The region where VPC and services are deployed"
@@ -14,6 +16,10 @@ variable "prefix" {
   default     = "vpe"
 }
 
+##############################################################################
+# VPC Variables
+##############################################################################
+
 variable "vpc_name" {
   description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names."
   type        = string
@@ -24,19 +30,6 @@ variable "vpc_id" {
   description = "ID of the VPC where the Endpoint Gateways will be created"
   type        = string
   default     = null
-}
-
-variable "subnet_zone_list" {
-  description = "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the ICSE VPC Subnet Module (https://github.com/Cloud-Schematics/vpc-subnet-module) or from templates using that module for subnet creation."
-  type = list(
-    object({
-      name = string
-      id   = string
-      zone = optional(string)
-      cidr = optional(string)
-    })
-  )
-  default = []
 }
 
 variable "create_vpc" {
@@ -50,6 +43,19 @@ variable "create_vpc" {
 ##############################################################################
 # VPE Variables
 ##############################################################################
+
+variable "subnet_zone_list" {
+  description = "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the ICSE VPC Subnet Module (https://github.com/Cloud-Schematics/vpc-subnet-module) or from templates using that module for subnet creation."
+  type = list(
+    object({
+      name = string
+      id   = string
+      zone = optional(string)
+      cidr = optional(string)
+    })
+  )
+  default = []
+}
 
 variable "resource_group_id" {
   description = "ID of the resource group where endpoint gateways will be provisioned"
