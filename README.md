@@ -8,6 +8,9 @@
 
 This module can be used to create and configure an [Endpoint Gateway](https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-endpoint-gateway&interface=ui).
 
+The module supports the following scenarios:
+- Create Reserved IPs, Endpoint Gateways, and Attach Endpoint Gateways to Reserved IPs.
+
 The module supports creating and updating settings that are applied with the `terraform apply` command. With objects
 affected by the `destroy` command, the module preserves the most recent setting and doesn't change objects that are
 configured outside of Terraform's scope.
