@@ -1,4 +1,4 @@
-# IBM VPE Module
+# IBM Virtual Private Endpoints module
 
 [![Incubating (Not yet consumable)](https://img.shields.io/badge/status-Incubating%20(Not%20yet%20consumable)-red)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
 [![Build status](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/actions/workflows/ci.yml/badge.svg)](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/actions/workflows/ci.yml)
