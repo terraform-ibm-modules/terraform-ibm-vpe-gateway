@@ -8,8 +8,9 @@
 
 You can use this module to create and configure virtual private endpoint gateways (https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-endpoint-gateway) for an IBM Cloud service.
 
-The module supports the following scenarios:
-- Create Reserved IPs, Endpoint Gateways, and Attach Endpoint Gateways to Reserved IPs.
+The module supports the following actions:
+- Create reserved IP addresses and endpoint gateways
+- Attach endpoint gateways to reserved IP addresses
 
 The module supports creating and updating settings that are applied with the `terraform apply` command. With objects
 affected by the `destroy` command, the module preserves the most recent setting and doesn't change objects that are
