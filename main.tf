@@ -74,7 +74,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     (gateway.name) => gateway
   }
 
-  name            = "${var.prefix}-${each.key}-endpoint-gateway"
+  name            = "${var.prefix}-${each.key}"
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids

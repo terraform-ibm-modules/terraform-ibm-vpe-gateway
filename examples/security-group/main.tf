@@ -31,6 +31,7 @@ resource "ibm_is_vpc" "vpc" {
   count          = var.create_vpc ? 1 : 0
   name           = "${var.prefix}-${var.vpc_name}"
   resource_group = module.resource_group.resource_group_id
+  tags           = var.resource_tags
 }
 
 ##############################################################################

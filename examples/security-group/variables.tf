@@ -13,13 +13,13 @@ variable "region" {
 variable "prefix" {
   description = "The prefix that you would like to append to your resources"
   type        = string
-  default     = "vpe"
+  default     = "sg-vpe"
 }
 
 variable "resource_group" {
   type        = string
   description = "An existing resource group name to use for this example, if unset a new resource group will be created"
-  default     = null
+  default     = "geretain-test-resources"
 }
 
 ##############################################################################
@@ -171,4 +171,10 @@ variable "add_ibm_cloud_internal_rules" {
   description = "Add IBM cloud Internal rules to the provided security group rules"
   type        = bool
   default     = false
+}
+
+variable "resource_tags" {
+  type        = list(string)
+  description = "Optional list of tags to be added to created resources"
+  default     = []
 }
