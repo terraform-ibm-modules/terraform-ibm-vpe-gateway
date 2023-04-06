@@ -12,10 +12,6 @@ The module supports the following actions:
 - Create reserved IP addresses and endpoint gateways
 - Attach endpoint gateways to reserved IP addresses
 
-The module supports creating and updating settings that are applied with the `terraform apply` command. With objects
-affected by the `destroy` command, the module preserves the most recent setting and doesn't change objects that are
-configured outside of Terraform's scope.
-
 ## Usage
 
 ```hcl
@@ -31,28 +27,28 @@ module "vpes" {
   region           = "us-south"
   prefix           = "vpe"
   vpc_name         = "my-vpc-instance"
-  vpc_id           = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
+  vpc_id           = "r022-ae2a6785-gd62-7d4j-af62-b4891e949345"
   subnet_zone_list = [
     {
       name           = "subnet-1"
-      cidr           = "2.3.4.5/6"
+      cidr           = "10.0.10.0/24"
       public_gateway = true
       acl_name       = "acl"
     },
     {
       name           = "subnet-2"
-      cidr           = "2.3.4.5/7"
+      cidr           = "10.0.11.0/24"
       acl_name       = "acl"
       public_gateway = null
     }
   ]
-  resource_group_id    = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
-  security_group_ids   = ["xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"]
+  resource_group_id    = "00ae4b38253f43a3acd14619dd385632" # pragma: allowlist secret
+  security_group_ids   = ["r014-2d4f8cd6-6g3s-4ab5-ac3f-8fc717ce2a1f"]
   cloud_services       = ["kms", "cloud-object-storage"]
   cloud_service_by_crn = [
     {
       name = "subnet-1"
-      crn  = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
+      crn  = "crn:v1:bluemix:public:kms:au-syd:a/abac0df06b644a9cabc6e44f55b3880e:12d2244b-g3d3-4978-7s3f-81b60a1fb7a4::"
     },
   ]
   service_endpoints = "private"
