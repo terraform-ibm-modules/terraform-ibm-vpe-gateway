@@ -30,7 +30,11 @@ module "vpc" {
 ##############################################################################
 
 data "ibm_is_vpc" "vpc" {
-  name = module.vpc[0].vpc_name
+  # Explicit depends as the vpc_name is known prior to VPC creation
+  depends_on = [
+    module.vpc
+  ]
+  name = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_name
 }
 
 data "ibm_is_security_group" "default_sg" {
