@@ -1,15 +1,16 @@
 # IBM Virtual Private Endpoints module
 
-[![Incubating (Not yet consumable)](https://img.shields.io/badge/status-Incubating%20(Not%20yet%20consumable)-red)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
+[![Stable (With quality checks)](https://img.shields.io/badge/Status-Stable%20(With%20quality%20checks)-green)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
 [![Build status](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/actions/workflows/ci.yml/badge.svg)](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/actions/workflows/ci.yml)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-vpe-module?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/releases/latest)
 
-You can use this module to create and configure virtual private endpoint gateways (https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-endpoint-gateway) for an IBM Cloud service.
+This module creates and configures virtual private endpoint gateways (https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-endpoint-gateway) for an IBM Cloud service.
 
 The module supports the following actions:
-- Create reserved IP addresses and endpoint gateways
+- Create virtual private endpoint gateways
+- Create reserved IP addresses
 - Attach endpoint gateways to reserved IP addresses
 
 ## Usage
@@ -68,7 +69,7 @@ You need the following permissions to run this module.
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
-- [Examples](examples)
+- [ Default example](examples/default)
 <!-- END EXAMPLES HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
