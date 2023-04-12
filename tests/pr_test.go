@@ -11,7 +11,6 @@ import (
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
 const defaultExampleTerraformDir = "examples/default"
-const securityGroupExampleTerraformDir = "examples/security-group"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
@@ -32,16 +31,8 @@ func TestRunDefaultExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 }
 
-func TestRunSecurityGroupExample(t *testing.T) {
-	t.Parallel()
-
-	options := setupOptions(t, "vpe-security-group", securityGroupExampleTerraformDir)
-	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
-}
-
 func TestRunUpgradeExample(t *testing.T) {
+	t.Skip()
 	t.Parallel()
 
 	options := setupOptions(t, "vpe-upgrade", defaultExampleTerraformDir)

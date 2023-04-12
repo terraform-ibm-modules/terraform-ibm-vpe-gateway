@@ -19,7 +19,7 @@ variable "prefix" {
 variable "resource_group" {
   type        = string
   description = "An existing resource group name to use for this example, if unset a new resource group will be created"
-  default     = "geretain-test-resources"
+  default     = null
 }
 
 ##############################################################################
@@ -27,21 +27,15 @@ variable "resource_group" {
 ##############################################################################
 
 variable "vpc_name" {
-  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names."
+  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. It is also used to create a VPC when the vpc_id input is set to null."
   type        = string
-  default     = "my-vpc-instance"
+  default     = "vpc-instance"
 }
 
 variable "vpc_id" {
-  description = "ID of the VPC where the Endpoint Gateways will be created"
+  description = "ID of the VPC where the Endpoint Gateways will be created. Creates a VPC if set to null."
   type        = string
   default     = null
-}
-
-variable "create_vpc" {
-  description = "Create a VPC instance."
-  type        = bool
-  default     = true
 }
 
 ##############################################################################
