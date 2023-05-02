@@ -138,12 +138,6 @@
       "version_constraints": [
         "\u003e=1.43.0"
       ]
-    },
-    "time": {
-      "source": "hashicorp/time",
-      "version_constraints": [
-        "0.9.1"
-      ]
     }
   },
   "managed_resources": {
@@ -186,19 +180,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 101
-      }
-    },
-    "time_sleep.wait_30_seconds": {
-      "mode": "managed",
-      "type": "time_sleep",
-      "name": "wait_30_seconds",
-      "provider": {
-        "name": "time"
-      },
-      "pos": {
-        "filename": "main.tf",
-        "line": 88
+        "line": 93
       }
     }
   },

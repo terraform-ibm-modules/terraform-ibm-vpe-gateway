@@ -71,6 +71,14 @@ module "vpes" {
   cloud_services       = var.cloud_services
   cloud_service_by_crn = var.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
+  depends_on           = [time_sleep.wait_30_seconds]
 }
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [data.ibm_is_security_group.default_sg]
+
+  destroy_duration = "30s"
+}
+
 
 ##############################################################################
