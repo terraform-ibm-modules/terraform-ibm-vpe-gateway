@@ -71,6 +71,15 @@ module "vpes" {
   cloud_services       = var.cloud_services
   cloud_service_by_crn = var.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
+  #  Wait 30secs after security group is destroyed before destroying VPE to workaround timing issue which can produce “Target not found” error on destroy
+  depends_on = [time_sleep.wait_30_seconds]
 }
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [data.ibm_is_security_group.default_sg]
+
+  destroy_duration = "30s"
+}
+
 
 ##############################################################################
