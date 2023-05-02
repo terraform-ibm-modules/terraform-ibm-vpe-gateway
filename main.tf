@@ -82,7 +82,15 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     crn           = each.value.service == null ? each.value.crn : local.service_to_endpoint_map[each.value.service]
     resource_type = "provider_cloud_service"
   }
+  depends_on = [time_sleep.wait_30_seconds]
 }
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [ibm_is_subnet_reserved_ip.ip]
+
+  destroy_duration = "30s"
+}
+
 
 ##############################################################################
 
