@@ -68,19 +68,6 @@ variable "cloud_services" {
   description = "List of cloud services to create an endpoint gateway."
   type        = list(string)
   default     = ["kms", "cloud-object-storage"]
-
-  validation {
-    error_message = "Currently the only supported services are Key Protect (`kms`), Cloud Object Storage (`cloud-object-storage`), Container Registry (`container-registry`), and Hyper Protect Crypto Services (`hs-crypto`). Any other VPE services must be added using `cloud_service_by_crn`."
-    condition = length(var.cloud_services) == 0 ? true : length([
-      for service in var.cloud_services :
-      service if !contains([
-        "kms",
-        "hs-crypto",
-        "cloud-object-storage",
-        "container-registry"
-      ], service)
-    ]) == 0
-  }
 }
 
 variable "cloud_service_by_crn" {

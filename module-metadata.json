@@ -8,7 +8,7 @@
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 80
+        "line": 95
       }
     },
     "cloud_services": {
@@ -90,7 +90,7 @@
       "default": "private",
       "pos": {
         "filename": "variables.tf",
-        "line": 91
+        "line": 106
       }
     },
     "subnet_zone_list": {
@@ -150,7 +150,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 55
+        "line": 70
       }
     },
     "ibm_is_virtual_endpoint_gateway.vpe": {
@@ -168,7 +168,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 70
+        "line": 85
       }
     },
     "ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip": {
@@ -180,7 +180,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 93
+        "line": 108
       }
     }
   },
