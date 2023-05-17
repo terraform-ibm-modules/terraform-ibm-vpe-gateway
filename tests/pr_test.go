@@ -12,6 +12,9 @@ import (
 const resourceGroup = "geretain-test-resources"
 const defaultExampleTerraformDir = "examples/default"
 
+// Not all cloud services supporting VPE works in all the regions. Hence pointing it to the us-south
+const region = "us-south"
+
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	cloudServices := []string{
 		"kms",
@@ -41,6 +44,7 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		Prefix:        prefix,
 		ResourceGroup: resourceGroup,
 		TerraformVars: map[string]interface{}{
+			"region":         region,
 			"cloud_services": cloudServices,
 		},
 	})
