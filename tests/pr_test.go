@@ -20,7 +20,6 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		"kms",
 		"hs-crypto",
 		"cloud-object-storage",
-		"container-registry",
 		"account-management",
 		"billing",
 		"codeengine",
