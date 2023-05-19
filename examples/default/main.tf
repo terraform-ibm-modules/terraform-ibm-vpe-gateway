@@ -56,6 +56,12 @@ module "vpe_security_group" {
   vpc_id         = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [module.vpe_security_group]
+
+  destroy_duration = "30s"
+}
+
 ##############################################################################
 # Create VPEs in the VPC
 ##############################################################################
@@ -74,12 +80,5 @@ module "vpes" {
   #  Wait 30secs after security group is destroyed before destroying VPE to workaround timing issue which can produce “Target not found” error on destroy
   depends_on = [time_sleep.wait_30_seconds]
 }
-
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [data.ibm_is_security_group.default_sg]
-
-  destroy_duration = "30s"
-}
-
 
 ##############################################################################

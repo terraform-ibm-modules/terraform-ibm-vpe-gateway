@@ -12,12 +12,39 @@ import (
 const resourceGroup = "geretain-test-resources"
 const defaultExampleTerraformDir = "examples/default"
 
+const region = "us-south"
+
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+	cloudServices := []string{
+		"kms",
+		"hs-crypto",
+		"cloud-object-storage",
+		"account-management",
+		"billing",
+		"codeengine",
+		"directlink",
+		"dns-svcs",
+		"enterprise",
+		"globalcatalog",
+		"global-search-tagging",
+		"hyperp-dbaas-mongodb",
+		"hyperp-dbaas-postgresql",
+		"iam-svcs",
+		"resource-controller",
+		"transit",
+		"user-management",
+		"is",
+	}
+
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  dir,
 		Prefix:        prefix,
 		ResourceGroup: resourceGroup,
+		TerraformVars: map[string]interface{}{
+			"region":         region,
+			"cloud_services": cloudServices,
+		},
 	})
 	return options
 }
