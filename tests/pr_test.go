@@ -14,9 +14,14 @@ const defaultExampleTerraformDir = "examples/default"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  dir,
-		Prefix:        prefix,
+		Testing:      t,
+		TerraformDir: dir,
+		Prefix:       prefix,
+		IgnoreUpdates: testhelper.Exemptions{ // Ignore for consistency check
+			List: []string{
+				"time_sleep.wait_30_seconds",
+			},
+		},
 		ResourceGroup: resourceGroup,
 	})
 	return options
