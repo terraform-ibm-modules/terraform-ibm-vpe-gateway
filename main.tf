@@ -68,18 +68,13 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
 ##############################################################################
 
 resource "ibm_is_virtual_endpoint_gateway" "vpe" {
-  for_each = {
-    # Create map based on gateway name if enabled
-    for gateway in local.gateway_list :
-    (gateway.name) => gateway
-  }
-
-  name            = "${var.prefix}-${each.key}"
+  count           = length(local.gateway_list)
+  name            = "${var.prefix}-${local.gateway_list[count.index].name}"
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
   target {
-    crn           = each.value.service == null ? each.value.crn : local.service_to_endpoint_map[each.value.service]
+    crn           = local.gateway_list[count.index].service == null ? local.gateway_list[count.index].crn : local.service_to_endpoint_map[local.gateway_list[count.index].service]
     resource_type = "provider_cloud_service"
   }
 }
