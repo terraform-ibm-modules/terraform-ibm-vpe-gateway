@@ -1,9 +1,9 @@
 moved {
-  from = ibm_is_virtual_endpoint_gateway.vpe[1]
-  to   = ibm_is_virtual_endpoint_gateway.vpe["vpc-instance-cloud-object-storage"]
+  from = ibm_is_virtual_endpoint_gateway.vpe["vpc-instance-cloud-object-storage"]
+  to   = ibm_is_virtual_endpoint_gateway.vpe[1]
 }
 
 moved {
-  from = ibm_is_virtual_endpoint_gateway.vpe[0]
-  to   = ibm_is_virtual_endpoint_gateway.vpe["vpc-instance-kms"]
+  from = ibm_is_virtual_endpoint_gateway.vpe["vpc-instance-kms"]
+  to   = ibm_is_virtual_endpoint_gateway.vpe[0]
 }
