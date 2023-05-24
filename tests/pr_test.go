@@ -32,7 +32,6 @@ func TestRunDefaultExample(t *testing.T) {
 }
 
 func TestRunUpgradeExample(t *testing.T) {
-	t.Skip()
 	t.Parallel()
 
 	options := setupOptions(t, "vpe-upgrade", defaultExampleTerraformDir)

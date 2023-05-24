@@ -32,10 +32,16 @@ locals {
       {
         ip_name      = "${subnet.name}-${service}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
-        gateway_name = "${var.vpc_name}-${service}"
+        gateway_name = "${var.prefix}-${var.vpc_name}-${service}"
       }
     ]
   ])
+
+  # Convert the virtual_endpoint_gateway output from list to a map
+  vpe_map = {
+    for gateway in ibm_is_virtual_endpoint_gateway.vpe :
+    (gateway.name) => gateway
+  }
 
   # Map of Services to endpoints
   service_to_endpoint_map = {
@@ -91,7 +97,7 @@ resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
   }
-  gateway     = ibm_is_virtual_endpoint_gateway.vpe[each.value.gateway_name].id
+  gateway     = local.vpe_map[each.value.gateway_name].id
   reserved_ip = ibm_is_subnet_reserved_ip.ip[each.key].reserved_ip
 }
 
