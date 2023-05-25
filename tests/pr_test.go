@@ -19,7 +19,7 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		Prefix:       prefix,
 		IgnoreUpdates: testhelper.Exemptions{ // Ignore for consistency check
 			List: []string{
-				"time_sleep.wait_30_seconds",
+				"time_sleep.sleep_time",
 			},
 		},
 		ResourceGroup: resourceGroup,
