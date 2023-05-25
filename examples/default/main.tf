@@ -78,7 +78,7 @@ module "vpes" {
 resource "time_sleep" "sleep_time" {
   depends_on       = [data.ibm_is_security_group.default_sg]
   create_duration  = "120s"
-  destroy_duration = "60s"
+  destroy_duration = "120s"
 }
 
 
