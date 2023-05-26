@@ -27,14 +27,22 @@ locals {
   endpoint_ip_list = flatten([
     # Create object for each subnet
     for subnet in var.subnet_zone_list :
-    [
+    concat([
       for service in var.cloud_services :
       {
         ip_name      = "${subnet.name}-${service}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
         gateway_name = "${var.vpc_name}-${service}"
       }
-    ]
+      ],
+      [
+        for service in var.cloud_service_by_crn :
+        {
+          ip_name      = "${subnet.name}-${service.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          subnet_id    = subnet.id
+          gateway_name = "${var.vpc_name}-${service.name}"
+        }
+    ])
   ])
 
   # Map of Services to endpoints
