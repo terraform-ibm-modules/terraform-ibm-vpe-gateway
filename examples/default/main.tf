@@ -15,7 +15,7 @@ module "resource_group" {
 
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
-  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc.git?ref=v7.0.1"
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc.git?ref=v7.2.0"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
