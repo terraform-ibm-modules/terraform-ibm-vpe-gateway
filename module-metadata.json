@@ -128,7 +128,24 @@
       }
     }
   },
-  "outputs": {},
+  "outputs": {
+    "vpe_ips": {
+      "name": "vpe_ips",
+      "description": "The endpoint gateway reserved ips",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 6
+      }
+    },
+    "vpe_service_endpoints": {
+      "name": "vpe_service_endpoints",
+      "description": "Vpe Service Endpoints",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 1
+      }
+    }
+  },
   "required_core": [
     "\u003e=1.3"
   ],

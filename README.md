@@ -109,7 +109,10 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_vpe_ips"></a> [vpe\_ips](#output\_vpe\_ips) | The endpoint gateway reserved ips |
+| <a name="output_vpe_service_endpoints"></a> [vpe\_service\_endpoints](#output\_vpe\_service\_endpoints) | Vpe Service Endpoints |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Contributing
