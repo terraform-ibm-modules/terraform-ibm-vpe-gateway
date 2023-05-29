@@ -56,6 +56,25 @@ module "vpe_security_group" {
   vpc_id         = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
 }
 
+
+##############################################################################
+# Create a PostgreSQL instance to demonstrate how to create an instance VPE
+##############################################################################
+
+module "postgresql_db" {
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql?ref=v3.1.0"
+  resource_group_id = module.resource_group.resource_group_id
+  name              = "${var.prefix}-vpe-pg"
+  region            = var.region
+}
+
+locals {
+  cloud_service_by_crn = concat([{
+    name = "postgresql" # name of the vpe
+    crn = module.postgresql_db.crn }
+  ], var.cloud_service_by_crn)
+}
+
 ##############################################################################
 # Create VPEs in the VPC
 ##############################################################################
@@ -69,16 +88,19 @@ module "vpes" {
   resource_group_id    = module.resource_group.resource_group_id
   security_group_ids   = var.security_group_ids != null ? var.security_group_ids : [module.vpe_security_group.security_group_id]
   cloud_services       = var.cloud_services
-  cloud_service_by_crn = var.cloud_service_by_crn
+  cloud_service_by_crn = local.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
-  #  Wait 30secs after security group is destroyed before destroying VPE to workaround timing issue which can produce “Target not found” error on destroy
-  depends_on = [time_sleep.wait_30_seconds]
+  #  See comments below (resource "time_sleep" "sleep_time") for explaination on why this is needed.
+  depends_on = [time_sleep.sleep_time]
 }
 
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [data.ibm_is_security_group.default_sg]
-
-  destroy_duration = "30s"
+## This sleep serve two purposes:
+# 1. Give some extra time after postgresql db creation, and before creating the VPE targetting it. This works around the error "Service does not support VPE extensions."
+# 2. Give time on deletion between the VPE destruction and the destruction of the SG that is attached to the VPE. This works around the error "Target not found"
+resource "time_sleep" "sleep_time" {
+  depends_on       = [module.vpe_security_group.security_group_id, module.postgresql_db]
+  create_duration  = "120s"
+  destroy_duration = "120s"
 }
 
 
