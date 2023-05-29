@@ -150,7 +150,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 63
+        "line": 69
       }
     },
     "ibm_is_virtual_endpoint_gateway.vpe": {
@@ -168,7 +168,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 78
+        "line": 84
       }
     },
     "ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip": {
@@ -180,7 +180,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 101
+        "line": 102
       }
     }
   },

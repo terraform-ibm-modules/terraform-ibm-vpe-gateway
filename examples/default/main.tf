@@ -90,15 +90,14 @@ module "vpes" {
   cloud_services       = var.cloud_services
   cloud_service_by_crn = local.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
-  # Wait 180 secs before creating VPE pointing to instances, and after security group is destroyed before destroying VPE to workaround timing issue which can produce “Target not found” error on destroy
-  depends_on = [time_sleep.wait_180_seconds]
+  #  Wait 120secs after security group is destroyed before destroying VPE to workaround timing issue which can produce “Target not found” error on destroy
+  depends_on = [time_sleep.sleep_time]
 }
 
-resource "time_sleep" "wait_180_seconds" {
-  depends_on = [data.ibm_is_security_group.default_sg, module.postgresql_db]
-
-  create_duration  = "180s"
-  destroy_duration = "180s"
+resource "time_sleep" "sleep_time" {
+  depends_on       = [data.ibm_is_security_group.default_sg, module.postgresql_db]
+  create_duration  = "120s"
+  destroy_duration = "120s"
 }
 
 
