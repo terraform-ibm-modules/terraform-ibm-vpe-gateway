@@ -129,6 +129,14 @@
     }
   },
   "outputs": {
+    "crn": {
+      "name": "crn",
+      "description": "The CRN of the endpoint gateway",
+      "pos": {
+        "filename": "outputs.tf",
+        "line": 6
+      }
+    },
     "vpe_ips": {
       "name": "vpe_ips",
       "description": "The endpoint gateway reserved ips",

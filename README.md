@@ -111,6 +111,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the endpoint gateway |
 | <a name="output_vpe_ips"></a> [vpe\_ips](#output\_vpe\_ips) | The endpoint gateway reserved ips |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
