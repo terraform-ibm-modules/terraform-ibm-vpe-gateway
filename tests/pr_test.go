@@ -14,9 +14,14 @@ const defaultExampleTerraformDir = "examples/default"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  dir,
-		Prefix:        prefix,
+		Testing:      t,
+		TerraformDir: dir,
+		Prefix:       prefix,
+		IgnoreUpdates: testhelper.Exemptions{ // Ignore for consistency check
+			List: []string{
+				"time_sleep.sleep_time",
+			},
+		},
 		ResourceGroup: resourceGroup,
 	})
 	return options
@@ -32,7 +37,6 @@ func TestRunDefaultExample(t *testing.T) {
 }
 
 func TestRunUpgradeExample(t *testing.T) {
-	t.Skip()
 	t.Parallel()
 
 	options := setupOptions(t, "vpe-upgrade", defaultExampleTerraformDir)
