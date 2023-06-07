@@ -12,10 +12,4 @@ _extends: repo-settings:.github/common-settings-v2.yml
 repository:
   name: "terraform-ibm-vpe-module"
   description: "Create Virtual Private Endpoint Gateways across VPC subnets."
-
-  # The description is displayed under the repository name on the
-  # organization page and in the 'About' section of the repository.
-
-  # Uncomment this description property
-  # and update the description to the current repo description.
-  # description: ""
+  topics: core-team, terraform, ibm-cloud, terraform-module, virtual-private-endpoint, vpe
