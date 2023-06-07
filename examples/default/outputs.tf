@@ -1,3 +1,9 @@
-##############################################################################
-# Please open an issue to suggest outputs for this module
-##############################################################################
+output "vpe_ips" {
+  description = "The endpoint gateway reserved ips"
+  value       = module.vpes.vpe_ips
+}
+
+output "crn" {
+  description = "The CRN of the endpoint gateway"
+  value       = module.vpes.crn
+}
