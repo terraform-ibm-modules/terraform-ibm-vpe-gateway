@@ -15,7 +15,7 @@ module "resource_group" {
 
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
-  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc.git?ref=v7.2.0"
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc.git?ref=v7.3.1"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -42,7 +42,7 @@ data "ibm_is_security_group" "default_sg" {
 }
 
 module "vpe_security_group" {
-  source                       = "git::https://github.com/terraform-ibm-modules/terraform-ibm-security-group.git?ref=v1.0.0"
+  source                       = "git::https://github.com/terraform-ibm-modules/terraform-ibm-security-group.git?ref=v1.0.1"
   security_group_name          = "${var.prefix}-vpe-sg"
   add_ibm_cloud_internal_rules = false # No need for the internal ibm cloud rules for SG associated with VPEs
 
@@ -62,7 +62,7 @@ module "vpe_security_group" {
 ##############################################################################
 
 module "postgresql_db" {
-  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql?ref=v3.3.0"
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql?ref=v3.3.1"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-vpe-pg"
   region            = var.region
