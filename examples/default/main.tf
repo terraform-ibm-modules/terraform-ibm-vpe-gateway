@@ -62,7 +62,7 @@ module "vpe_security_group" {
 ##############################################################################
 
 module "postgresql_db" {
-  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql?ref=v3.1.0"
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-icd-postgresql?ref=v3.3.0"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-vpe-pg"
   region            = var.region
