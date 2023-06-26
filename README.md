@@ -24,7 +24,8 @@ provider "ibm" {
 # Creates:
 # - VPE
 module "vpes" {
-  source           = "git::https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module?ref=main"
+  source           = "terraform-ibm-modules/vpe-module/ibm"
+  version          = "latest" # Replace "latest" with a release version to lock into a specific release
   region           = "us-south"
   prefix           = "vpe"
   vpc_name         = "my-vpc-instance"
