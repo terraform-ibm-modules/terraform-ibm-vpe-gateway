@@ -24,8 +24,8 @@ provider "ibm" {
 # Creates:
 # - VPE
 module "vpes" {
-  source  = "terraform-ibm-modules/vpe-module/ibm"
-  version = "latest" # Replace "latest" with a release version to lock into a specific release
+  source           = "terraform-ibm-modules/vpe-module/ibm"
+  version          = "latest" # Replace "latest" with a release version to lock into a specific release
   region           = "us-south"
   prefix           = "vpe"
   vpc_name         = "my-vpc-instance"
