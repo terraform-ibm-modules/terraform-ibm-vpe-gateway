@@ -2,7 +2,8 @@
 # Resource Group
 ##############################################################################
 module "resource_group" {
-  source = "git::https://github.com/terraform-ibm-modules/terraform-ibm-resource-group.git?ref=v1.0.5"
+  source  = "terraform-ibm-modules/resource-group/ibm"
+  version = "1.0.5"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -15,7 +16,8 @@ module "resource_group" {
 
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
-  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc.git?ref=v7.0.1"
+  source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
+  version           = "7.3.1"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -42,7 +44,8 @@ data "ibm_is_security_group" "default_sg" {
 }
 
 module "vpe_security_group" {
-  source                       = "git::https://github.com/terraform-ibm-modules/terraform-ibm-security-group.git?ref=v1.0.0"
+  source                       = "terraform-ibm-modules/security-group/ibm"
+  version                      = "1.0.1"
   security_group_name          = "${var.prefix}-vpe-sg"
   add_ibm_cloud_internal_rules = false # No need for the internal ibm cloud rules for SG associated with VPEs
 
@@ -62,6 +65,26 @@ resource "time_sleep" "wait_30_seconds" {
   destroy_duration = "30s"
 }
 
+
+##############################################################################
+# Create a PostgreSQL instance to demonstrate how to create an instance VPE
+##############################################################################
+
+module "postgresql_db" {
+  source            = "terraform-ibm-modules/icd-postgresql/ibm"
+  version           = "3.3.1"
+  resource_group_id = module.resource_group.resource_group_id
+  name              = "${var.prefix}-vpe-pg"
+  region            = var.region
+}
+
+locals {
+  cloud_service_by_crn = concat([{
+    name = "postgresql" # name of the vpe
+    crn = module.postgresql_db.crn }
+  ], var.cloud_service_by_crn)
+}
+
 ##############################################################################
 # Create VPEs in the VPC
 ##############################################################################
@@ -75,10 +98,20 @@ module "vpes" {
   resource_group_id    = module.resource_group.resource_group_id
   security_group_ids   = var.security_group_ids != null ? var.security_group_ids : [module.vpe_security_group.security_group_id]
   cloud_services       = var.cloud_services
-  cloud_service_by_crn = var.cloud_service_by_crn
+  cloud_service_by_crn = local.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
-  #  Wait 30secs after security group is destroyed before destroying VPE to workaround timing issue which can produce “Target not found” error on destroy
-  depends_on = [time_sleep.wait_30_seconds]
+  #  See comments below (resource "time_sleep" "sleep_time") for explaination on why this is needed.
+  depends_on = [time_sleep.sleep_time]
 }
+
+## This sleep serve two purposes:
+# 1. Give some extra time after postgresql db creation, and before creating the VPE targetting it. This works around the error "Service does not support VPE extensions."
+# 2. Give time on deletion between the VPE destruction and the destruction of the SG that is attached to the VPE. This works around the error "Target not found"
+resource "time_sleep" "sleep_time" {
+  depends_on       = [module.vpe_security_group.security_group_id, module.postgresql_db]
+  create_duration  = "120s"
+  destroy_duration = "120s"
+}
+
 
 ##############################################################################

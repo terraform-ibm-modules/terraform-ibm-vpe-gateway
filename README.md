@@ -1,10 +1,10 @@
 # IBM Virtual Private Endpoints module
 
 [![Stable (With quality checks)](https://img.shields.io/badge/Status-Stable%20(With%20quality%20checks)-green)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
-[![Build status](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/actions/workflows/ci.yml/badge.svg)](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/actions/workflows/ci.yml)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-vpe-module?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/releases/latest)
+[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 This module creates and configures virtual private endpoint gateways (https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-endpoint-gateway) for an IBM Cloud service.
 
@@ -24,7 +24,8 @@ provider "ibm" {
 # Creates:
 # - VPE
 module "vpes" {
-  source           = "git::https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module?ref=main"
+  source           = "terraform-ibm-modules/vpe-module/ibm"
+  version          = "latest" # Replace "latest" with a release version to lock into a specific release
   region           = "us-south"
   prefix           = "vpe"
   vpc_name         = "my-vpc-instance"
@@ -73,18 +74,18 @@ You need the following permissions to run this module.
 <!-- END EXAMPLES HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-## Requirements
+### Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.3 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.52.0 |
 
-## Modules
+### Modules
 
 No modules.
 
-## Resources
+### Resources
 
 | Name | Type |
 |------|------|
@@ -92,7 +93,7 @@ No modules.
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway) | resource |
 | [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway_ip) | resource |
 
-## Inputs
+### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
@@ -107,9 +108,12 @@ No modules.
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | ID of the VPC where the Endpoint Gateways will be created | `string` | `null` | no |
 | <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. | `string` | `"vpc"` | no |
 
-## Outputs
+### Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the endpoint gateway |
+| <a name="output_vpe_ips"></a> [vpe\_ips](#output\_vpe\_ips) | The endpoint gateway reserved ips |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Contributing
