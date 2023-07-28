@@ -68,18 +68,17 @@ variable "cloud_services" {
     condition = length(var.cloud_services) == 0 ? true : length([
       for service in var.cloud_services :
       service if !contains([
-        "kms",
-        "hs-crypto",
-        "cloud-object-storage",
-        "container-registry",
         "account-management",
         "billing",
+        "cloud-object-storage",
         "codeengine",
-        "directlink",
+        "container-registry",
         "databases-for-cassandra",
         "databases-for-elasticsearch",
+        "databases-for-mongodb",
         "databases-for-postgresql",
         "databases-for-redis",
+        "directlink",
         "dns-svcs",
         "enterprise",
         "globalcatalog",
@@ -88,15 +87,30 @@ variable "cloud_services" {
         "hyperp-dbaas-postgresql",
         "iam-svcs",
         "iam-identity",
+        "is",
+        "hs-crypto",
+        "kms",
         "secrets-manager",
         "resource-controller",
         "transit",
         "user-management",
-        "is",
       ], service)
     ]) == 0
   }
 }
+
+# "ae"
+# "cbappcdaldev, cbappcontrol, cbedrdaldev, cbedrprod, cbedrstandalone"
+# "compliance"
+# "context-based-restrictions"
+# "containers-kubernetes"
+# "databases-for-enterprisedb"
+# "ghost-tags"
+# "messagehub"
+# "logs"
+# "sos"
+# "support"
+# "vmware"
 
 variable "cloud_service_by_crn" {
   description = "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
