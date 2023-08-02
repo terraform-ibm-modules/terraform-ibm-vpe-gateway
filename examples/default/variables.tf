@@ -63,7 +63,6 @@ variable "security_group_ids" {
   default     = null
 }
 
-
 variable "cloud_services" {
   description = "List of cloud services to create an endpoint gateway."
   type        = list(string)

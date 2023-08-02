@@ -16,24 +16,24 @@ const region = "us-south"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	cloudServices := []string{
-		"kms",
-		"hs-crypto",
-		"cloud-object-storage",
 		"account-management",
 		"billing",
+		"cloud-object-storage",
 		"codeengine",
 		"directlink",
 		"dns-svcs",
 		"enterprise",
-		"globalcatalog",
 		"global-search-tagging",
+		"globalcatalog",
+		"hs-crypto",
 		"hyperp-dbaas-mongodb",
 		"hyperp-dbaas-postgresql",
 		"iam-svcs",
+		"is",
+		"kms",
 		"resource-controller",
 		"transit",
 		"user-management",
-		"is",
 	}
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{

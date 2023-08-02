@@ -75,6 +75,7 @@ variable "cloud_services" {
         "container-registry",
         "databases-for-cassandra",
         "databases-for-elasticsearch",
+        "databases-for-enterprisedb",
         "databases-for-mongodb",
         "databases-for-postgresql",
         "databases-for-redis",
@@ -98,19 +99,6 @@ variable "cloud_services" {
     ]) == 0
   }
 }
-
-# "ae"
-# "cbappcdaldev, cbappcontrol, cbedrdaldev, cbedrprod, cbedrstandalone"
-# "compliance"
-# "context-based-restrictions"
-# "containers-kubernetes"
-# "databases-for-enterprisedb"
-# "ghost-tags"
-# "messagehub"
-# "logs"
-# "sos"
-# "support"
-# "vmware"
 
 variable "cloud_service_by_crn" {
   description = "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."

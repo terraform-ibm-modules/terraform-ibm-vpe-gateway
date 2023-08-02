@@ -59,13 +59,6 @@ module "vpe_security_group" {
   vpc_id         = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
 }
 
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [module.vpe_security_group]
-
-  destroy_duration = "30s"
-}
-
-
 ##############################################################################
 # Create a PostgreSQL instance to demonstrate how to create an instance VPE
 ##############################################################################
