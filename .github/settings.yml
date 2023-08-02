@@ -10,6 +10,6 @@ _extends: repo-settings:.github/common-settings-v2.yml
 # repo-specific settings
 #
 repository:
-  name: "terraform-ibm-vpe-module"
+  name: "terraform-ibm-vpe-gateway"
   description: "Create Virtual Private Endpoint Gateways across VPC subnets."
   topics: core-team, terraform, ibm-cloud, terraform-module, virtual-private-endpoint, vpe
