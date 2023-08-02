@@ -1,4 +1,4 @@
-# IBM Virtual Private Endpoints module
+# IBM Virtual Private Endpoint Gateway module
 
 [![Stable (With quality checks)](https://img.shields.io/badge/Status-Stable%20(With%20quality%20checks)-green)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
@@ -24,7 +24,7 @@ provider "ibm" {
 # Creates:
 # - VPE
 module "vpes" {
-  source           = "terraform-ibm-modules/vpe-module/ibm"
+  source           = "terraform-ibm-modules/vpe-gateway/ibm"
   version          = "latest" # Replace "latest" with a release version to lock into a specific release
   region           = "us-south"
   prefix           = "vpe"

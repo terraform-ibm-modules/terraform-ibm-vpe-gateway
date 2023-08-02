@@ -1,4 +1,4 @@
-module github.com/terraform-ibm-modules/terraform-ibm-vpe-module
+module github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway
 
 go 1.20
 
