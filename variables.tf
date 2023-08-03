@@ -64,14 +64,37 @@ variable "cloud_services" {
   default     = ["kms", "cloud-object-storage"]
 
   validation {
-    error_message = "Currently the only supported services are Key Protect (`kms`), Cloud Object Storage (`cloud-object-storage`), Container Registry (`container-registry`), and Hyper Protect Crypto Services (`hs-crypto`). Any other VPE services must be added using `cloud_service_by_crn`."
+    error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
     condition = length(var.cloud_services) == 0 ? true : length([
       for service in var.cloud_services :
       service if !contains([
-        "kms",
-        "hs-crypto",
+        "account-management",
+        "billing",
         "cloud-object-storage",
-        "container-registry"
+        "codeengine",
+        "container-registry",
+        "databases-for-cassandra",
+        "databases-for-elasticsearch",
+        "databases-for-enterprisedb",
+        "databases-for-mongodb",
+        "databases-for-postgresql",
+        "databases-for-redis",
+        "directlink",
+        "dns-svcs",
+        "enterprise",
+        "global-search-tagging",
+        "globalcatalog",
+        "hs-crypto",
+        "hyperp-dbaas-mongodb",
+        "hyperp-dbaas-postgresql",
+        "iam-identity",
+        "iam-svcs",
+        "is",
+        "kms",
+        "resource-controller",
+        "secrets-manager",
+        "transit",
+        "user-management",
       ], service)
     ]) == 0
   }

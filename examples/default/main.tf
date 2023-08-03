@@ -59,7 +59,6 @@ module "vpe_security_group" {
   vpc_id         = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
 }
 
-
 ##############################################################################
 # Create a PostgreSQL instance to demonstrate how to create an instance VPE
 ##############################################################################
