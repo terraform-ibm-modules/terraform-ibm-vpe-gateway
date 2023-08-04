@@ -134,7 +134,7 @@
       "description": "The CRN of the endpoint gateway",
       "pos": {
         "filename": "outputs.tf",
-        "line": 6
+        "line": 7
       }
     },
     "vpe_ips": {
