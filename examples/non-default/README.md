@@ -1,4 +1,4 @@
-# End-to-end example
+# End-to-end example with non-default values
 
 This example creates the following infrastructure:
 - A resource group, if one is not passed in.
