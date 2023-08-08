@@ -29,18 +29,10 @@
       "type": "string",
       "description": "The prefix that you would like to append to your resources",
       "default": "vpe",
-      "required": true,
-      "source": [
-        "ibm_is_virtual_endpoint_gateway.vpe.name"
-      ],
       "pos": {
         "filename": "variables.tf",
         "line": 11
-      },
-      "immutable": true,
-      "min_length": 1,
-      "max_length": 63,
-      "matches": "^([a-z]|[a-z][-a-z0-9]*[a-z0-9])$"
+      }
     },
     "region": {
       "name": "region",
@@ -126,6 +118,16 @@
         "filename": "variables.tf",
         "line": 17
       }
+    },
+    "vpe_names": {
+      "name": "vpe_names",
+      "type": "map(string)",
+      "description": "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have.",
+      "default": {},
+      "pos": {
+        "filename": "variables.tf",
+        "line": 125
+      }
     }
   },
   "outputs": {
@@ -175,7 +177,6 @@
       "type": "ibm_is_virtual_endpoint_gateway",
       "name": "vpe",
       "attributes": {
-        "name": "prefix",
         "resource_group": "resource_group_id",
         "security_groups": "security_group_ids",
         "vpc": "vpc_id"
