@@ -71,7 +71,7 @@ You need the following permissions to run this module.
 ## Examples
 
 - [ End-to-end example](examples/default)
-- [ End-to-end example with non-default values](examples/non-default)
+- [ End-to-end example with non-default values for custom VPE names](examples/non-default)
 <!-- END EXAMPLES HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

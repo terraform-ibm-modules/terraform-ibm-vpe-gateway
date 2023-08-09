@@ -1,4 +1,4 @@
-# End-to-end example with non-default values
+# End-to-end example with non-default values for custom VPE names
 
 This example creates the following infrastructure:
 - A resource group, if one is not passed in.
