@@ -91,6 +91,12 @@ variable "service_endpoints" {
   }
 }
 
+variable "vpe_names" {
+  description = "Map whose keys are services and values are names to use for that service's endpoint gateway."
+  type        = map(string)
+  default     = {}
+}
+
 variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
