@@ -36,6 +36,12 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		"user-management",
 	}
 
+	vpeNames := map[string]string{
+		"cloud-object-storage": "custom-cos-name",
+		"kms":                  "custom-kms-name",
+		"postgresql":           "custom-postgres-name",
+	}
+
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:      t,
 		TerraformDir: dir,
@@ -49,6 +55,7 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		TerraformVars: map[string]interface{}{
 			"region":         region,
 			"cloud_services": cloudServices,
+			"vpe_names":      vpeNames,
 		},
 	})
 	return options
