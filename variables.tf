@@ -122,4 +122,10 @@ variable "service_endpoints" {
   }
 }
 
+variable "vpe_names" {
+  description = "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have."
+  type        = map(string)
+  default     = {}
+}
+
 ##############################################################################

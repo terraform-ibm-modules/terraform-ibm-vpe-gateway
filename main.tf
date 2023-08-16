@@ -8,7 +8,7 @@ locals {
     # Create object for each service
     for service in var.cloud_services :
     {
-      name    = "${var.vpc_name}-${service}"
+      name    = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
       service = service
       crn     = null
     }
@@ -16,7 +16,7 @@ locals {
     [
       for service in var.cloud_service_by_crn :
       {
-        name    = "${var.vpc_name}-${service.name}"
+        name    = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
         service = null
         crn     = service.crn
       }
@@ -32,7 +32,7 @@ locals {
       {
         ip_name      = "${subnet.name}-${service}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
-        gateway_name = "${var.prefix}-${var.vpc_name}-${service}"
+        gateway_name = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
       }
       ],
       [
@@ -40,7 +40,7 @@ locals {
         {
           ip_name      = "${subnet.name}-${service.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
-          gateway_name = "${var.prefix}-${var.vpc_name}-${service.name}"
+          gateway_name = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
         }
     ])
   ])
@@ -106,7 +106,7 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
 
 resource "ibm_is_virtual_endpoint_gateway" "vpe" {
   count           = length(local.gateway_list)
-  name            = "${var.prefix}-${local.gateway_list[count.index].name}"
+  name            = local.gateway_list[count.index].name
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
