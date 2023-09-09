@@ -1,6 +1,6 @@
 output "vpe_ips" {
   description = "The endpoint gateway reserved ips"
-  value = { for vpe_pg in ibm_is_virtual_endpoint_gateway.vpe :
+  value = { for vpe_pg in data.ibm_is_virtual_endpoint_gateway.vpe :
   vpe_pg.name => vpe_pg.ips }
 }
 

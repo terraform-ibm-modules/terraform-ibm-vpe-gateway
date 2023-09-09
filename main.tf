@@ -133,3 +133,13 @@ resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
 }
 
 ##############################################################################
+
+##############################################################################
+# Datasource to load endpoint gateways details once resources are fully created
+##############################################################################
+
+data "ibm_is_virtual_endpoint_gateway" "vpe" {
+  depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
+  count      = length(ibm_is_virtual_endpoint_gateway.vpe)
+  name       = ibm_is_virtual_endpoint_gateway.vpe[count.index].name
+}

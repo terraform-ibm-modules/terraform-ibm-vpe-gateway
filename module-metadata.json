@@ -202,6 +202,19 @@
       }
     }
   },
-  "data_resources": {},
+  "data_resources": {
+    "data.ibm_is_virtual_endpoint_gateway.vpe": {
+      "mode": "data",
+      "type": "ibm_is_virtual_endpoint_gateway",
+      "name": "vpe",
+      "provider": {
+        "name": "ibm"
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 141
+      }
+    }
+  },
   "module_calls": {}
 }
