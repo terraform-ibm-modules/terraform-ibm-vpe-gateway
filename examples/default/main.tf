@@ -1,3 +1,11 @@
+### randomising the custom vpe names
+locals {
+  vpe_names = {
+    for k, v in var.vpe_names :
+    k => "${var.prefix}-${v}"
+  }
+}
+
 ##############################################################################
 # Resource Group
 ##############################################################################
@@ -93,7 +101,7 @@ module "vpes" {
   cloud_services       = var.cloud_services
   cloud_service_by_crn = local.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
-  vpe_names            = var.vpe_names
+  vpe_names            = local.vpe_names
   #  See comments below (resource "time_sleep" "sleep_time") for explaination on why this is needed.
   depends_on = [time_sleep.sleep_time]
 }
