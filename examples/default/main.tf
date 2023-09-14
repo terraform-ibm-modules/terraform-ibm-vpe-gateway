@@ -1,9 +1,17 @@
+### randomising the custom vpe names
+locals {
+  vpe_names = {
+    for k, v in var.vpe_names :
+    k => "${var.prefix}-${v}"
+  }
+}
+
 ##############################################################################
 # Resource Group
 ##############################################################################
 module "resource_group" {
   source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.0.5"
+  version = "1.0.6"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -17,7 +25,7 @@ module "resource_group" {
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "7.3.1"
+  version           = "7.4.0"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -65,7 +73,7 @@ module "vpe_security_group" {
 
 module "postgresql_db" {
   source            = "terraform-ibm-modules/icd-postgresql/ibm"
-  version           = "3.4.0"
+  version           = "3.4.3"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-vpe-pg"
   region            = var.region
@@ -93,7 +101,7 @@ module "vpes" {
   cloud_services       = var.cloud_services
   cloud_service_by_crn = local.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
-  vpe_names            = var.vpe_names
+  vpe_names            = local.vpe_names
   #  See comments below (resource "time_sleep" "sleep_time") for explaination on why this is needed.
   depends_on = [time_sleep.sleep_time]
 }

@@ -92,7 +92,7 @@ variable "service_endpoints" {
 }
 
 variable "vpe_names" {
-  description = "A Map to specify custom names for endpoint gateways whose keys are services and values are names to use for that service's endpoint gateway."
+  description = "A Map to specify custom names for endpoint gateways whose keys are services and values are names to use for that service's endpoint gateway. Each name will be prefixed with prefix value for isolated testing purposes."
   type        = map(string)
   default     = {}
 }
