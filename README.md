@@ -3,7 +3,7 @@
 [![Stable (With quality checks)](https://img.shields.io/badge/Status-Stable%20(With%20quality%20checks)-green)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-vpe-module?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-module/releases/latest)
+[![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-vpe-gateway?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/releases/latest)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 This module creates and configures virtual private endpoint gateways (https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-endpoint-gateway) for an IBM Cloud service.
@@ -13,7 +13,18 @@ The module supports the following actions:
 - Create reserved IP addresses
 - Attach endpoint gateways to reserved IP addresses
 
-## Usage
+<!-- Below content is automatically populated via pre-commit hook -->
+<!-- BEGIN OVERVIEW HOOK -->
+## Overview
+* [terraform-ibm-vpe-gateway](#terraform-ibm-vpe-gateway)
+* [Examples](./examples)
+    * [End-to-end example](./examples/default)
+* [Contributing](#contributing)
+
+## terraform-ibm-vpe-gateway
+<!-- END OVERVIEW HOOK -->
+
+### Usage
 
 ```hcl
 provider "ibm" {
@@ -57,7 +68,7 @@ module "vpes" {
 }
 ```
 
-## Required IAM access policies
+### Required IAM access policies
 You need the following permissions to run this module.
 
 - Account Management
@@ -66,12 +77,6 @@ You need the following permissions to run this module.
 - IAM services
     - **VPE Infrastructure** services
         - `Editor` platform access
-
-<!-- BEGIN EXAMPLES HOOK -->
-## Examples
-
-- [ End-to-end example](examples/default)
-<!-- END EXAMPLES HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -118,6 +123,7 @@ No modules.
 | <a name="output_vpe_ips"></a> [vpe\_ips](#output\_vpe\_ips) | The endpoint gateway reserved ips |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
+<!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->
 ## Contributing
 
 You can report issues and request features for this module in GitHub issues in the module repo. See [Report an issue or request a feature](https://github.com/terraform-ibm-modules/.github/blob/main/.github/SUPPORT.md).
