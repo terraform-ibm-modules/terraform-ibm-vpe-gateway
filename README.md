@@ -16,12 +16,13 @@ The module supports the following actions:
 <!-- Below content is automatically populated via pre-commit hook -->
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
-* [terraform-ibm-vpe-gateway](#terraform-ibm-vpe-gateway)
+* [terraform-ibm-vpe-module](#terraform-ibm-vpe-module)
 * [Examples](./examples)
     * [End-to-end example](./examples/default)
+    * [Every multi-tenant VPE](./examples/every-mt-vpe)
 * [Contributing](#contributing)
 
-## terraform-ibm-vpe-gateway
+## terraform-ibm-vpe-module
 <!-- END OVERVIEW HOOK -->
 
 ### Usage
