@@ -19,6 +19,7 @@ The module supports the following actions:
 * [terraform-ibm-vpe-gateway](#terraform-ibm-vpe-gateway)
 * [Examples](./examples)
     * [End-to-end example](./examples/default)
+    * [Every multi-tenant VPE](./examples/every-mt-vpe)
 * [Contributing](#contributing)
 
 ## terraform-ibm-vpe-gateway

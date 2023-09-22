@@ -53,33 +53,25 @@ locals {
 
   # Map of Services to endpoints
   service_to_endpoint_map = {
-    account-management          = "crn:v1:bluemix:public:account-management:global:::endpoint:${var.service_endpoints}.accounts.cloud.ibm.com"
-    billing                     = "crn:v1:bluemix:public:billing:global:::endpoint:${var.service_endpoints}.billing.cloud.ibm.com"
-    cloud-object-storage        = "crn:v1:bluemix:public:cloud-object-storage:global:::endpoint:s3.direct.${var.region}.cloud-object-storage.appdomain.cloud"
-    codeengine                  = "crn:v1:bluemix:public:codeengine:${var.region}:::endpoint:${var.service_endpoints}.${var.region}.codeengine.cloud.ibm.com"
-    container-registry          = "crn:v1:bluemix:public:container-registry:${var.region}:::endpoint:vpe.${var.region}.container-registry.cloud.ibm.com"
-    databases-for-cassandra     = "crn:v1:bluemix:public:databases-for-cassandra:${var.region}:::endpoint:${var.service_endpoints}.databases-for-cassandra.cloud.ibm.com"
-    databases-for-elasticsearch = "crn:v1:bluemix:public:databases-for-elasticsearch:${var.region}:::endpoint:${var.service_endpoints}.databases-for-elasticsearch.cloud.ibm.com"
-    databases-for-enterprisedb  = "crn:v1:bluemix:public:databases-for-enterprisedb:${var.region}:::${var.service_endpoints}.databases-for-enterprisedb.cloud.ibm.com"
-    databases-for-mongodb       = "crn:v1:bluemix:public:databases-for-mongodb:${var.region}:::endpoint:${var.service_endpoints}.databases-for-mongodb.cloud.ibm.com"
-    databases-for-postgresql    = "crn:v1:bluemix:public:databases-for-postgresql:${var.region}:::endpoint:${var.service_endpoints}.databases-for-postgresql.cloud.ibm.com"
-    databases-for-redis         = "crn:v1:bluemix:public:databases-for-redis:${var.region}:::endpoint:${var.service_endpoints}.databases-for-redis.cloud.ibm.com"
-    directlink                  = "crn:v1:bluemix:public:directlink:global:::endpoint:${var.service_endpoints}.directlink.cloud.ibm.com"
-    dns-svcs                    = "crn:v1:bluemix:public:dns-svcs:global::::"
-    enterprise                  = "crn:v1:bluemix:public:enterprise:global:::endpoint:${var.service_endpoints}.enterprise.cloud.ibm.com"
-    global-search-tagging       = "crn:v1:bluemix:public:global-search-tagging:global:::endpoint:api.${var.service_endpoints}.global-search-tagging.cloud.ibm.com"
-    globalcatalog               = "crn:v1:bluemix:public:globalcatalog:global:::endpoint:${var.service_endpoints}.globalcatalog.cloud.ibm.com"
-    hs-crypto                   = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:api.${var.service_endpoints}.${var.region}.hs-crypto.cloud.ibm.com"
-    hyperp-dbaas-mongodb        = "crn:v1:bluemix:public:hyperp-dbaas-mongodb:${var.region}:::endpoint:dbaas900-mongodb.${var.service_endpoints}.hyperp-dbaas.cloud.ibm.com"
-    hyperp-dbaas-postgresql     = "crn:v1:bluemix:public:hyperp-dbaas-postgresql:${var.region}:::endpoint:dbaas900-postgresql.${var.service_endpoints}.hyperp-dbaas.cloud.ibm.com"
-    iam-identity                = "crn:v1:bluemix:public:iam-identity:global:::endpoint:${var.service_endpoints}.iam.cloud.ibm.com"
-    iam-svcs                    = "crn:v1:bluemix:public:iam-svcs:global:::endpoint:${var.service_endpoints}.iam.cloud.ibm.com"
-    is                          = "crn:v1:bluemix:public:is:${var.region}:::endpoint:${var.region}.${var.service_endpoints}.iaas.cloud.ibm.com"
-    kms                         = "crn:v1:bluemix:public:kms:${var.region}:::endpoint:${var.service_endpoints}.${var.region}.kms.cloud.ibm.com"
-    resource-controller         = "crn:v1:bluemix:public:resource-controller:global:::endpoint:${var.service_endpoints}.resource-controller.cloud.ibm.com"
-    secrets-manager             = "crn:v1:bluemix:public:secrets-manager:${var.region}:::endpoint:${var.service_endpoints}.secrets-manager.cloud.ibm.com"
-    transit                     = "crn:v1:bluemix:public:transit:global:::endpoint:${var.service_endpoints}.transit.cloud.ibm.com"
-    user-management             = "crn:v1:bluemix:public:user-management:global:::endpoint:${var.service_endpoints}.user-management.cloud.ibm.com"
+    account-management      = "crn:v1:bluemix:public:account-management:global:::endpoint:${var.service_endpoints}.accounts.cloud.ibm.com"
+    billing                 = "crn:v1:bluemix:public:billing:global:::endpoint:${var.service_endpoints}.billing.cloud.ibm.com"
+    cloud-object-storage    = "crn:v1:bluemix:public:cloud-object-storage:global:::endpoint:s3.direct.${var.region}.cloud-object-storage.appdomain.cloud"
+    codeengine              = "crn:v1:bluemix:public:codeengine:${var.region}:::endpoint:${var.service_endpoints}.${var.region}.codeengine.cloud.ibm.com"
+    container-registry      = "crn:v1:bluemix:public:container-registry:${var.region}:::endpoint:${var.region}.icr.io"
+    directlink              = "crn:v1:bluemix:public:directlink:global:::endpoint:${var.service_endpoints}.directlink.cloud.ibm.com"
+    dns-svcs                = "crn:v1:bluemix:public:dns-svcs:global::::"
+    enterprise              = "crn:v1:bluemix:public:enterprise:global:::endpoint:${var.service_endpoints}.enterprise.cloud.ibm.com"
+    global-search-tagging   = "crn:v1:bluemix:public:global-search-tagging:global:::endpoint:api.${var.service_endpoints}.global-search-tagging.cloud.ibm.com"
+    globalcatalog           = "crn:v1:bluemix:public:globalcatalog:global:::endpoint:${var.service_endpoints}.globalcatalog.cloud.ibm.com"
+    hs-crypto               = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:api.${var.service_endpoints}.${var.region}.hs-crypto.cloud.ibm.com"
+    hyperp-dbaas-mongodb    = "crn:v1:bluemix:public:hyperp-dbaas-mongodb:${var.region}:::endpoint:dbaas900-mongodb.${var.service_endpoints}.hyperp-dbaas.cloud.ibm.com"
+    hyperp-dbaas-postgresql = "crn:v1:bluemix:public:hyperp-dbaas-postgresql:${var.region}:::endpoint:dbaas900-postgresql.${var.service_endpoints}.hyperp-dbaas.cloud.ibm.com"
+    iam-svcs                = "crn:v1:bluemix:public:iam-svcs:global:::endpoint:${var.service_endpoints}.iam.cloud.ibm.com"
+    is                      = "crn:v1:bluemix:public:is:${var.region}:::endpoint:${var.region}.${var.service_endpoints}.iaas.cloud.ibm.com"
+    kms                     = "crn:v1:bluemix:public:kms:${var.region}:::endpoint:${var.service_endpoints}.${var.region}.kms.cloud.ibm.com"
+    resource-controller     = "crn:v1:bluemix:public:resource-controller:global:::endpoint:${var.service_endpoints}.resource-controller.cloud.ibm.com"
+    transit                 = "crn:v1:bluemix:public:transit:global:::endpoint:${var.service_endpoints}.transit.cloud.ibm.com"
+    user-management         = "crn:v1:bluemix:public:user-management:global:::endpoint:${var.service_endpoints}.user-management.cloud.ibm.com"
   }
 }
 
@@ -105,13 +97,16 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
 ##############################################################################
 
 resource "ibm_is_virtual_endpoint_gateway" "vpe" {
-  count           = length(local.gateway_list)
-  name            = local.gateway_list[count.index].name
+  for_each = { # Create a map based on gateway name
+    for gateway in local.gateway_list :
+    (gateway.name) => gateway
+  }
+  name            = each.key
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
   target {
-    crn           = local.gateway_list[count.index].service == null ? local.gateway_list[count.index].crn : local.service_to_endpoint_map[local.gateway_list[count.index].service]
+    crn           = each.value.service == null ? each.value.crn : local.service_to_endpoint_map[each.value.service]
     resource_type = "provider_cloud_service"
   }
 }
@@ -140,6 +135,6 @@ resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
 
 data "ibm_is_virtual_endpoint_gateway" "vpe" {
   depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
-  count      = length(ibm_is_virtual_endpoint_gateway.vpe)
-  name       = ibm_is_virtual_endpoint_gateway.vpe[count.index].name
+  for_each   = ibm_is_virtual_endpoint_gateway.vpe
+  name       = each.key
 }
