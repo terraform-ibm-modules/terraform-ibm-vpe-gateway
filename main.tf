@@ -82,10 +82,12 @@ locals {
 ##############################################################################
 
 resource "ibm_is_subnet_reserved_ip" "ip" {
+  count = var.object_lock_enabled == null ? 0 : 1
   for_each = {
     # Create a map based on endpoint IP name
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
+    if var.reserved-ips == null
   }
   subnet = each.value.subnet_id
 }
@@ -124,7 +126,7 @@ resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
     (gateway_ip.ip_name) => gateway_ip
   }
   gateway     = local.vpe_map[each.value.gateway_name].id
-  reserved_ip = ibm_is_subnet_reserved_ip.ip[each.key].reserved_ip
+  reserved_ip = var.reserved_ip == null ? ibm_is_subnet_reserved_ip.ip[each.key].reserved_ip : var.reserved-ips[each.value.ip_name].reserved_ip
 }
 
 ##############################################################################
