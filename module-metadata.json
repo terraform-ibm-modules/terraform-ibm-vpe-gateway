@@ -6,6 +6,9 @@
       "type": "list(\n    object({\n      name = string # service name\n      crn  = string # service crn\n    })\n  )",
       "description": "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services).",
       "default": [],
+      "source": [
+        "module.create_reserved_ips"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 95
@@ -19,6 +22,9 @@
         "kms",
         "cloud-object-storage"
       ],
+      "source": [
+        "module.create_reserved_ips"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 61
@@ -29,6 +35,9 @@
       "type": "string",
       "description": "The prefix that you would like to append to your resources",
       "default": "vpe",
+      "source": [
+        "module.create_reserved_ips"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 11
@@ -42,6 +51,19 @@
       "pos": {
         "filename": "variables.tf",
         "line": 5
+      }
+    },
+    "reserved_ips": {
+      "name": "reserved_ips",
+      "type": "map(map(string))",
+      "description": "Reserved IPs to attach to attach to Endpoint Gateways.",
+      "source": [
+        "ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip.reserved_ip",
+        "module.create_reserved_ips"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 123
       }
     },
     "resource_group_id": {
@@ -90,6 +112,9 @@
       "type": "list(\n    object({\n      name = string\n      id   = string\n      zone = optional(string)\n      cidr = optional(string)\n    })\n  )",
       "description": "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation.",
       "default": [],
+      "source": [
+        "module.create_reserved_ips"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 29
@@ -114,6 +139,9 @@
       "type": "string",
       "description": "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names.",
       "default": "vpc",
+      "source": [
+        "module.create_reserved_ips"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 17
@@ -124,6 +152,9 @@
       "type": "map(string)",
       "description": "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have.",
       "default": {},
+      "source": [
+        "module.create_reserved_ips"
+      ],
       "pos": {
         "filename": "variables.tf",
         "line": 117
@@ -160,18 +191,6 @@
     }
   },
   "managed_resources": {
-    "ibm_is_subnet_reserved_ip.ip": {
-      "mode": "managed",
-      "type": "ibm_is_subnet_reserved_ip",
-      "name": "ip",
-      "provider": {
-        "name": "ibm"
-      },
-      "pos": {
-        "filename": "main.tf",
-        "line": 84
-      }
-    },
     "ibm_is_virtual_endpoint_gateway.vpe": {
       "mode": "managed",
       "type": "ibm_is_virtual_endpoint_gateway",
@@ -186,19 +205,22 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 99
+        "line": 79
       }
     },
     "ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip": {
       "mode": "managed",
       "type": "ibm_is_virtual_endpoint_gateway_ip",
       "name": "endpoint_gateway_ip",
+      "attributes": {
+        "reserved_ip": "reserved_ips"
+      },
       "provider": {
         "name": "ibm"
       },
       "pos": {
         "filename": "main.tf",
-        "line": 120
+        "line": 100
       }
     }
   },
@@ -212,9 +234,61 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 136
+        "line": 116
       }
     }
   },
-  "module_calls": {}
+  "module_calls": {
+    "create_reserved_ips": {
+      "name": "create_reserved_ips",
+      "source": "./modules/reserved-ips",
+      "attributes": {
+        "cloud_service_by_crn": "cloud_service_by_crn",
+        "cloud_services": "cloud_services",
+        "prefix": "prefix",
+        "reserved_ips": "reserved_ips",
+        "subnet_zone_list": "subnet_zone_list",
+        "vpc_name": "vpc_name",
+        "vpe_names": "vpe_names"
+      },
+      "managed_resources": {
+        "ibm_is_subnet_reserved_ip.ip": {
+          "mode": "managed",
+          "type": "ibm_is_subnet_reserved_ip",
+          "name": "ip",
+          "provider": {
+            "name": "ibm"
+          },
+          "pos": {
+            "filename": "modules/reserved-ips/main.tf",
+            "line": 36
+          }
+        }
+      },
+      "data_resources": {},
+      "outputs": {
+        "endpoint_ip_list": {
+          "name": "endpoint_ip_list",
+          "description": "The endpoint gateway reserved ips",
+          "value": "local.endpoint_ip_list",
+          "pos": {
+            "filename": "modules/reserved-ips/outputs.tf",
+            "line": 16
+          }
+        },
+        "reserved_ips": {
+          "name": "reserved_ips",
+          "description": "The endpoint gateway reserved ips",
+          "pos": {
+            "filename": "modules/reserved-ips/outputs.tf",
+            "line": 1
+          }
+        }
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 62
+      }
+    }
+  }
 }

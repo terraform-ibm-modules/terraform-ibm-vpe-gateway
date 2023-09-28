@@ -23,28 +23,6 @@ locals {
     ]
   )
 
-  # List of IPs to create
-  endpoint_ip_list = flatten([
-    # Create object for each subnet
-    for subnet in var.subnet_zone_list :
-    concat([
-      for service in var.cloud_services :
-      {
-        ip_name      = "${subnet.name}-${service}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
-        subnet_id    = subnet.id
-        gateway_name = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
-      }
-      ],
-      [
-        for service in var.cloud_service_by_crn :
-        {
-          ip_name      = "${subnet.name}-${service.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
-          subnet_id    = subnet.id
-          gateway_name = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
-        }
-    ])
-  ])
-
   # Convert the virtual_endpoint_gateway output from list to a map
   vpe_map = {
     for gateway in ibm_is_virtual_endpoint_gateway.vpe :
@@ -81,15 +59,15 @@ locals {
 # Create Reserved IPs
 ##############################################################################
 
-resource "ibm_is_subnet_reserved_ip" "ip" {
-  count = var.object_lock_enabled == null ? 0 : 1
-  for_each = {
-    # Create a map based on endpoint IP name
-    for gateway_ip in local.endpoint_ip_list :
-    (gateway_ip.ip_name) => gateway_ip
-    if var.reserved-ips == null
-  }
-  subnet = each.value.subnet_id
+module "create_reserved_ips" {
+  source               = "./modules/reserved-ips"
+  prefix               = var.prefix
+  vpc_name             = var.vpc_name
+  subnet_zone_list     = var.subnet_zone_list
+  vpe_names            = var.vpe_names
+  cloud_services       = var.cloud_services
+  cloud_service_by_crn = var.cloud_service_by_crn
+  reserved_ips         = var.reserved_ips
 }
 
 ##############################################################################
@@ -122,11 +100,11 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
 resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
   for_each = {
     # Create a map based on endpoint IP
-    for gateway_ip in local.endpoint_ip_list :
+    for gateway_ip in module.create_reserved_ips.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
   }
   gateway     = local.vpe_map[each.value.gateway_name].id
-  reserved_ip = var.reserved_ip == null ? ibm_is_subnet_reserved_ip.ip[each.key].reserved_ip : var.reserved-ips[each.value.ip_name].reserved_ip
+  reserved_ip = var.reserved_ips == null ? module.create_reserved_ips.reserved_ips[each.key].reserved_ip : var.reserved_ips[each.value.ip_name].reserved_ip
 }
 
 ##############################################################################
@@ -140,3 +118,5 @@ data "ibm_is_virtual_endpoint_gateway" "vpe" {
   for_each   = ibm_is_virtual_endpoint_gateway.vpe
   name       = each.key
 }
+
+##############################################################################

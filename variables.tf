@@ -120,8 +120,8 @@ variable "vpe_names" {
   default     = {}
 }
 
-variable "reserved-ips" {
-  description = "reserved IPS"
+variable "reserved_ips" {
+  description = "Reserved IPs to attach to attach to Endpoint Gateways."
   type        = map(map(string))
   default     = null
 }

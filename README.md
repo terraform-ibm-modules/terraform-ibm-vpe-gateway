@@ -17,6 +17,7 @@ The module supports the following actions:
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
 * [terraform-ibm-vpe-gateway](#terraform-ibm-vpe-gateway)
+* [Submodules](./modules)
 * [Examples](./examples)
     * [End-to-end example](./examples/default)
     * [Every multi-tenant VPE](./examples/every-mt-vpe)
@@ -89,13 +90,14 @@ You need the following permissions to run this module.
 
 ### Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_create_reserved_ips"></a> [create\_reserved\_ips](#module\_create\_reserved\_ips) | ./modules/reserved-ips | n/a |
 
 ### Resources
 
 | Name | Type |
 |------|------|
-| [ibm_is_subnet_reserved_ip.ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_subnet_reserved_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway) | resource |
 | [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
@@ -108,6 +110,7 @@ No modules.
 | <a name="input_cloud_services"></a> [cloud\_services](#input\_cloud\_services) | List of cloud services to create an endpoint gateway. | `list(string)` | <pre>[<br>  "kms",<br>  "cloud-object-storage"<br>]</pre> | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources | `string` | `"vpe"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where VPC and services are deployed | `string` | `"us-south"` | no |
+| <a name="input_reserved_ips"></a> [reserved\_ips](#input\_reserved\_ips) | Reserved IPs to attach to attach to Endpoint Gateways. | `map(map(string))` | `null` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group where endpoint gateways will be provisioned | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security group ids to attach to each endpoint gateway. | `list(string)` | `null` | no |
 | <a name="input_service_endpoints"></a> [service\_endpoints](#input\_service\_endpoints) | Service endpoints to use to create endpoint gateways. Can be `public`, or `private`. | `string` | `"private"` | no |

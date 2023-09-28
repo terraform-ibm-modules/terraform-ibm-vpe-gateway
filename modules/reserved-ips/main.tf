@@ -1,7 +1,9 @@
 ##############################################################################
 # VPE Locals
 ##############################################################################
-  
+
+locals {
+
   # List of IPs to create
   endpoint_ip_list = flatten([
     # Create object for each subnet
@@ -23,6 +25,7 @@
         }
     ])
   ])
+}
 
 ##############################################################################
 
@@ -35,9 +38,10 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
     # Create a map based on endpoint IP name
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
+    if var.reserved_ips == null
   }
   subnet = each.value.subnet_id
-  name = each.value.ip_name
+  name   = each.value.ip_name
 }
 
 ##############################################################################

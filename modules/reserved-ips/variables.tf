@@ -1,4 +1,25 @@
 ##############################################################################
+# VPC Variables
+##############################################################################
+variable "region" {
+  description = "The region where VPC and services are deployed"
+  type        = string
+  default     = "us-south"
+}
+
+variable "prefix" {
+  description = "The prefix that you would like to append to your resources"
+  type        = string
+  default     = "vpe"
+}
+
+variable "vpc_name" {
+  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names."
+  type        = string
+  default     = "vpc"
+}
+
+##############################################################################
 # SUBNET Variables
 ##############################################################################
 
@@ -19,12 +40,22 @@ variable "subnet_zone_list" {
 # VPE Variables
 ##############################################################################
 
-variable "security_group_ids" {
-  description = "List of security group ids to attach to each endpoint gateway."
-  type        = list(string)
-  default     = null
+variable "vpe_names" {
+  description = "A Map to specify custom names for endpoint gateways whose keys are services and values are names to use for that service's endpoint gateway. Each name will be prefixed with prefix value for isolated testing purposes."
+  type        = map(string)
+  default     = {}
 }
 
+variable "cloud_service_by_crn" {
+  description = "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
+  type = list(
+    object({
+      name = string # service name
+      crn  = string # service crn
+    })
+  )
+  default = []
+}
 
 variable "cloud_services" {
   description = "List of cloud services to create an endpoint gateway."
@@ -60,13 +91,8 @@ variable "cloud_services" {
   }
 }
 
-variable "cloud_service_by_crn" {
-  description = "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
-  type = list(
-    object({
-      name = string # service name
-      crn  = string # service crn
-    })
-  )
-  default = []
+variable "reserved_ips" {
+  description = "Reserved IPs to attach to attach to Endpoint Gateways."
+  type        = map(map(string))
+  default     = null
 }
