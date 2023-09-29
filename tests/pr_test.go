@@ -14,7 +14,7 @@ import (
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
 const defaultExampleTerraformDir = "examples/default"
-const everyMtVpeExampleTerraformDir = "example/every-mt-vpe"
+const everyMtVpeExampleTerraformDir = "examples/every-mt-vpe"
 
 const region = "us-south"
 
