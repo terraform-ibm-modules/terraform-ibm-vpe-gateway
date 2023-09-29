@@ -14,6 +14,7 @@ import (
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
 const defaultExampleTerraformDir = "examples/default"
+const everyMtVpeExampleTerraformDir = "example/every-mt-vpe"
 
 const region = "us-south"
 
@@ -138,4 +139,14 @@ func TestRunUpgradeExample(t *testing.T) {
 		assert.Nil(t, err, "This should not have errored")
 		assert.NotNil(t, output, "Expected some output")
 	}
+}
+
+func TestRunEveryMtVpeExample(t *testing.T) {
+	t.Parallel()
+
+	options := setupOptions(t, "very-Mt-Vpe", everyMtVpeExampleTerraformDir)
+	options.SkipTestTearDown = true
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
 }
