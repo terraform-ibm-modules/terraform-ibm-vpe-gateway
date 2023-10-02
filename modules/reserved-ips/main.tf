@@ -11,7 +11,7 @@ locals {
     concat([
       for service in var.cloud_services :
       {
-        ip_name      = "${subnet.name}-${service}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+        ip_name      = "${subnet.name}-${service}-gw-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
         gateway_name = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
       }
@@ -19,7 +19,7 @@ locals {
       [
         for service in var.cloud_service_by_crn :
         {
-          ip_name      = "${subnet.name}-${service.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          ip_name      = "${subnet.name}-${service.name}-gw-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
           gateway_name = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
         }
