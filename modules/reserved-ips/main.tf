@@ -11,7 +11,7 @@ locals {
     concat([
       for service in var.cloud_services :
       {
-        ip_name      = "${subnet.name}-${service}-gw-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+        ip_name      = "${subnet.name}-${reverse(split("-", service))[0]}-gw-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
         gateway_name = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
       }
