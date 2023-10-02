@@ -129,13 +129,13 @@ func TestRunDefaultExample(t *testing.T) {
 	options.TestTearDown()
 }
 
-// func TestRunUpgradeExample(t *testing.T) {
-// 	t.Parallel()
-//
-// 	options := setupOptions(t, "vpe-upgrade", defaultExampleTerraformDir)
-// 	output, err := options.RunTestUpgrade()
-// 	if !options.UpgradeTestSkipped {
-// 		assert.Nil(t, err, "This should not have errored")
-// 		assert.NotNil(t, output, "Expected some output")
-// 	}
-// }
+func TestRunUpgradeExample(t *testing.T) {
+	t.Parallel()
+
+	options := setupOptions(t, "vpe-upgrade", defaultExampleTerraformDir)
+	output, err := options.RunTestUpgrade()
+	if !options.UpgradeTestSkipped {
+		assert.Nil(t, err, "This should not have errored")
+		assert.NotNil(t, output, "Expected some output")
+	}
+}
