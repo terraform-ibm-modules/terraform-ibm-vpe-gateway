@@ -149,4 +149,21 @@ func TestRunEveryMtVpeExample(t *testing.T) {
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
+	// checking vpe_ips to exist
+	outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+	expectedOutputs := []string{"vpe_ips"}
+	_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
+	assert.NoErrorf(t, outputErr, "Some outputs not found or nil")
+	// checking vpe_ips to contain a set on not empty slices as expected
+	mapToValidate, ok := outputs["vpe_ips"].(map[string]interface{})
+	var outputErrMap error
+	if !ok {
+		outputErrMap = fmt.Errorf("Output: Failed to read value of key %s\n", "vpe_ips")
+	} else {
+		_, outputErrMap = ValidateOutputMapOfSlicesContent(mapToValidate)
+	}
+
+	assert.NoErrorf(t, outputErr, "Some outputs not found or nil")
+	assert.NoErrorf(t, outputErrMap, "Some outputs not having the expected structure")
+	options.TestTearDown()
 }
