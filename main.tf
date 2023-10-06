@@ -12,7 +12,7 @@ locals {
     {
       name    = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
       service = service
-      crn     = null
+      crn     = local.service_to_endpoint_map[service]
     }
     ],
     [
@@ -85,9 +85,12 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
+
+  # check if target is a CRN and handle accordingly
   target {
-    crn           = each.value.service == null ? each.value.crn : local.service_to_endpoint_map[each.value.service]
-    resource_type = "provider_cloud_service"
+    name          = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? null : each.value.crn
+    crn           = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? each.value.crn : null
+    resource_type = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? "provider_cloud_service" : "provider_infrastructure_service"
   }
 }
 
