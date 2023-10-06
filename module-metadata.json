@@ -8,7 +8,7 @@
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 95
+        "line": 97
       }
     },
     "cloud_services": {
@@ -82,7 +82,7 @@
       "default": "private",
       "pos": {
         "filename": "variables.tf",
-        "line": 106
+        "line": 108
       }
     },
     "subnet_zone_list": {
@@ -126,7 +126,7 @@
       "default": {},
       "pos": {
         "filename": "variables.tf",
-        "line": 117
+        "line": 119
       }
     }
   },
@@ -198,7 +198,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 100
+        "line": 103
       }
     }
   },
@@ -212,7 +212,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 116
+        "line": 119
       }
     }
   },
