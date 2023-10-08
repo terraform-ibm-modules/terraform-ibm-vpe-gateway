@@ -22,9 +22,9 @@ The module supports the following actions:
     * [End-to-end example](./examples/default)
     * [Every multi-tenant VPE](./examples/every-mt-vpe)
 * [Contributing](#contributing)
+<!-- END OVERVIEW HOOK -->
 
 ## terraform-ibm-vpe-gateway
-<!-- END OVERVIEW HOOK -->
 
 ### Usage
 
@@ -38,7 +38,7 @@ provider "ibm" {
 # - VPE
 module "vpes" {
   source           = "terraform-ibm-modules/vpe-gateway/ibm"
-  version          = "latest" # Replace "latest" with a release version to lock into a specific release
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   region           = "us-south"
   prefix           = "vpe"
   vpc_name         = "my-vpc-instance"
