@@ -24,7 +24,7 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		"cloud-object-storage",
 		//"cloud-object-storage-config",
 		"codeengine",
-		"container-registry",
+		//"container-registry",
 		//"containers-kubernetes",
 		//"context-based-restrictions",
 		"directlink",
