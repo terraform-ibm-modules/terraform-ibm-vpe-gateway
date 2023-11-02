@@ -63,23 +63,6 @@ variable "security_group_ids" {
   default     = null
 }
 
-variable "cloud_services" {
-  description = "List of cloud services to create an endpoint gateway."
-  type        = list(string)
-  default     = ["kms", "cloud-object-storage"]
-}
-
-variable "cloud_service_by_crn" {
-  description = "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
-  type = list(
-    object({
-      name = string # service name
-      crn  = string # service crn
-    })
-  )
-  default = []
-}
-
 variable "service_endpoints" {
   description = "Service endpoints to use to create endpoint gateways. Can be `public`, or `private`."
   type        = string
