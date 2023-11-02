@@ -3,22 +3,19 @@
   "variables": {
     "cloud_service_by_crn": {
       "name": "cloud_service_by_crn",
-      "type": "list(\n    object({\n      name = string # service name\n      crn  = string # service crn\n    })\n  )",
+      "type": "list(\n    object({\n      name = string # service name\n      crn  = string # service crn\n      #allow_dns_resolution_binding = optional(bool, true)\n    })\n  )",
       "description": "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services).",
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 95
+        "line": 99
       }
     },
     "cloud_services": {
       "name": "cloud_services",
-      "type": "list(string)",
+      "type": "map(object({\n    name                         = optional(string),\n    allow_dns_resolution_binding = optional(bool, true)\n  }))",
       "description": "List of cloud services to create an endpoint gateway.",
-      "default": [
-        "kms",
-        "cloud-object-storage"
-      ],
+      "required": true,
       "pos": {
         "filename": "variables.tf",
         "line": 61
@@ -82,7 +79,7 @@
       "default": "private",
       "pos": {
         "filename": "variables.tf",
-        "line": 106
+        "line": 111
       }
     },
     "subnet_zone_list": {
@@ -118,16 +115,6 @@
         "filename": "variables.tf",
         "line": 17
       }
-    },
-    "vpe_names": {
-      "name": "vpe_names",
-      "type": "map(string)",
-      "description": "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have.",
-      "default": {},
-      "pos": {
-        "filename": "variables.tf",
-        "line": 117
-      }
     }
   },
   "outputs": {
@@ -155,7 +142,7 @@
     "ibm": {
       "source": "IBM-Cloud/ibm",
       "version_constraints": [
-        "\u003e= 1.52.0"
+        "\u003e= 1.58.0"
       ]
     }
   },
@@ -169,7 +156,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 84
+        "line": 86
       }
     },
     "ibm_is_virtual_endpoint_gateway.vpe": {
@@ -186,7 +173,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 99
+        "line": 101
       }
     },
     "ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip": {
@@ -198,7 +185,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 120
+        "line": 123
       }
     }
   },
@@ -212,7 +199,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 136
+        "line": 139
       }
     }
   },

@@ -60,36 +60,40 @@ variable "security_group_ids" {
 
 variable "cloud_services" {
   description = "List of cloud services to create an endpoint gateway."
-  type        = list(string)
-  default     = ["kms", "cloud-object-storage"]
+  type = map(object({
+    name                         = optional(string),
+    allow_dns_resolution_binding = optional(bool, true)
+  }))
+  #type        = list(string)
+  #default     = ["kms", "cloud-object-storage"]
 
-  validation {
-    error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
-    condition = length(var.cloud_services) == 0 ? true : length([
-      for service in var.cloud_services :
-      service if !contains([
-        "account-management",
-        "billing",
-        "cloud-object-storage",
-        "codeengine",
-        "container-registry",
-        "directlink",
-        "dns-svcs",
-        "enterprise",
-        "global-search-tagging",
-        "globalcatalog",
-        "hs-crypto",
-        "hyperp-dbaas-mongodb",
-        "hyperp-dbaas-postgresql",
-        "iam-svcs",
-        "is",
-        "kms",
-        "resource-controller",
-        "transit",
-        "user-management",
-      ], service)
-    ]) == 0
-  }
+  # validation {
+  #   error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
+  #   condition = length(var.cloud_services) == 0 ? true : length([
+  #     for service in var.cloud_services :
+  #     service if !contains([
+  #       "account-management",
+  #       "billing",
+  #       "cloud-object-storage",
+  #       "codeengine",
+  #       "container-registry",
+  #       "directlink",
+  #       "dns-svcs",
+  #       "enterprise",
+  #       "global-search-tagging",
+  #       "globalcatalog",
+  #       "hs-crypto",
+  #       "hyperp-dbaas-mongodb",
+  #       "hyperp-dbaas-postgresql",
+  #       "iam-svcs",
+  #       "is",
+  #       "kms",
+  #       "resource-controller",
+  #       "transit",
+  #       "user-management",
+  #     ], service)
+  #   ]) == 0
+  # }
 }
 
 variable "cloud_service_by_crn" {
@@ -98,6 +102,7 @@ variable "cloud_service_by_crn" {
     object({
       name = string # service name
       crn  = string # service crn
+      #allow_dns_resolution_binding = optional(bool, true)
     })
   )
   default = []
@@ -114,10 +119,16 @@ variable "service_endpoints" {
   }
 }
 
-variable "vpe_names" {
-  description = "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have."
-  type        = map(string)
-  default     = {}
-}
+# variable "vpe_names" {
+#   description = "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have."
+#   type        = map(string)
+#   default     = {}
+# }
+
+# variable "allow_dns_resolution_binding" {
+#   description = "Indicates whether to allow this endpoint gateway to participate in DNS resolution bindings with a VPC that has dns.enable_hub set to true."
+#   type        = bool
+#   default     = true
+# }
 
 ##############################################################################

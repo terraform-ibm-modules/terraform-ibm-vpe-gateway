@@ -34,25 +34,27 @@ module "vpes" {
   vpc_id   = module.vpc.vpc_id
   #subnet_zone_list  = module.vpc.subnet_zone_list
   resource_group_id = module.resource_group.resource_group_id
-  cloud_services = ["account-management",
-    "billing",
-    "cloud-object-storage",
-    "codeengine",
+  cloud_services = {
+    "account-management"   = {},
+    "billing"              = {},
+    "cloud-object-storage" = {},
+    "codeengine"           = {},
     #"container-registry", # to fix in https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/390
-    "directlink",
-    "dns-svcs",
-    "enterprise",
-    "global-search-tagging",
-    "globalcatalog",
-    "hs-crypto",
-    "hyperp-dbaas-mongodb",
-    "hyperp-dbaas-postgresql",
-    "iam-svcs",
-    "is",
-    "kms",
-    "resource-controller",
-    "transit",
-  "user-management"]
+    "directlink"              = {},
+    "dns-svcs"                = {},
+    "enterprise"              = {},
+    "global-search-tagging"   = {},
+    "globalcatalog"           = {},
+    "hs-crypto"               = {},
+    "hyperp-dbaas-mongodb"    = {},
+    "hyperp-dbaas-postgresql" = {},
+    "iam-svcs"                = {},
+    "is"                      = {},
+    "kms"                     = {},
+    "resource-controller"     = {},
+    "transit"                 = {},
+    "user-management"         = {}
+  }
 }
 
 

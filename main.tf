@@ -6,19 +6,21 @@ locals {
   # List of Gateways to create
   gateway_list = concat([
     # Create object for each service
-    for service in var.cloud_services :
+    for service_name, service_details in var.cloud_services :
     {
-      name    = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
-      service = service
-      crn     = null
+      name                         = service_details["name"] != null ? service_details["name"] : "${var.prefix}-${var.vpc_name}-${service_name}"
+      service                      = service_name
+      crn                          = null
+      allow_dns_resolution_binding = service_details["allow_dns_resolution_binding"]
     }
     ],
     [
       for service in var.cloud_service_by_crn :
       {
-        name    = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
-        service = null
-        crn     = service.crn
+        name                         = service.name # lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
+        service                      = null
+        crn                          = service.crn
+        allow_dns_resolution_binding = service["allow_dns_resolution_binding"]
       }
     ]
   )
@@ -28,11 +30,11 @@ locals {
     # Create object for each subnet
     for subnet in var.subnet_zone_list :
     concat([
-      for service in var.cloud_services :
+      for service_name, service_details in var.cloud_services :
       {
-        ip_name      = "${subnet.name}-${service}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+        ip_name      = "${subnet.name}-${service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
-        gateway_name = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
+        gateway_name = lookup(service_details, "name", "${var.prefix}-${var.vpc_name}-${service_name}")
       }
       ],
       [
@@ -40,7 +42,7 @@ locals {
         {
           ip_name      = "${subnet.name}-${service.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
-          gateway_name = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
+          gateway_name = service.name #lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
         }
     ])
   ])
@@ -109,6 +111,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     crn           = each.value.service == null ? each.value.crn : local.service_to_endpoint_map[each.value.service]
     resource_type = "provider_cloud_service"
   }
+  allow_dns_resolution_binding = each.value.allow_dns_resolution_binding
 }
 
 ##############################################################################
