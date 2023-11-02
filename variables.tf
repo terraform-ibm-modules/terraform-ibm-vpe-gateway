@@ -98,14 +98,13 @@ variable "cloud_services" {
 
 variable "cloud_service_by_crn" {
   description = "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
-  type = list(
+  type = map(
     object({
-      name = string # service name
-      crn  = string # service crn
-      #allow_dns_resolution_binding = optional(bool, true)
+      name = optional(string) # vpe name
+      allow_dns_resolution_binding = optional(bool, true)
     })
   )
-  default = []
+  default = {}
 }
 
 variable "service_endpoints" {

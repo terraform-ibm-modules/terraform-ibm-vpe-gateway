@@ -6,21 +6,21 @@ locals {
   # List of Gateways to create
   gateway_list = concat([
     # Create object for each service
-    for service_name, service_details in var.cloud_services :
+    for target_service_name, vpe_details in var.cloud_services :
     {
-      name                         = service_details["name"] != null ? service_details["name"] : "${var.prefix}-${var.vpc_name}-${service_name}"
-      service                      = service_name
+      name                         = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${target_service_name}"
+      service                      = target_service_name
       crn                          = null
-      allow_dns_resolution_binding = service_details["allow_dns_resolution_binding"]
+      allow_dns_resolution_binding = vpe_details.allow_dns_resolution_binding
     }
     ],
     [
-      for service in var.cloud_service_by_crn :
+      for target_crn, vpe_details in var.cloud_service_by_crn :
       {
-        name                         = service.name # lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
+        name                         = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${element(split(":", target_crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
         service                      = null
-        crn                          = service.crn
-        allow_dns_resolution_binding = service["allow_dns_resolution_binding"]
+        crn                          = target_crn
+        allow_dns_resolution_binding = vpe_details.allow_dns_resolution_binding
       }
     ]
   )
@@ -30,19 +30,19 @@ locals {
     # Create object for each subnet
     for subnet in var.subnet_zone_list :
     concat([
-      for service_name, service_details in var.cloud_services :
+      for target_service_name, vpe_details in var.cloud_services :
       {
-        ip_name      = "${subnet.name}-${service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+        ip_name      = "${subnet.name}-${target_service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
-        gateway_name = lookup(service_details, "name", "${var.prefix}-${var.vpc_name}-${service_name}")
+        gateway_name = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${target_service_name}" # lookup(vpe_details, "name", "${var.prefix}-${var.vpc_name}-${target_service_name}")
       }
       ],
       [
-        for service in var.cloud_service_by_crn :
+        for target_crn, vpe_details in var.cloud_service_by_crn :
         {
-          ip_name      = "${subnet.name}-${service.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          ip_name      = vpe_details.name != null ? "${subnet.name}-${vpe_details.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${element(split(":", target_crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
-          gateway_name = service.name #lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
+          gateway_name = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${element(split(":", target_crn), 4)}"
         }
     ])
   ])
