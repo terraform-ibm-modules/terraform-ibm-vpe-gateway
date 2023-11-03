@@ -1,11 +1,3 @@
-### randomising the custom vpe names
-locals {
-  vpe_names = {
-    for k, v in var.vpe_names :
-    k => "${var.prefix}-${v}"
-  }
-}
-
 ##############################################################################
 # Resource Group
 ##############################################################################
@@ -97,8 +89,8 @@ module "vpes" {
     "cloud-object-storage" = {}
   }
   cloud_service_by_crn = {
-    "${module.postgresql_db.crn}" = {
-      name = "postgresql"
+    (module.postgresql_db.crn) = {
+      service_name = "postgresql" # Optional - with this set, the service name would be derived from the crn which would be database-for-postgresql. service_name is used in this example to maintain backward compatibility with version <= 3.1.0 of the module
     }
   }
   service_endpoints = var.service_endpoints

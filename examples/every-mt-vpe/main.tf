@@ -39,7 +39,7 @@ module "vpes" {
     "billing"              = {},
     "cloud-object-storage" = {},
     "codeengine"           = {},
-    #"container-registry", # to fix in https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/390
+    #"container-registry = {}", # to fix in https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/390
     "directlink"              = {},
     "dns-svcs"                = {},
     "enterprise"              = {},

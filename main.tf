@@ -8,7 +8,7 @@ locals {
     # Create object for each service
     for target_service_name, vpe_details in var.cloud_services :
     {
-      name                         = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${target_service_name}"
+      name                         = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${target_service_name}"
       service                      = target_service_name
       crn                          = null
       allow_dns_resolution_binding = vpe_details.allow_dns_resolution_binding
@@ -17,7 +17,7 @@ locals {
     [
       for target_crn, vpe_details in var.cloud_service_by_crn :
       {
-        name                         = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${element(split(":", target_crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
+        name                         = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${vpe_details.service_name != null ? vpe_details.service_name : element(split(":", target_crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
         service                      = null
         crn                          = target_crn
         allow_dns_resolution_binding = vpe_details.allow_dns_resolution_binding
@@ -34,15 +34,15 @@ locals {
       {
         ip_name      = "${subnet.name}-${target_service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
-        gateway_name = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${target_service_name}" # lookup(vpe_details, "name", "${var.prefix}-${var.vpc_name}-${target_service_name}")
+        gateway_name = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${target_service_name}" # lookup(vpe_details, "name", "${var.prefix}-${var.vpc_name}-${target_service_name}")
       }
       ],
       [
         for target_crn, vpe_details in var.cloud_service_by_crn :
         {
-          ip_name      = vpe_details.name != null ? "${subnet.name}-${vpe_details.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${element(split(":", target_crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          ip_name      = vpe_details.vpe_name != null ? "${subnet.name}-${vpe_details.vpe_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${vpe_details.service_name != null ? vpe_details.service_name : element(split(":", target_crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
-          gateway_name = vpe_details.name != null ? vpe_details.name : "${var.prefix}-${var.vpc_name}-${element(split(":", target_crn), 4)}"
+          gateway_name = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${vpe_details.service_name != null ? vpe_details.service_name : element(split(":", target_crn), 4)}"
         }
     ])
   ])
