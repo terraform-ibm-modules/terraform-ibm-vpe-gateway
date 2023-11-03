@@ -8,7 +8,7 @@
       "default": [],
       "pos": {
         "filename": "variables.tf",
-        "line": 99
+        "line": 109
       }
     },
     "cloud_services": {
@@ -79,7 +79,7 @@
       "default": "private",
       "pos": {
         "filename": "variables.tf",
-        "line": 111
+        "line": 120
       }
     },
     "subnet_zone_list": {
@@ -114,6 +114,16 @@
       "pos": {
         "filename": "variables.tf",
         "line": 17
+      }
+    },
+    "vpe_names": {
+      "name": "vpe_names",
+      "type": "map(string)",
+      "description": "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have.",
+      "default": {},
+      "pos": {
+        "filename": "variables.tf",
+        "line": 131
       }
     }
   },
@@ -156,7 +166,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 86
+        "line": 64
       }
     },
     "ibm_is_virtual_endpoint_gateway.vpe": {
@@ -173,7 +183,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 101
+        "line": 79
       }
     },
     "ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip": {
@@ -185,7 +195,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 123
+        "line": 103
       }
     }
   },
@@ -199,7 +209,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 139
+        "line": 119
       }
     }
   },
