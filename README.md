@@ -58,13 +58,16 @@ module "vpes" {
   ]
   resource_group_id    = "00ae4b38253f43a3acd14619dd385632" # pragma: allowlist secret
   security_group_ids   = ["r014-2d4f8cd6-6g3s-4ab5-ac3f-8fc717ce2a1f"]
-  cloud_services       = ["kms", "cloud-object-storage"]
-  cloud_service_by_crn = [
-    {
-      name = "subnet-1"
-      crn  = "crn:v1:bluemix:public:kms:au-syd:a/abac0df06b644a9cabc6e44f55b3880e:12d2244b-g3d3-4978-7s3f-81b60a1fb7a4::"
-    },
-  ]
+  cloud_services       = {
+    kms = {}
+    cloud-object-storage = {
+      vpe_name = "cos custom vpe name"
+      allow_dns_resolution_binding = true
+    }
+  }
+  cloud_service_by_crn = {
+    "crn:v1:bluemix:public:databases-for-postgresql:us-south:a/abac0df06b644a9cabc6e44f55b3880e:93f97b1a-fe35-4f17-a8be-ecf197a36bee::" = {}
+  }
   service_endpoints = "private"
 }
 ```
@@ -105,7 +108,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | List of cloud service CRNs. The keys are the CRN. The values (all optional) give some level of control on the created VPEs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). | <pre>map(<br>    object({<br>      vpe_name                     = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br>      service_name                 = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.<br>      allow_dns_resolution_binding = optional(bool, true)<br>    })<br>  )</pre> | `{}` | no |
-| <a name="input_cloud_services"></a> [cloud\_services](#input\_cloud\_services) | List of cloud services to create an endpoint gateway. The keys are the service names, the values (all optional) give some level of control on the created VPEs. | <pre>map(object({<br>    vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br>    allow_dns_resolution_binding = optional(bool, true)<br>  }))</pre> | n/a | yes |
+| <a name="input_cloud_services"></a> [cloud\_services](#input\_cloud\_services) | List of cloud services to create an endpoint gateway. The keys are the service names, the values (all optional) give some level of control on the created VPEs. | <pre>map(object({<br>    vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br>    allow_dns_resolution_binding = optional(bool, false)<br>  }))</pre> | n/a | yes |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources | `string` | `"vpe"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where VPC and services are deployed | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group where endpoint gateways will be provisioned | `string` | `null` | no |
