@@ -59,10 +59,10 @@ module "vpes" {
   resource_group_id    = "00ae4b38253f43a3acd14619dd385632" # pragma: allowlist secret
   security_group_ids   = ["r014-2d4f8cd6-6g3s-4ab5-ac3f-8fc717ce2a1f"]
   cloud_services       = {
-    kms = {}
-    cloud-object-storage = {
-      vpe_name = "cos custom vpe name"
-      allow_dns_resolution_binding = true
+    "kms" = {}
+    "cloud-object-storage" = {
+      "vpe_name" = "cos custom vpe name"
+      "allow_dns_resolution_binding" = true
     }
   }
   cloud_service_by_crn = {

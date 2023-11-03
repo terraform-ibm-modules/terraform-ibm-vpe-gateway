@@ -18,47 +18,6 @@ const defaultExampleTerraformDir = "examples/default"
 const region = "us-south"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
-	cloudServices := []string{
-		"account-management",
-		"billing",
-		"cloud-object-storage",
-		//"cloud-object-storage-config",
-		"codeengine",
-		//"container-registry",
-		//"containers-kubernetes",
-		//"context-based-restrictions",
-		"directlink",
-		"dns-svcs",
-		"enterprise",
-		"global-search-tagging",
-		"globalcatalog",
-		"hs-crypto",
-		//"hs-crypto-cert-mgr",
-		//"hs-crypto-ep11",
-		//"hs-crypto-ep11-az1",
-		//"hs-crypto-ep11-az2",
-		//"hs-crypto-ep11-az3",
-		//"hs-crypto-kmip",
-		//"hs-crypto-tke",
-		"hyperp-dbaas-mongodb",
-		"hyperp-dbaas-postgresql",
-		"iam-svcs",
-		"is",
-		"kms",
-		//"messaging",
-		"resource-controller",
-		//"support-center",
-		"transit",
-		"user-management",
-		//"vmware",
-		//"ntp",
-	}
-
-	vpeNames := map[string]string{
-		"cloud-object-storage": "custom-cos-name",
-		"kms":                  "custom-kms-name",
-		"postgresql":           "custom-postgres-name",
-	}
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:      t,
@@ -71,9 +30,7 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		},
 		ResourceGroup: resourceGroup,
 		TerraformVars: map[string]interface{}{
-			"region":         region,
-			"cloud_services": cloudServices,
-			"vpe_names":      vpeNames,
+			"region": region,
 		},
 	})
 	return options
