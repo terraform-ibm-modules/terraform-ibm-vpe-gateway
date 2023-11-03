@@ -1,7 +1,8 @@
 output "vpe_ips" {
   description = "The endpoint gateway reserved ips"
   value = { for vpe_pg in data.ibm_is_virtual_endpoint_gateway.vpe :
-  vpe_pg.name => vpe_pg.ips }
+    # Sorting the array by ids to ensure stability across idempotent plan/apply
+  vpe_pg.name => flatten([for id in sort([for ip in vpe_pg.ips : ip.id]) : [for ip in vpe_pg.ips : ip if ip.id == id]]) }
 }
 
 output "crn" {
