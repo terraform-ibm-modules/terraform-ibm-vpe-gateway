@@ -62,7 +62,7 @@ variable "cloud_services" {
   description = "List of cloud services to create an endpoint gateway. The keys are the service names, the values (all optional) give some level of control on the created VPEs."
   type = map(object({
     vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
-    allow_dns_resolution_binding = optional(bool, true)
+    allow_dns_resolution_binding = optional(bool, false)
   }))
   validation {
     error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."

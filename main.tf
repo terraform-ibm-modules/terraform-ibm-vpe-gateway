@@ -69,6 +69,7 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
   }
+  name   = each.key
   subnet = each.value.subnet_id
 }
 
