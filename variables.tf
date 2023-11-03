@@ -60,15 +60,16 @@ variable "security_group_ids" {
 
 variable "cloud_services" {
   description = "List of cloud services to create an endpoint gateway. The keys are the service names, the values (all optional) give some level of control on the created VPEs."
-  type = map(object({
+  type = set(object({
+    service_name                 = string
     vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
     allow_dns_resolution_binding = optional(bool, false)
   }))
   validation {
     error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
     condition = length(var.cloud_services) == 0 ? true : length([
-      for service_name, _ in var.cloud_services :
-      service_name if !contains([
+      for service in var.cloud_services :
+      service.service_name if !contains([
         "account-management",
         "billing",
         "cloud-object-storage",
@@ -102,21 +103,22 @@ variable "cloud_services" {
         "user-management",
         "vmware",
         "ntp"
-      ], service_name)
+      ], service.service_name)
     ]) == 0
   }
 }
 
 variable "cloud_service_by_crn" {
   description = "List of cloud service CRNs. The keys are the CRN. The values (all optional) give some level of control on the created VPEs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
-  type = map(
+  type = set(
     object({
+      crn                          = string
       vpe_name                     = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
       service_name                 = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.
       allow_dns_resolution_binding = optional(bool, true)
     })
   )
-  default = {}
+  default = []
 }
 
 variable "service_endpoints" {

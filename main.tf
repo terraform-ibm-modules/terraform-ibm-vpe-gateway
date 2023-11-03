@@ -8,21 +8,21 @@ locals {
   # List of Gateways to create
   gateway_list = concat([
     # Create object for each service
-    for target_service_name, vpe_details in var.cloud_services :
+    for service in var.cloud_services :
     {
-      name                         = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${target_service_name}"
-      service                      = target_service_name
-      crn                          = local.service_to_endpoint_map[target_service_name]
-      allow_dns_resolution_binding = vpe_details.allow_dns_resolution_binding
+      name                         = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
+      service                      = service.service_name
+      crn                          = local.service_to_endpoint_map[service.service_name]
+      allow_dns_resolution_binding = service.allow_dns_resolution_binding
     }
     ],
     [
-      for target_crn, vpe_details in var.cloud_service_by_crn :
+      for service in var.cloud_service_by_crn :
       {
-        name                         = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${vpe_details.service_name != null ? vpe_details.service_name : element(split(":", target_crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
+        name                         = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
         service                      = null
-        crn                          = target_crn
-        allow_dns_resolution_binding = vpe_details.allow_dns_resolution_binding
+        crn                          = service.crn
+        allow_dns_resolution_binding = service.allow_dns_resolution_binding
       }
     ]
   )
@@ -32,19 +32,19 @@ locals {
     # Create object for each subnet
     for subnet in var.subnet_zone_list :
     concat([
-      for target_service_name, vpe_details in var.cloud_services :
+      for service in var.cloud_services :
       {
-        ip_name      = "${subnet.name}-${target_service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+        ip_name      = "${subnet.name}-${service.service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
-        gateway_name = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${target_service_name}" # lookup(vpe_details, "name", "${var.prefix}-${var.vpc_name}-${target_service_name}")
+        gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
       }
       ],
       [
-        for target_crn, vpe_details in var.cloud_service_by_crn :
+        for service in var.cloud_service_by_crn :
         {
-          ip_name      = vpe_details.vpe_name != null ? "${subnet.name}-${vpe_details.vpe_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${vpe_details.service_name != null ? vpe_details.service_name : element(split(":", target_crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          ip_name      = service.vpe_name != null ? "${subnet.name}-${service.vpe_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
-          gateway_name = vpe_details.vpe_name != null ? vpe_details.vpe_name : "${var.prefix}-${var.vpc_name}-${vpe_details.service_name != null ? vpe_details.service_name : element(split(":", target_crn), 4)}"
+          gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}"
         }
     ])
   ])

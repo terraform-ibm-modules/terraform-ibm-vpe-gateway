@@ -84,15 +84,21 @@ module "vpes" {
   subnet_zone_list   = var.vpc_id != null ? var.subnet_zone_list : module.vpc[0].subnet_zone_list
   resource_group_id  = module.resource_group.resource_group_id
   security_group_ids = var.security_group_ids != null ? var.security_group_ids : [module.vpe_security_group.security_group_id]
-  cloud_services = {
-    "kms"                  = {},
-    "cloud-object-storage" = {}
-  }
-  cloud_service_by_crn = {
-    (module.postgresql_db.crn) = {
+  cloud_services = [
+    {
+      service_name = "kms"
+    },
+    {
+      service_name = "cloud-object-storage"
+    }
+
+  ]
+  cloud_service_by_crn = [
+    {
+      crn          = (module.postgresql_db.crn)
       service_name = "postgresql" # Optional - with this set, the service name would be derived from the crn which would be database-for-postgresql. service_name is used in this example to maintain backward compatibility with version <= 3.1.0 of the module
     }
-  }
+  ]
   service_endpoints = var.service_endpoints
   #vpe_names            = local.vpe_names
   #  See comments below (resource "time_sleep" "sleep_time") for explaination on why this is needed.
