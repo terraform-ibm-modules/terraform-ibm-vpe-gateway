@@ -58,16 +58,19 @@ module "vpes" {
   ]
   resource_group_id    = "00ae4b38253f43a3acd14619dd385632" # pragma: allowlist secret
   security_group_ids   = ["r014-2d4f8cd6-6g3s-4ab5-ac3f-8fc717ce2a1f"]
-  cloud_services       = {
-    "kms" = {}
-    "cloud-object-storage" = {
-      "vpe_name" = "cos custom vpe name"
-      "allow_dns_resolution_binding" = true
+  cloud_services = [
+    {
+      service_name = "kms"
+    },
+    {
+      service_name = "cloud-object-storage"
     }
-  }
-  cloud_service_by_crn = {
-    "crn:v1:bluemix:public:databases-for-postgresql:us-south:a/abac0df06b644a9cabc6e44f55b3880e:93f97b1a-fe35-4f17-a8be-ecf197a36bee::" = {}
-  }
+  ]
+  cloud_service_by_crn = [
+    {
+      crn          = "crn:v1:bluemix:public:databases-for-postgresql:us-south:a/abac0df06b644a9cabc6e44f55b3880d:93f97b1a-fe35-4f17-a8be-ecf197a36bed::"
+    }
+  ]
   service_endpoints = "private"
 }
 ```
