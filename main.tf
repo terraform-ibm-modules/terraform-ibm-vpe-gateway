@@ -84,7 +84,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     for gateway in local.gateway_list :
     (gateway.name) => gateway
   }
-  name            = each.key
+  # name            = each.key # Tracked at https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/435
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
