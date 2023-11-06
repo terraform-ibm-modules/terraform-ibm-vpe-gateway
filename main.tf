@@ -69,7 +69,7 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
   }
-  name   = each.key
+  # name  # Tracked at https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/435
   subnet = each.value.subnet_id
 }
 
@@ -84,7 +84,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     for gateway in local.gateway_list :
     (gateway.name) => gateway
   }
-  # name            = each.key # Tracked at https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/435
+  name            = each.key
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
