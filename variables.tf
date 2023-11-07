@@ -59,15 +59,17 @@ variable "security_group_ids" {
 
 
 variable "cloud_services" {
-  description = "List of cloud services to create an endpoint gateway."
-  type        = list(string)
-  default     = ["kms", "cloud-object-storage"]
-
+  description = "List of cloud services to create an endpoint gateway. The keys are the service names, the values (all optional) give some level of control on the created VPEs."
+  type = set(object({
+    service_name                 = string
+    vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
+    allow_dns_resolution_binding = optional(bool, false)
+  }))
   validation {
     error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
     condition = length(var.cloud_services) == 0 ? true : length([
       for service in var.cloud_services :
-      service if !contains([
+      service.service_name if !contains([
         "account-management",
         "billing",
         "cloud-object-storage",
@@ -101,17 +103,19 @@ variable "cloud_services" {
         "user-management",
         "vmware",
         "ntp"
-      ], service)
+      ], service.service_name)
     ]) == 0
   }
 }
 
 variable "cloud_service_by_crn" {
-  description = "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
-  type = list(
+  description = "List of cloud service CRNs. The keys are the CRN. The values (all optional) give some level of control on the created VPEs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
+  type = set(
     object({
-      name = string # service name
-      crn  = string # service crn
+      crn                          = string
+      vpe_name                     = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
+      service_name                 = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.
+      allow_dns_resolution_binding = optional(bool, true)
     })
   )
   default = []
@@ -126,12 +130,6 @@ variable "service_endpoints" {
     error_message = "Service endpoints can only be `public` or `private`."
     condition     = contains(["public", "private"], var.service_endpoints)
   }
-}
-
-variable "vpe_names" {
-  description = "A map whose keys are the service(s) you are overriding the name of and the values are the names you want the gateways for those services to have."
-  type        = map(string)
-  default     = {}
 }
 
 ##############################################################################

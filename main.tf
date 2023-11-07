@@ -10,17 +10,19 @@ locals {
     # Create object for each service
     for service in var.cloud_services :
     {
-      name    = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
-      service = service
-      crn     = local.service_to_endpoint_map[service]
+      name                         = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
+      service                      = service.service_name
+      crn                          = local.service_to_endpoint_map[service.service_name]
+      allow_dns_resolution_binding = service.allow_dns_resolution_binding
     }
     ],
     [
       for service in var.cloud_service_by_crn :
       {
-        name    = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
-        service = null
-        crn     = service.crn
+        name                         = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
+        service                      = null
+        crn                          = service.crn
+        allow_dns_resolution_binding = service.allow_dns_resolution_binding
       }
     ]
   )
@@ -32,17 +34,17 @@ locals {
     concat([
       for service in var.cloud_services :
       {
-        ip_name      = "${subnet.name}-${service}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+        ip_name      = "${subnet.name}-${service.service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
-        gateway_name = lookup(var.vpe_names, service, "${var.prefix}-${var.vpc_name}-${service}")
+        gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
       }
       ],
       [
         for service in var.cloud_service_by_crn :
         {
-          ip_name      = "${subnet.name}-${service.name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          ip_name      = service.vpe_name != null ? "${subnet.name}-${service.vpe_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
-          gateway_name = lookup(var.vpe_names, service.name, "${var.prefix}-${var.vpc_name}-${service.name}")
+          gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}"
         }
     ])
   ])
@@ -67,6 +69,7 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
   }
+  # name  # Tracked at https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/435
   subnet = each.value.subnet_id
 }
 
@@ -92,6 +95,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     crn           = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? each.value.crn : null
     resource_type = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? "provider_cloud_service" : "provider_infrastructure_service"
   }
+  allow_dns_resolution_binding = each.value.allow_dns_resolution_binding
 }
 
 ##############################################################################

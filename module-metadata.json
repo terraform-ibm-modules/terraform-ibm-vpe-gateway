@@ -3,7 +3,7 @@
   "variables": {
     "cloud_service_by_crn": {
       "name": "cloud_service_by_crn",
-      "type": "list(\n    object({\n      name = string # service name\n      crn  = string # service crn\n    })\n  )",
+      "type": "list(\n    object({\n      name = string # service name\n      crn  = string # service crn\n      #allow_dns_resolution_binding = optional(bool, true)\n    })\n  )",
       "description": "List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services).",
       "default": [],
       "pos": {
@@ -13,12 +13,9 @@
     },
     "cloud_services": {
       "name": "cloud_services",
-      "type": "list(string)",
+      "type": "map(object({\n    name                         = optional(string),\n    allow_dns_resolution_binding = optional(bool, true)\n  }))",
       "description": "List of cloud services to create an endpoint gateway.",
-      "default": [
-        "kms",
-        "cloud-object-storage"
-      ],
+      "required": true,
       "pos": {
         "filename": "variables.tf",
         "line": 61
@@ -155,7 +152,7 @@
     "ibm": {
       "source": "IBM-Cloud/ibm",
       "version_constraints": [
-        "\u003e= 1.52.0"
+        "\u003e= 1.58.0"
       ]
     }
   },

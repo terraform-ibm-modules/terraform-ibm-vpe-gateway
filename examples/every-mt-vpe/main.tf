@@ -27,47 +27,113 @@ module "vpc" {
 # Create every multi-tenant VPEs in the VPC
 ##############################################################################
 module "vpes" {
-  source   = "../../"
-  region   = var.region
-  prefix   = var.prefix
-  vpc_name = module.vpc.vpc_name
-  vpc_id   = module.vpc.vpc_id
-  #subnet_zone_list  = module.vpc.subnet_zone_list
+  source            = "../../"
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  subnet_zone_list  = module.vpc.subnet_zone_list
   resource_group_id = module.resource_group.resource_group_id
   cloud_services = [
-    "account-management",
-    "billing",
-    "cloud-object-storage",
-    "cloud-object-storage-config",
-    "codeengine",
-    "container-registry",
-    "containers-kubernetes",
-    "context-based-restrictions",
-    "directlink",
-    "dns-svcs",
-    "enterprise",
-    "global-search-tagging",
-    "globalcatalog",
-    "hs-crypto",
-    "hs-crypto-cert-mgr",
-    "hs-crypto-ep11",
-    "hs-crypto-ep11-az1",
-    "hs-crypto-ep11-az2",
-    "hs-crypto-ep11-az3",
-    "hs-crypto-kmip",
-    "hs-crypto-tke",
-    "hyperp-dbaas-mongodb",
-    "hyperp-dbaas-postgresql",
-    "iam-svcs",
-    "is",
-    "kms",
-    "messaging",
-    "resource-controller",
-    "support-center",
-    "transit",
-    "user-management",
-    "vmware",
-    "ntp",
+    {
+      service_name = "account-management"
+    },
+    {
+      service_name = "billing"
+    },
+    {
+      service_name = "cloud-object-storage"
+    },
+    {
+      service_name = "cloud-object-storage-config"
+    },
+    {
+      service_name = "codeengine"
+    },
+    {
+      service_name = "container-registry"
+    },
+    {
+      service_name = "containers-kubernetes"
+    },
+    {
+      service_name = "context-based-restrictions"
+    },
+    {
+      service_name = "directlink"
+    },
+    {
+      service_name = "dns-svcs"
+    },
+    {
+      service_name = "enterprise"
+    },
+    {
+      service_name = "global-search-tagging"
+    },
+    {
+      service_name = "globalcatalog"
+    },
+    {
+      service_name = "hs-crypto"
+    },
+    {
+      service_name = "hs-crypto-cert-mgr"
+    },
+    {
+      service_name = "hs-crypto-ep11"
+    },
+    {
+      service_name = "hs-crypto-ep11-az1"
+    },
+    {
+      service_name = "hs-crypto-ep11-az2"
+    },
+    {
+      service_name = "hs-crypto-ep11-az3"
+    },
+    {
+      service_name = "hs-crypto-kmip"
+    },
+    {
+      service_name = "hs-crypto-tke"
+    },
+    {
+      service_name = "hyperp-dbaas-mongodb"
+    },
+    {
+      service_name = "hyperp-dbaas-postgresql"
+    },
+    {
+      service_name = "iam-svcs"
+    },
+    {
+      service_name = "is"
+    },
+    {
+      service_name = "kms"
+    },
+    {
+      service_name = "messaging"
+    },
+    {
+      service_name = "resource-controller"
+    },
+    {
+      service_name = "support-center"
+    },
+    {
+      service_name = "transit"
+    },
+    {
+      service_name = "user-management"
+    },
+    {
+      service_name = "vmware"
+    },
+    {
+      service_name = "ntp"
+    }
   ]
 }
 

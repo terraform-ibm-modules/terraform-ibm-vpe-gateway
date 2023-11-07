@@ -1,11 +1,3 @@
-### randomising the custom vpe names
-locals {
-  vpe_names = {
-    for k, v in var.vpe_names :
-    k => "${var.prefix}-${v}"
-  }
-}
-
 ##############################################################################
 # Resource Group
 ##############################################################################
@@ -79,29 +71,36 @@ module "postgresql_db" {
   region            = var.region
 }
 
-locals {
-  cloud_service_by_crn = concat([{
-    name = "postgresql" # name of the vpe
-    crn = module.postgresql_db.crn }
-  ], var.cloud_service_by_crn)
-}
 
 ##############################################################################
 # Create VPEs in the VPC
 ##############################################################################
 module "vpes" {
-  source               = "../../"
-  region               = var.region
-  prefix               = var.prefix
-  vpc_name             = var.vpc_name
-  vpc_id               = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
-  subnet_zone_list     = var.vpc_id != null ? var.subnet_zone_list : module.vpc[0].subnet_zone_list
-  resource_group_id    = module.resource_group.resource_group_id
-  security_group_ids   = var.security_group_ids != null ? var.security_group_ids : [module.vpe_security_group.security_group_id]
-  cloud_services       = var.cloud_services
-  cloud_service_by_crn = local.cloud_service_by_crn
-  service_endpoints    = var.service_endpoints
-  vpe_names            = local.vpe_names
+  source             = "../../"
+  region             = var.region
+  prefix             = var.prefix
+  vpc_name           = var.vpc_name
+  vpc_id             = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
+  subnet_zone_list   = var.vpc_id != null ? var.subnet_zone_list : module.vpc[0].subnet_zone_list
+  resource_group_id  = module.resource_group.resource_group_id
+  security_group_ids = var.security_group_ids != null ? var.security_group_ids : [module.vpe_security_group.security_group_id]
+  cloud_services = [
+    {
+      service_name = "kms"
+    },
+    {
+      service_name = "cloud-object-storage"
+    }
+
+  ]
+  cloud_service_by_crn = [
+    {
+      crn          = (module.postgresql_db.crn)
+      service_name = "postgresql" # Optional - with this set, the service name would be derived from the crn which would be database-for-postgresql. service_name is used in this example to maintain backward compatibility with version <= 3.1.0 of the module
+    }
+  ]
+  service_endpoints = var.service_endpoints
+  #vpe_names            = local.vpe_names
   #  See comments below (resource "time_sleep" "sleep_time") for explaination on why this is needed.
   depends_on = [time_sleep.sleep_time]
 }
