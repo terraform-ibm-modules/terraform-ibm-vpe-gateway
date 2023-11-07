@@ -81,10 +81,11 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     for gateway in local.gateway_list :
     (gateway.name) => gateway
   }
-  name            = each.key
-  vpc             = var.vpc_id
-  resource_group  = var.resource_group_id
-  security_groups = var.security_group_ids
+  name                         = each.key
+  vpc                          = var.vpc_id
+  resource_group               = var.resource_group_id
+  security_groups              = var.security_group_ids
+  allow_dns_resolution_binding = var.allow_dns_resolution_binding
 
   # check if target is a CRN and handle accordingly
   target {
