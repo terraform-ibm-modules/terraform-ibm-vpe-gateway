@@ -37,6 +37,7 @@ locals {
         ip_name      = "${subnet.name}-${service.service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
         subnet_id    = subnet.id
         gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
+        name         = service.vpe_name != null ? "${service.vpe_name}-${replace(subnet.zone, "/${var.region}-/", "")}" : "${var.prefix}-${var.vpc_name}-${service.service_name}-${replace(subnet.zone, "/${var.region}-/", "")}"
       }
       ],
       [
@@ -45,6 +46,7 @@ locals {
           ip_name      = service.vpe_name != null ? "${subnet.name}-${service.vpe_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
           gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}"
+          name         = service.vpe_name != null ? "${service.vpe_name}-${replace(subnet.zone, "/${var.region}-/", "")}" : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}-${replace(subnet.zone, "/${var.region}-/", "")}"
         }
     ])
   ])
@@ -69,7 +71,7 @@ resource "ibm_is_subnet_reserved_ip" "ip" {
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
   }
-  # name  # Tracked at https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/issues/435
+  name   = each.value.name
   subnet = each.value.subnet_id
 }
 
