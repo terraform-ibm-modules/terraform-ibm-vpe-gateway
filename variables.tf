@@ -65,6 +65,7 @@ variable "cloud_services" {
     vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
     allow_dns_resolution_binding = optional(bool, false)
   }))
+  default = []
   validation {
     error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
     condition = length(var.cloud_services) == 0 ? true : length([
