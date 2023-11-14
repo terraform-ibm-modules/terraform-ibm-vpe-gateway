@@ -23,15 +23,13 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 		Testing:      t,
 		TerraformDir: dir,
 		Prefix:       prefix,
+		Region:       region,
 		IgnoreUpdates: testhelper.Exemptions{ // Ignore for consistency check
 			List: []string{
 				"time_sleep.sleep_time",
 			},
 		},
 		ResourceGroup: resourceGroup,
-		TerraformVars: map[string]interface{}{
-			"region": region,
-		},
 	})
 	return options
 }
@@ -110,4 +108,13 @@ func TestRunUpgradeExample(t *testing.T) {
 		assert.Nil(t, err, "This should not have errored")
 		assert.NotNil(t, output, "Expected some output")
 	}
+}
+
+func TestRunEveryMultiTenantExample(t *testing.T) {
+	t.Parallel()
+
+	options := setupOptions(t, "vpe-allmt", "examples/every-mt-vpe")
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
 }
