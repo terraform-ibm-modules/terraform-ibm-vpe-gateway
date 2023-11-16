@@ -13,6 +13,10 @@ The module supports the following actions:
 - Create reserved IP addresses
 - Attach endpoint gateways to reserved IP addresses
 
+### Known provider issues
+
+An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4927) has been raised that impacts this module. When changing the name of reserved ip addresses for the VPE gateways, the outputs of this module may not be updated in the terraform state file. When this issue occurs, run a `terraform apply -refresh-only` to update the terraform state.
+
 <!-- Below content is automatically populated via pre-commit hook -->
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
