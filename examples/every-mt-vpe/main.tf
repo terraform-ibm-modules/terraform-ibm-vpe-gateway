@@ -60,6 +60,7 @@ module "vpes" {
     },
     {
       service_name = "containers-kubernetes"
+      vpe_name     = "${var.prefix}-kubernetes"
     },
     {
       service_name = "context-based-restrictions"
