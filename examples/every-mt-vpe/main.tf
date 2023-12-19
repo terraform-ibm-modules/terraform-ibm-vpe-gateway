@@ -16,15 +16,18 @@ module "resource_group" {
 
 module "vpc" {
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "7.11.0"
+  version           = "7.13.2"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
   name              = "vpc"
+  tags              = var.resource_tags
 }
 
 ##############################################################################
 # Create every multi-tenant VPEs in the VPC
+# NOTE: forcing a shorter VPE name for some services due to length limitations
+# on VPE service side
 ##############################################################################
 module "vpes" {
   source            = "../../"
@@ -43,9 +46,11 @@ module "vpes" {
     },
     {
       service_name = "cloud-object-storage"
+      vpe_name     = "${var.prefix}-cos"
     },
     {
       service_name = "cloud-object-storage-config"
+      vpe_name     = "${var.prefix}-cos-config"
     },
     {
       service_name = "codeengine"
@@ -55,9 +60,11 @@ module "vpes" {
     },
     {
       service_name = "containers-kubernetes"
+      vpe_name     = "${var.prefix}-kubernetes"
     },
     {
       service_name = "context-based-restrictions"
+      vpe_name     = "${var.prefix}-cbr"
     },
     {
       service_name = "directlink"
@@ -70,6 +77,7 @@ module "vpes" {
     },
     {
       service_name = "global-search-tagging"
+      vpe_name     = "${var.prefix}-search-tag"
     },
     {
       service_name = "globalcatalog"
@@ -100,9 +108,11 @@ module "vpes" {
     },
     {
       service_name = "hyperp-dbaas-mongodb"
+      vpe_name     = "${var.prefix}-hyperp-mongodb"
     },
     {
       service_name = "hyperp-dbaas-postgresql"
+      vpe_name     = "${var.prefix}-hyperp-postgresql"
     },
     {
       service_name = "iam-svcs"
