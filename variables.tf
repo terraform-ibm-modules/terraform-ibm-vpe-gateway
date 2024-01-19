@@ -9,13 +9,13 @@ variable "region" {
 }
 
 variable "prefix" {
-  description = "The prefix that you would like to append to your resources"
+  description = "The prefix that you would like to append to your resources. Value is only used if no value is passed for the `vpe_name` option in the `cloud_services` input variable."
   type        = string
   default     = "vpe"
 }
 
 variable "vpc_name" {
-  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names."
+  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. Value is only used if no value is passed for the `vpe_name` option in the `cloud_services` input variable."
   type        = string
   default     = "vpc"
 }
@@ -131,6 +131,14 @@ variable "service_endpoints" {
     error_message = "Service endpoints can only be `public` or `private`."
     condition     = contains(["public", "private"], var.service_endpoints)
   }
+}
+
+variable "reserved_ips" {
+  description = "Map of existing reserved IP names and values. If you wish to create your reserved ips independently and not create new ones you can first run the `reserved-ips` submodule and then copy the output `reserved_ip_map` here."
+  type = object({
+    name = optional(string) # endpoint gateway IP ID
+  })
+  default = {}
 }
 
 ##############################################################################

@@ -11,7 +11,7 @@ This module creates and configures virtual private endpoint gateways (https://cl
 The module supports the following actions:
 - Create virtual private endpoint gateways
 - Create reserved IP addresses
-- Attach endpoint gateways to reserved IP addresses
+- Attach endpoint gateways to reserved IP addresses.
 
 ### Known provider issues
 
@@ -21,9 +21,12 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
 * [terraform-ibm-vpe-gateway](#terraform-ibm-vpe-gateway)
+* [Submodules](./modules)
+    * [reserved-ips](./modules/reserved-ips)
 * [Examples](./examples)
     * [End-to-end example](./examples/default)
     * [Every multi-tenant VPE](./examples/every-mt-vpe)
+    * [Existing Reserved IPs example](./examples/reserved-ips)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
@@ -99,13 +102,14 @@ You need the following permissions to run this module.
 
 ### Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_ip"></a> [ip](#module\_ip) | ./modules/reserved-ips | n/a |
 
 ### Resources
 
 | Name | Type |
 |------|------|
-| [ibm_is_subnet_reserved_ip.ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_subnet_reserved_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway) | resource |
 | [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
@@ -116,14 +120,15 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | List of cloud service CRNs. The keys are the CRN. The values (all optional) give some level of control on the created VPEs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). | <pre>set(<br>    object({<br>      crn                          = string<br>      vpe_name                     = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br>      service_name                 = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.<br>      allow_dns_resolution_binding = optional(bool, true)<br>    })<br>  )</pre> | `[]` | no |
 | <a name="input_cloud_services"></a> [cloud\_services](#input\_cloud\_services) | List of cloud services to create an endpoint gateway. The keys are the service names, the values (all optional) give some level of control on the created VPEs. | <pre>set(object({<br>    service_name                 = string<br>    vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br>    allow_dns_resolution_binding = optional(bool, false)<br>  }))</pre> | `[]` | no |
-| <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources | `string` | `"vpe"` | no |
+| <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources. Value is only used if no value is passed for the `vpe_name` option in the `cloud_services` input variable. | `string` | `"vpe"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where VPC and services are deployed | `string` | `"us-south"` | no |
+| <a name="input_reserved_ips"></a> [reserved\_ips](#input\_reserved\_ips) | Map of existing reserved IP names and values. If you wish to create your reserved ips independently and not create new ones you can first run the `reserved-ips` submodule and then copy the output `reserved_ip_map` here. | <pre>object({<br>    name = optional(string) # endpoint gateway IP ID<br>  })</pre> | `{}` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group where endpoint gateways will be provisioned | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security group ids to attach to each endpoint gateway. | `list(string)` | `null` | no |
 | <a name="input_service_endpoints"></a> [service\_endpoints](#input\_service\_endpoints) | Service endpoints to use to create endpoint gateways. Can be `public`, or `private`. | `string` | `"private"` | no |
 | <a name="input_subnet_zone_list"></a> [subnet\_zone\_list](#input\_subnet\_zone\_list) | List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation. | <pre>list(<br>    object({<br>      name = string<br>      id   = string<br>      zone = optional(string)<br>      cidr = optional(string)<br>    })<br>  )</pre> | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | ID of the VPC where the Endpoint Gateways will be created | `string` | `null` | no |
-| <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. | `string` | `"vpc"` | no |
+| <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. Value is only used if no value is passed for the `vpe_name` option in the `cloud_services` input variable. | `string` | `"vpc"` | no |
 
 ### Outputs
 
