@@ -5,4 +5,3 @@
   "prefix": $PREFIX,
   "vpc_name": $VPC_NAME
 }
-
