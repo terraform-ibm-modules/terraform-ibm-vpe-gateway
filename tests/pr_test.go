@@ -17,13 +17,12 @@ const defaultExampleTerraformDir = "examples/default"
 
 const region = "us-south"
 
-func setupOptions(t *testing.T, prefix string, dir string, vpc_name string) *testhelper.TestOptions {
+func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:      t,
 		TerraformDir: dir,
 		Prefix:       prefix,
-		Vpc_Name:     vpc_name,
 		Region:       region,
 		IgnoreUpdates: testhelper.Exemptions{ // Ignore for consistency check
 			List: []string{
@@ -76,7 +75,7 @@ func ValidateOutputMapOfSlicesContent(inputMap map[string]interface{}) ([]string
 func TestRunDefaultExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "vpe-default", defaultExampleTerraformDir, "vpc-instance")
+	options := setupOptions(t, "vpe-default", defaultExampleTerraformDir)
 	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
