@@ -63,7 +63,6 @@ variable "security_group_ids" {
 variable "service_endpoints" {
   description = "Service endpoints to use to create endpoint gateways. Can be `public`, or `private`."
   type        = string
-  default     = "private"
 
   validation {
     error_message = "Service endpoints can only be `public` or `private`."
