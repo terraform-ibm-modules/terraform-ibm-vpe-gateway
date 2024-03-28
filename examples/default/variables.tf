@@ -24,11 +24,6 @@ variable "resource_group" {
 # VPC Variables
 ##############################################################################
 
-variable "vpc_name" {
-  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. It is also used to create a VPC when the vpc_id input is set to null."
-  type        = string
-}
-
 variable "vpc_id" {
   description = "ID of the VPC where the Endpoint Gateways will be created. Creates a VPC if set to null."
   type        = string
@@ -63,6 +58,7 @@ variable "security_group_ids" {
 variable "service_endpoints" {
   description = "Service endpoints to use to create endpoint gateways. Can be `public`, or `private`."
   type        = string
+  default     = "private"
 
   validation {
     error_message = "Service endpoints can only be `public` or `private`."
