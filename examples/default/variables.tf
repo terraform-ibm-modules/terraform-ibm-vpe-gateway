@@ -27,7 +27,6 @@ variable "resource_group" {
 variable "vpc_name" {
   description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. It is also used to create a VPC when the vpc_id input is set to null."
   type        = string
-  default     = "vpc-instance"
 }
 
 variable "vpc_id" {
