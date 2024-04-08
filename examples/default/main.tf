@@ -21,7 +21,7 @@ module "vpc" {
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
-  name              = var.vpc_name
+  name              = "vpc-instance"
   tags              = var.resource_tags
 }
 
@@ -79,7 +79,7 @@ module "vpes" {
   source             = "../../"
   region             = var.region
   prefix             = var.prefix
-  vpc_name           = var.vpc_name
+  vpc_name           = "vpc-instance"
   vpc_id             = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
   subnet_zone_list   = var.vpc_id != null ? var.subnet_zone_list : module.vpc[0].subnet_zone_list
   resource_group_id  = module.resource_group.resource_group_id
