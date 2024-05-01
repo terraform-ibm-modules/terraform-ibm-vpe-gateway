@@ -28,8 +28,6 @@ locals {
     hs-crypto-ep11-az3          = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:ep11-az3.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
     hs-crypto-kmip              = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:kmip.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
     hs-crypto-tke               = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:tke.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
-    hyperp-dbaas-mongodb        = "crn:v1:bluemix:public:hyperp-dbaas-mongodb:${var.region}:::endpoint:dbaas900-mongodb.${local.endpoint_prefix}hyperp-dbaas.cloud.ibm.com"
-    hyperp-dbaas-postgresql     = "crn:v1:bluemix:public:hyperp-dbaas-postgresql:${var.region}:::endpoint:dbaas900-postgresql.${local.endpoint_prefix}hyperp-dbaas.cloud.ibm.com"
     iam-svcs                    = "crn:v1:bluemix:public:iam-svcs:global:::endpoint:${local.endpoint_prefix}iam.cloud.ibm.com"
     is                          = "crn:v1:bluemix:public:is:${var.region}:::endpoint:${var.region}.${local.endpoint_prefix}iaas.cloud.ibm.com"
     kms                         = "crn:v1:bluemix:public:kms:${var.region}:::endpoint:${local.endpoint_prefix}${var.region}.kms.cloud.ibm.com"
