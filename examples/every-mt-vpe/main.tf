@@ -107,14 +107,6 @@ module "vpes" {
       service_name = "hs-crypto-tke"
     },
     {
-      service_name = "hyperp-dbaas-mongodb"
-      vpe_name     = "${var.prefix}-hyperp-mongodb"
-    },
-    {
-      service_name = "hyperp-dbaas-postgresql"
-      vpe_name     = "${var.prefix}-hyperp-postgresql"
-    },
-    {
       service_name = "iam-svcs"
     },
     {
