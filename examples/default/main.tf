@@ -17,11 +17,11 @@ module "resource_group" {
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "7.17.1"
+  version           = "7.18.0"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
-  name              = var.vpc_name
+  name              = "vpc-instance"
   tags              = var.resource_tags
 }
 
@@ -65,7 +65,7 @@ module "vpe_security_group" {
 
 module "postgresql_db" {
   source            = "terraform-ibm-modules/icd-postgresql/ibm"
-  version           = "3.10.3"
+  version           = "3.12.0"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-vpe-pg"
   region            = var.region
@@ -79,7 +79,7 @@ module "vpes" {
   source             = "../../"
   region             = var.region
   prefix             = var.prefix
-  vpc_name           = var.vpc_name
+  vpc_name           = "vpc-instance"
   vpc_id             = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_id
   subnet_zone_list   = var.vpc_id != null ? var.subnet_zone_list : module.vpc[0].subnet_zone_list
   resource_group_id  = module.resource_group.resource_group_id

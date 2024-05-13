@@ -16,7 +16,7 @@ module "resource_group" {
 
 module "vpc" {
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "7.17.1"
+  version           = "7.18.0"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -106,14 +106,6 @@ module "vpes" {
     },
     {
       service_name = "hs-crypto-tke"
-    },
-    {
-      service_name = "hyperp-dbaas-mongodb"
-      vpe_name     = "${var.prefix}-hyperp-mongodb"
-    },
-    {
-      service_name = "hyperp-dbaas-postgresql"
-      vpe_name     = "${var.prefix}-hyperp-postgresql"
     },
     {
       service_name = "iam-svcs"

@@ -92,8 +92,6 @@ variable "cloud_services" {
         "hs-crypto-ep11-az3",
         "hs-crypto-kmip",
         "hs-crypto-tke",
-        "hyperp-dbaas-mongodb",
-        "hyperp-dbaas-postgresql",
         "iam-svcs",
         "is",
         "kms",
