@@ -33,7 +33,7 @@ module "vpes" {
   source            = "../../"
   region            = var.region
   prefix            = var.prefix
-  vpc_name          = module.vpc.vpc_name
+  vpc_name          = "vpc"
   vpc_id            = module.vpc.vpc_id
   subnet_zone_list  = module.vpc.subnet_zone_list
   resource_group_id = module.resource_group.resource_group_id
