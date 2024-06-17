@@ -51,7 +51,8 @@ locals {
     "eu-gb"    = "uk.icr.io"  # uk-south
     "ca-tor"   = "ca.icr.io"  # ca-tor
     "br-sao"   = "br.icr.io"  # br-sao
-    "us-south" = "us.icr.io"  # us
+    "us-south" = "us.icr.io"  # us-south
+    "eu-es"    = "es.icr.io"  # eu-es
   }
 
 }
