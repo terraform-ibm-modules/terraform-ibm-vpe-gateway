@@ -48,16 +48,20 @@ module "vpes" {
   vpc_id           = "r022-ae2a6785-gd62-7d4j-af62-b4891e949345"
   subnet_zone_list = [
     {
+      id             = "0757-b21b9565-bc4c-4847-bc6f-277ecd0a7cf6"
       name           = "subnet-1"
       cidr           = "10.0.10.0/24"
       public_gateway = true
       acl_name       = "acl"
+      zone           = "zone-1"
     },
     {
+      id             = "0757-b21b9565-bc4c-4847-bc6f-277ecd0a7cf6"
       name           = "subnet-2"
       cidr           = "10.0.11.0/24"
       acl_name       = "acl"
       public_gateway = null
+      zone           = "zone-2"
     }
   ]
   resource_group_id    = "00ae4b38253f43a3acd14619dd385632" # pragma: allowlist secret
@@ -121,7 +125,7 @@ No modules.
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | ID of the resource group where endpoint gateways will be provisioned | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security group ids to attach to each endpoint gateway. | `list(string)` | `null` | no |
 | <a name="input_service_endpoints"></a> [service\_endpoints](#input\_service\_endpoints) | Service endpoints to use to create endpoint gateways. Can be `public`, or `private`. | `string` | `"private"` | no |
-| <a name="input_subnet_zone_list"></a> [subnet\_zone\_list](#input\_subnet\_zone\_list) | List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation. | <pre>list(<br>    object({<br>      name = string<br>      id   = string<br>      zone = optional(string)<br>      cidr = optional(string)<br>    })<br>  )</pre> | `[]` | no |
+| <a name="input_subnet_zone_list"></a> [subnet\_zone\_list](#input\_subnet\_zone\_list) | List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation. | <pre>list(<br>    object({<br>      name = string<br>      id   = string<br>      zone = string<br>      cidr = optional(string)<br>    })<br>  )</pre> | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | ID of the VPC where the Endpoint Gateways will be created | `string` | `null` | no |
 | <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | Name of the VPC where the Endpoint Gateways will be created. This value is used to dynamically generate VPE names. | `string` | `"vpc"` | no |
 
