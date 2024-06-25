@@ -12,7 +12,7 @@ locals {
     cloud-object-storage        = "crn:v1:bluemix:public:cloud-object-storage:global:::endpoint:s3.direct.${var.region}.cloud-object-storage.appdomain.cloud"
     cloud-object-storage-config = "crn:v1:bluemix:public:cloud-object-storage:global:::endpoint:config.direct.cloud-object-storage.cloud.ibm.com"
     codeengine                  = "crn:v1:bluemix:public:codeengine:${var.region}:::endpoint:${local.endpoint_prefix}${var.region}.codeengine.cloud.ibm.com"
-    container-registry          = "crn:v1:bluemix:public:container-registry:${contains(keys(local.container_registry_region_domain_map), var.region) ? var.region : "us-east"}:::endpoint:${lookup(local.container_registry_region_domain_map, var.region, "icr.io")}" # default to global if not in mapping
+    container-registry          = "crn:v1:bluemix:public:container-registry:${contains(keys(local.container_registry_region_domain_map), var.region) ? var.region : "us-east"}:::endpoint:${lookup(local.container_registry_region_domain_map, var.region, "icr.io")}" # for container-registry the CRN defaults to global/us-east if the region is not in mapping
     containers-kubernetes       = "crn:v1:bluemix:public:containers-kubernetes:${var.region}:::endpoint:api.${var.region}.containers.cloud.ibm.com"
     context-based-restrictions  = "crn:v1:bluemix:public:context-based-restrictions:global:::endpoint:${local.endpoint_prefix}cbr.cloud.ibm.com"
     directlink                  = "crn:v1:bluemix:public:directlink:global:::endpoint:${local.endpoint_prefix}directlink.cloud.ibm.com"
@@ -53,6 +53,7 @@ locals {
     "br-sao"   = "br.icr.io"  # br-sao
     "us-south" = "us.icr.io"  # us-south
     "eu-es"    = "es.icr.io"  # eu-es
+    "us-east"  = "icr.io"     # us-east (exposing VPE for global registry endpoint)
   }
 
 }
