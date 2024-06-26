@@ -22,8 +22,8 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
 ## Overview
 * [terraform-ibm-vpe-gateway](#terraform-ibm-vpe-gateway)
 * [Examples](./examples)
-    * [End-to-end example](./examples/default)
-    * [Every multi-tenant VPE](./examples/every-mt-vpe)
+    * [Advanced dedicated service VPE gateway](./examples/advanced)
+    * [Basic multi-tenant VPE gateway](./examples/basic)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 

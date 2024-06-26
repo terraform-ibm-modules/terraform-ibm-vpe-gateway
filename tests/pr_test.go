@@ -13,7 +13,7 @@ import (
 
 // Use existing resource group
 const resourceGroup = "geretain-test-resources"
-const defaultExampleTerraformDir = "examples/default"
+const advancedExampleTerraformDir = "examples/advanced"
 
 const region = "us-south"
 
@@ -72,10 +72,10 @@ func ValidateOutputMapOfSlicesContent(inputMap map[string]interface{}) ([]string
 	return failedKeys, err
 }
 
-func TestRunDefaultExample(t *testing.T) {
+func TestRunAdvancedExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "vpe-default", defaultExampleTerraformDir)
+	options := setupOptions(t, "vpe-adv", advancedExampleTerraformDir)
 	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
@@ -102,7 +102,7 @@ func TestRunDefaultExample(t *testing.T) {
 func TestRunUpgradeExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "vpe-upgrade", defaultExampleTerraformDir)
+	options := setupOptions(t, "vpe-upgrade", advancedExampleTerraformDir)
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {
 		assert.Nil(t, err, "This should not have errored")
@@ -113,7 +113,7 @@ func TestRunUpgradeExample(t *testing.T) {
 func TestRunEveryMultiTenantExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "vpe-allmt", "examples/every-mt-vpe")
+	options := setupOptions(t, "vpe-allmt", "examples/basic")
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
