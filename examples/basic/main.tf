@@ -69,6 +69,7 @@ module "vpes" {
     {
       service_name = "directlink"
     },
+    # Disabling dns-svcs till we fix test failure.
     # {
     #   service_name = "dns-svcs"
     # },
