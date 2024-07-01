@@ -32,7 +32,7 @@ variable "subnet_zone_list" {
     object({
       name = string
       id   = string
-      zone = optional(string)
+      zone = string
       cidr = optional(string)
     })
   )
