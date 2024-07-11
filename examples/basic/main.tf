@@ -69,9 +69,9 @@ module "vpes" {
     {
       service_name = "directlink"
     },
-    # {
-    #   service_name = "dns-svcs"
-    # },
+    {
+      service_name = "dns-svcs"
+    },
     {
       service_name = "enterprise"
     },
