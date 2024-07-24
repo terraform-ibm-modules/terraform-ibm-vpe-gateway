@@ -21,7 +21,7 @@ locals {
     # keeping global-search-tagging along with global-search service name for Global Search for backward compatibility for existing deployments
     global-search-tagging = "crn:v1:bluemix:public:global-search-tagging:global:::endpoint:api.${local.endpoint_prefix}global-search-tagging.cloud.ibm.com"
     global-search         = "crn:v1:bluemix:public:global-search-tagging:global:::endpoint:api.${local.endpoint_prefix}global-search-tagging.cloud.ibm.com"
-    global-tagging        = "crn:v1:bluemix:public:ghost-tags:global:::endpoint:tags.${local.endpoint_prefix}.global-search-tagging.cloud.ibm.com"
+    global-tagging        = "crn:v1:bluemix:public:ghost-tags:global:::endpoint:tags.${local.endpoint_prefix}global-search-tagging.cloud.ibm.com"
     globalcatalog         = "crn:v1:bluemix:public:globalcatalog:global:::endpoint:${local.endpoint_prefix}globalcatalog.cloud.ibm.com"
     hs-crypto             = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:api.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
     hs-crypto-cert-mgr    = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:cert-mgr.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
