@@ -76,8 +76,12 @@ module "vpes" {
       service_name = "enterprise"
     },
     {
-      service_name = "global-search-tagging"
-      vpe_name     = "${var.prefix}-search-tag"
+      service_name = "global-search"
+      vpe_name     = "${var.prefix}-search"
+    },
+    {
+      service_name = "global-tagging"
+      vpe_name     = "${var.prefix}-tagging"
     },
     {
       service_name = "globalcatalog"
