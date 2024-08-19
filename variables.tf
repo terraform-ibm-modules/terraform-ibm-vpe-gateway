@@ -15,7 +15,7 @@ variable "prefix" {
 }
 
 variable "vpc_name" {
-  description = "Name of the VPC where the Endpoint Gateways will be created. This value is used to generate VPE names dynamically and must be specified before applying the changes."
+  description = "This is the name of the VPC, which must be a known value before any deployment. It will be used to create VPE names."
   type        = string
   default     = "vpc"
 }
