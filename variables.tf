@@ -15,7 +15,7 @@ variable "prefix" {
 }
 
 variable "vpc_name" {
-  description = "This is the name of the VPC, which must be a known value before any deployment. It will be used to create VPE names."
+  description = "The name of the VPC where the virtual private endpoint gateways are created. The VPC must exist before you can deploy this module."
   type        = string
   default     = "vpc"
 }
