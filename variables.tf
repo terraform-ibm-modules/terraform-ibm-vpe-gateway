@@ -15,7 +15,7 @@ variable "prefix" {
 }
 
 variable "vpc_name" {
-  description = "The name of the VPC where the virtual private endpoint gateways are created. The VPC must exist before you can deploy this module."
+  description = "The name of the VPC that's used as part of virtual private endpoint names. This VPC must exist before you can deploy this module."
   type        = string
   default     = "vpc"
 }
@@ -59,7 +59,7 @@ variable "security_group_ids" {
 
 
 variable "cloud_services" {
-  description = "List of cloud services to create an endpoint gateway. The keys are the service names, the values (all optional) give some level of control on the created VPEs."
+  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created as `<prefix>-<vpc_name>-<service_name>`."
   type = set(object({
     service_name                 = string
     vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
@@ -67,7 +67,7 @@ variable "cloud_services" {
   }))
   default = []
   validation {
-    error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
+    error_message = "The service you're trying to add is not supported. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). You can add unsupported services in the `cloud_service_by_crn` variable."
     condition = length(var.cloud_services) == 0 ? true : length([
       for service in var.cloud_services :
       service.service_name if !contains([
@@ -110,7 +110,7 @@ variable "cloud_services" {
 }
 
 variable "cloud_service_by_crn" {
-  description = "List of cloud service CRNs. The keys are the CRN. The values (all optional) give some level of control on the created VPEs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)."
+  description = "The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created as `<prefix>-<vpc_name>-<service_name>`"
   type = set(
     object({
       crn                          = string
