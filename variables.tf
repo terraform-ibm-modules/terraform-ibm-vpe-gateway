@@ -15,7 +15,7 @@ variable "prefix" {
 }
 
 variable "vpc_name" {
-  description = "The name of the VPC that's used as part of virtual private endpoint names. This VPC must exist before you can deploy this module."
+  description = "A label that can be used as a short name for virtual private endpoints. If `vpe_name` is not specified in the `cloud_services` or `cloud_service_by_crn` input variable lists, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time"
   type        = string
   default     = "vpc"
 }
@@ -59,7 +59,7 @@ variable "security_group_ids" {
 
 
 variable "cloud_services" {
-  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created as `<prefix>-<vpc_name>-<service_name>`."
+  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
   type = set(object({
     service_name                 = string
     vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
@@ -110,7 +110,7 @@ variable "cloud_services" {
 }
 
 variable "cloud_service_by_crn" {
-  description = "The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created as `<prefix>-<vpc_name>-<service_name>`"
+  description = "The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
   type = set(
     object({
       crn                          = string
