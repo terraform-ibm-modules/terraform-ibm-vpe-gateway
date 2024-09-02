@@ -16,7 +16,7 @@ module "resource_group" {
 
 module "vpc" {
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "7.18.3"
+  version           = "7.19.0"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -69,16 +69,19 @@ module "vpes" {
     {
       service_name = "directlink"
     },
-    # Disabling dns-svcs till we fix test failure.
-    # {
-    #   service_name = "dns-svcs"
-    # },
+    {
+      service_name = "dns-svcs"
+    },
     {
       service_name = "enterprise"
     },
     {
-      service_name = "global-search-tagging"
-      vpe_name     = "${var.prefix}-search-tag"
+      service_name = "global-search"
+      vpe_name     = "${var.prefix}-search"
+    },
+    {
+      service_name = "global-tagging"
+      vpe_name     = "${var.prefix}-tagging"
     },
     {
       service_name = "globalcatalog"

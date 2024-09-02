@@ -83,6 +83,8 @@ variable "cloud_services" {
         "dns-svcs",
         "enterprise",
         "global-search-tagging",
+        "global-search",
+        "global-tagging",
         "globalcatalog",
         "hs-crypto",
         "hs-crypto-cert-mgr",
