@@ -15,7 +15,7 @@ variable "prefix" {
 }
 
 variable "vpc_name" {
-  description = "A label that can be used as a short name for virtual private endpoints. If `vpe_name` is not specified in the `cloud_services` or `cloud_service_by_crn` input variable lists, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time"
+  description = "A label that can be used as a short name for virtual private endpoints. If `vpe_name` is not specified in the `cloud_services` or `cloud_service_by_crn` input variable lists, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
   type        = string
   default     = "vpc"
 }
