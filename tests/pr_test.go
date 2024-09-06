@@ -115,6 +115,6 @@ func TestRunEveryMultiTenantExample(t *testing.T) {
 
 	options := setupOptions(t, "vpe-allmt", "examples/basic")
 	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
+	assert.Nil(t, err, "This should not have errored.")
 	assert.NotNil(t, output, "Expected some output")
 }
