@@ -65,14 +65,12 @@ locals {
 # Create Reserved IPs
 ##############################################################################
 
-resource "ibm_is_subnet_reserved_ip" "ip" {
-  for_each = {
-    # Create a map based on endpoint IP name
-    for gateway_ip in local.endpoint_ip_list :
-    (gateway_ip.ip_name) => gateway_ip
-  }
-  name   = each.value.name
-  subnet = each.value.subnet_id
+module "ip" {
+  source           = "./modules/reserved-ips"
+  endpoint_ip_list = local.endpoint_ip_list
+  reserved_ips     = var.reserved_ips
+  prefix           = var.prefix
+  vpc_name         = var.vpc_name
 }
 
 ##############################################################################
@@ -113,7 +111,7 @@ resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
     (gateway_ip.ip_name) => gateway_ip
   }
   gateway     = local.vpe_map[each.value.gateway_name].id
-  reserved_ip = ibm_is_subnet_reserved_ip.ip[each.key].reserved_ip
+  reserved_ip = lookup(var.reserved_ips, each.value.name, module.ip.reserved_ip_map[each.value.name])
 }
 
 ##############################################################################
