@@ -48,47 +48,6 @@ variable "reserved_ip_cloud_services" {
     vpe_name     = optional(string),
   }))
   default = []
-  validation {
-    error_message = "Currently the service you're trying to add is not supported. Any other VPE services must be added using `cloud_service_by_crn`."
-    condition = length(var.reserved_ip_cloud_services) == 0 ? true : length([
-      for service in var.reserved_ip_cloud_services :
-      service.service_name if !contains([
-        "account-management",
-        "billing",
-        "cloud-object-storage",
-        "cloud-object-storage-config",
-        "codeengine",
-        "container-registry",
-        "containers-kubernetes",
-        "context-based-restrictions",
-        "directlink",
-        "dns-svcs",
-        "enterprise",
-        "global-search-tagging",
-        "globalcatalog",
-        "hs-crypto",
-        "hs-crypto-cert-mgr",
-        "hs-crypto-ep11",
-        "hs-crypto-ep11-az1",
-        "hs-crypto-ep11-az2",
-        "hs-crypto-ep11-az3",
-        "hs-crypto-kmip",
-        "hs-crypto-tke",
-        "hyperp-dbaas-mongodb",
-        "hyperp-dbaas-postgresql",
-        "iam-svcs",
-        "is",
-        "kms",
-        "messaging",
-        "resource-controller",
-        "support-center",
-        "transit",
-        "user-management",
-        "vmware",
-        "ntp"
-      ], service.service_name)
-    ]) == 0
-  }
 }
 
 variable "cloud_service_by_crn" {
@@ -118,7 +77,7 @@ variable "endpoint_ip_list" {
 variable "reserved_ips" {
   description = "Map of existing reserved IP names and values. Leave this value as default if you want to create new reserved ips, this value is used in the main module in which a user passes their existing reserved ips created here so as to not attempt to recreate them."
   type = object({
-    name = optional(string) # endpoint gateway IP ID
+    name = optional(string) # reserved ip name
   })
   default = {}
 }

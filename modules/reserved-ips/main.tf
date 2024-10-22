@@ -35,7 +35,7 @@ locals {
 
 resource "ibm_is_subnet_reserved_ip" "ip" {
   for_each = {
-    # Create a map based on endpoint IP name
+    # Create a map based on reserved IP name
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
     if lookup(var.reserved_ips, gateway_ip.name, null) == null
