@@ -65,7 +65,7 @@ module "vpe_security_group" {
 
 module "postgresql_db" {
   source            = "terraform-ibm-modules/icd-postgresql/ibm"
-  version           = "3.17.9"
+  version           = "3.19.6"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-vpe-pg"
   region            = var.region
@@ -109,7 +109,7 @@ module "vpes" {
 # 2. Give time on deletion between the VPE destruction and the destruction of the SG that is attached to the VPE. This works around the error "Target not found"
 resource "time_sleep" "sleep_time" {
   depends_on       = [module.vpe_security_group.security_group_id, module.postgresql_db]
-  create_duration  = "120s"
+  create_duration  = "180s"
   destroy_duration = "120s"
 }
 
