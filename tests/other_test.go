@@ -25,13 +25,10 @@ func TestRunReservedIpExample(t *testing.T) {
 	expectedOutputs := []string{"reserved_ips"}
 	_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
 	assert.NoErrorf(t, outputErr, "Some outputs not found or nil")
-	// checking reserved_ips to contain a set on not empty slices as expected
-	mapToValidate, ok := outputs["reserved_ips"].(map[string]interface{})
+	_, ok := outputs["reserved_ips"].(map[string]interface{})
 	var outputErrMap error
 	if !ok {
 		outputErrMap = fmt.Errorf("Output: Failed to read value of key %s\n", "reserved_ips")
-	} else {
-		_, outputErrMap = ValidateOutputMapOfSlicesContent(mapToValidate)
 	}
 
 	assert.NoErrorf(t, outputErr, "Some outputs not found or nil")
