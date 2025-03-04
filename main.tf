@@ -93,7 +93,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
   target {
     name          = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? null : each.value.crn
     crn           = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? each.value.crn : null
-    resource_type = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? "provider_cloud_service" : "provider_infrastructure_service"
+    resource_type = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? can(regex(".private-path-service-gateway.*", each.value.crn)) ? "private_path_service_gateway" : "provider_cloud_service" : "provider_infrastructure_service"
   }
   allow_dns_resolution_binding = each.value.allow_dns_resolution_binding
 }
