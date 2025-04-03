@@ -37,16 +37,9 @@ variable "vpc_name" {
   type        = string
 }
 
-variable "subnet_zone_list" {
-  description = "List of subnets in the VPC where gateways and reserved IPs will be provisioned. This value is intended to use the `subnet_zone_list` output from the Landing Zone VPC Subnet Module (https://github.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc) or from templates using that module for subnet creation."
-  type = list(
-    object({
-      name = string
-      id   = string
-      zone = string
-      cidr = optional(string)
-    })
-  )
+variable "subnet_ids" {
+  description = "List of subnets' id in the VPC where gateways and reserved IPs will be provisioned."
+  type        = list(string)
 }
 
 ##############################################################################

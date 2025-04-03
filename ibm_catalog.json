@@ -84,7 +84,7 @@
                 "required": true
               },
               {
-                "key": "subnet_zone_list",
+                "key": "subnet_ids",
                 "required": true
               },
               {
