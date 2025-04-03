@@ -1,6 +1,6 @@
 # Deploy Virtual Private Endpoint (VPE) gateways to Virtual Private Cloud (VPC)
 
-This architecture creates and configures virtual private endpoint gateways to virtual private cloud. 
+This architecture creates and configures virtual private endpoint gateways to virtual private cloud.
 
 ## Before you begin
 
