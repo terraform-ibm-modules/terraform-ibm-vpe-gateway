@@ -29,7 +29,7 @@ variable "region" {
 variable "prefix" {
   description = "The prefix that you would like to append to your resources. Value is only used if no value is passed for the `vpe_name` option in the `cloud_services` input variable."
   type        = string
-  default     = null
+  default     = "dn"
 }
 
 variable "vpc_name" {
