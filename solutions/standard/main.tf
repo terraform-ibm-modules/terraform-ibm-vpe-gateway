@@ -18,7 +18,7 @@ data "ibm_is_vpc" "vpc" {
 
 data "ibm_is_subnet" "subnet" {
   for_each   = toset(var.subnet_ids)
-  identifier = each.value
+  identifier = each.key
 }
 
 locals {

@@ -105,7 +105,7 @@
             ],
             "iam_permissions": [
               {
-                "service_name": "globalcatalog-collection",
+                "service_name": "is",
                 "role_crns": [
                   "crn:v1:bluemix:public:iam::::role:Editor"
                 ]
