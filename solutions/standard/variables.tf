@@ -58,7 +58,7 @@ variable "subnet_zone_list" {
 variable "security_group_ids" {
   description = "List of security group ids to attach to each endpoint gateway."
   type        = list(string)
-  default     = [ ]
+  default     = []
 }
 
 

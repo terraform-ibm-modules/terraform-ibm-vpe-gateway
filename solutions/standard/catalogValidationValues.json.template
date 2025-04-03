@@ -1,5 +1,5 @@
 {
   "ibmcloud_api_key": $VALIDATION_APIKEY,
   "label": $PREFIX,
-  "existing_resource_group_name": "geretain-test-resources"
+  "region": "us-south"
 }

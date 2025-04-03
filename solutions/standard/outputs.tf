@@ -1,6 +1,6 @@
 output "vpe_ips" {
   description = "The endpoint gateway reserved ips"
-  value = module.vpe.vpe_ips
+  value       = module.vpe.vpe_ips
 }
 
 output "crn" {
