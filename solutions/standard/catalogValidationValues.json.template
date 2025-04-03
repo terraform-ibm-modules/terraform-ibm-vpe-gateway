@@ -1,5 +1,5 @@
 {
   "ibmcloud_api_key": $VALIDATION_APIKEY,
-  "label": $PREFIX,
+  "prefix": $PREFIX,
   "region": "us-south"
 }
