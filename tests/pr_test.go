@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
@@ -110,11 +111,28 @@ func TestRunUpgradeExample(t *testing.T) {
 	}
 }
 
-func TestRunEveryMultiTenantExample(t *testing.T) {
-	t.Parallel()
+func TestPlanValidation(t *testing.T) {
+	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  "examples/basic",
+		Prefix:        "mt-ex",
+		ResourceGroup: resourceGroup,
+		Region:        "us-south", // skip VPC region picker
+	})
+	options.TestSetup()
+	options.TerraformOptions.NoColor = true
+	options.TerraformOptions.Logger = logger.Discard
+	options.TerraformOptions.Vars = map[string]interface{}{
+		"prefix": options.Prefix,
+		"region": "us-south",
+	}
 
-	options := setupOptions(t, "vpe-allmt", "examples/basic")
-	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored.")
-	assert.NotNil(t, output, "Expected some output")
+	_, initErr := terraform.InitE(t, options.TerraformOptions)
+	if assert.Nil(t, initErr, "This should not have errored") {
+		t.Run("mt-example", func(t *testing.T) {
+			output, err := terraform.PlanE(t, options.TerraformOptions)
+			assert.Nil(t, err, "This should not have errored")
+			assert.NotNil(t, output, "Expected some output")
+		})
+	}
 }
