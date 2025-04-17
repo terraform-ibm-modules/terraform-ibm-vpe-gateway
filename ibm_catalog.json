@@ -31,31 +31,14 @@
         ],
         "flavors": [
           {
-            "label": "standard",
-            "name": "standard",
+            "label": "Fully Configurable",
+            "name": "fully-configurable",
             "install_type": "fullstack",
-            "working_directory": "solutions/standard",
+            "working_directory": "solutions/fully-configurable",
             "compliance": {},
             "configuration": [
               {
                 "key": "ibmcloud_api_key"
-              },
-              {
-                "key": "provider_visibility",
-                "options": [
-                  {
-                    "displayname": "private",
-                    "value": "private"
-                  },
-                  {
-                    "displayname": "public",
-                    "value": "public"
-                  },
-                  {
-                    "displayname": "public-and-private",
-                    "value": "public-and-private"
-                  }
-                ]
               },
               {
                 "custom_config": {

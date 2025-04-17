@@ -4,17 +4,6 @@ variable "ibmcloud_api_key" {
   sensitive   = true
 }
 
-variable "provider_visibility" {
-  description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
-  type        = string
-  default     = "private"
-
-  validation {
-    condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
-    error_message = "Invalid visibility option. Allowed values are 'public', 'private', or 'public-and-private'."
-  }
-}
-
 variable "existing_resource_group_name" {
   type        = string
   description = "The name of an existing resource group to provision resource in."
@@ -27,9 +16,8 @@ variable "region" {
 }
 
 variable "prefix" {
-  description = "The prefix that you would like to append to your resources. Value is only used if no value is passed for the `vpe_name` option in the `cloud_services` input variable."
   type        = string
-  default     = "dn"
+  description = "Prefix to add to all resources created by this deployable architecture. To not use any prefix value, you can set this value to `null` or an empty string."
 }
 
 variable "vpc_name" {
@@ -38,7 +26,7 @@ variable "vpc_name" {
 }
 
 variable "subnet_ids" {
-  description = "List of subnets' id in the VPC where gateways and reserved IPs will be provisioned."
+  description = "List of subnet ids in the VPC where gateways and reserved IPs will be provisioned."
   type        = list(string)
 }
 
