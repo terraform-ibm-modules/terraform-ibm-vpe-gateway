@@ -9,6 +9,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
 
 // Use existing resource group
@@ -117,4 +118,25 @@ func TestRunEveryMultiTenantExample(t *testing.T) {
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored.")
 	assert.NotNil(t, output, "Expected some output")
+}
+
+func TestRunStandardSolutionSchematics(t *testing.T) {
+	t.Parallel()
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing: t,
+		TarIncludePatterns: []string{
+			"*.tf",
+			"modules/*/*.tf",
+			advancedExampleTerraformDir + "/*.tf",
+		},
+		TemplateFolder:         advancedExampleTerraformDir,
+		Tags:                   []string{"test-schematic"},
+		Prefix:                 "vpe-adv-da",
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
+	})
+
+	err := options.RunSchematicTest()
+	assert.Nil(t, err, "This should not have errored")
 }
