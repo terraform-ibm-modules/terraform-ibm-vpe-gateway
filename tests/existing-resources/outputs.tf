@@ -17,3 +17,13 @@ output "subnet_ids" {
   description = "The IDs of the subnets"
   value       = module.vpc.subnet_ids
 }
+
+output "resource_group_id" {
+  description = "Resource Group ID of resources"
+  value       = module.resource_group.resource_group_id
+}
+
+output "resource_group_name" {
+  description = "Resource Group Name of resources"
+  value       = module.resource_group.resource_group_name
+}
