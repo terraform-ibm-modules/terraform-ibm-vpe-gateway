@@ -44,7 +44,7 @@ variable "security_group_ids" {
 
 
 variable "cloud_services" {
-  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
+  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/solutions/fully-configurable/DA-types.md#cloud_services)."
   type = set(object({
     service_name                 = string
     vpe_name                     = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
@@ -95,7 +95,7 @@ variable "cloud_services" {
 }
 
 variable "cloud_service_by_crn" {
-  description = "The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
+  description = "The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/solutions/fully-configurable/DA-types.md#cloud_service_by_crn)."
   type = set(
     object({
       crn                          = string
@@ -119,7 +119,7 @@ variable "service_endpoints" {
 }
 
 variable "reserved_ips" {
-  description = "Map of existing reserved IP names and values. If you wish to create your reserved ips independently and not create new ones you can first run the `reserved-ips` submodule and then copy the output `reserved_ip_map` here."
+  description = "Map of existing reserved IP names and values. If you wish to create your reserved ips independently and not create new ones you can first run the `reserved-ips` submodule and then copy the output `reserved_ip_map` here. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/solutions/fully-configurable/DA-types.md#reserved_ips)."
   type = object({
     name = optional(string) # reserved ip name
   })
