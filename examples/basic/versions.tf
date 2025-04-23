@@ -12,6 +12,10 @@ terraform {
       # pin to lowest vesion, required for IAM auth policy
       version = "1.61.0"
     }
+    time = {
+      source  = "hashicorp/time"
+      version = ">= 0.9.1"
+    }
   }
 }
 
