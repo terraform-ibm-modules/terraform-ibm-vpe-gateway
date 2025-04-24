@@ -35,10 +35,8 @@ resource "time_sleep" "sleep_time" {
 
 ##############################################################################
 # Create every multi-tenant VPEs in the VPC
-# NOTE: * forcing a shorter VPE name for some services due to length limitations
+# NOTE: forcing a shorter VPE name for some services due to length limitations
 # on VPE service side
-# * Since a total of 236 resources will be created that involves VPC in parallel
-# than might impact API throttle therefore dividing the entire list into smaller batches
 ##############################################################################
 
 module "vpes" {
