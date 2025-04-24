@@ -80,7 +80,6 @@ module "ip" {
 ##############################################################################
 
 resource "ibm_is_virtual_endpoint_gateway" "vpe" {
-  depends_on = [module.ip]
   for_each = { # Create a map based on gateway name
     for gateway in local.gateway_list :
     (gateway.name) => gateway
