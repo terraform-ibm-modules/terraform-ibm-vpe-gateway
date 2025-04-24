@@ -197,7 +197,7 @@ func TestRunFullConfigSolutionSchematics(t *testing.T) {
 
 	// set up the options for existing resource deployment
 	// needed by solution
-	existingResourceOptions := setupOptions(t, "vpe-fullcfg", existingVpcTerraformDir)
+	existingResourceOptions := setupOptions(t, "vpe-full", existingVpcTerraformDir)
 	// Creates temp dirs and runs InitAndApply for existing resources
 	// outputs will be in options after apply
 	existingResourceOptions.SkipTestTearDown = true
@@ -208,7 +208,7 @@ func TestRunFullConfigSolutionSchematics(t *testing.T) {
 	require.NoError(t, existDeployErr, "error creating needed existing VPC resources")
 
 	// start main schematics test
-	options := setupSolutionSchematicOptions(t, "vpe-fullcfg", fullConfigSolutionDir)
+	options := setupSolutionSchematicOptions(t, "vpe-full", fullConfigSolutionDir)
 	options.TerraformVars = getFullConfigSolutionTestVariables(options, existingResourceOptions)
 
 	err := options.RunSchematicTest()
