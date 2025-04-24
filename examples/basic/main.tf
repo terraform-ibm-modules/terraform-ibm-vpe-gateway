@@ -28,10 +28,9 @@ module "vpc" {
 # Delay to prevent VPC lock when creating many VPEs right after VPC creation
 ##############################################################################
 
-resource "time_sleep" "wait_before_vpe_creation" {
-  create_duration  = "300s"
-  destroy_duration = "120s"
-  depends_on       = [module.vpc]
+resource "time_sleep" "sleep_time" {
+  create_duration = "300s"
+  depends_on      = [module.vpc]
 }
 
 ##############################################################################
@@ -44,7 +43,7 @@ resource "time_sleep" "wait_before_vpe_creation" {
 
 module "vpes_batch_1" {
   source            = "../../"
-  depends_on        = [time_sleep.wait_before_vpe_creation]
+  depends_on        = [time_sleep.sleep_time]
   region            = var.region
   prefix            = var.prefix
   vpc_name          = module.vpc.vpc_name
