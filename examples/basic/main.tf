@@ -29,7 +29,7 @@ module "vpc" {
 ##############################################################################
 
 resource "time_sleep" "sleep_time" {
-  create_duration = "180s"
+  create_duration = "240s"
   depends_on      = [module.vpc]
 }
 
@@ -65,9 +65,6 @@ module "vpes" {
     },
     {
       service_name = "codeengine"
-    },
-    {
-      service_name = "container-registry"
     }
   ]
 }
