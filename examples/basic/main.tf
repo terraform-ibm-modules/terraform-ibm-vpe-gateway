@@ -35,11 +35,14 @@ resource "time_sleep" "sleep_time" {
 
 ##############################################################################
 # Create every multi-tenant VPEs in the VPC
-# NOTE: forcing a shorter VPE name for some services due to length limitations
+# NOTE: * forcing a shorter VPE name for some services due to length limitations
 # on VPE service side
+# * Since a total of 236 resources will be created that involves VPC in parallel
+# than might impact API throttle as well as lock the VPC therefore dividing the
+# entire list into smaller batches
 ##############################################################################
 
-module "vpes" {
+module "vpes_batch_1" {
   source            = "../../"
   depends_on        = [time_sleep.sleep_time]
   region            = var.region
@@ -48,24 +51,124 @@ module "vpes" {
   vpc_id            = module.vpc.vpc_id
   subnet_zone_list  = module.vpc.subnet_zone_list
   resource_group_id = module.resource_group.resource_group_id
+
   cloud_services = [
-    {
-      service_name = "account-management"
-    },
-    {
-      service_name = "billing"
-    },
-    {
-      service_name = "cloud-object-storage"
-      vpe_name     = "${var.prefix}-cos"
-    },
-    {
-      service_name = "cloud-object-storage-config"
-      vpe_name     = "${var.prefix}-cos-config"
-    },
-    {
-      service_name = "codeengine"
-    }
+    { service_name = "account-management" },
+    { service_name = "billing" },
+    { service_name = "cloud-object-storage", vpe_name = "${var.prefix}-cos" },
+    { service_name = "cloud-object-storage-config", vpe_name = "${var.prefix}-cos-config" },
+    { service_name = "codeengine" }
+  ]
+}
+
+module "vpes_batch_2" {
+  source            = "../../"
+  depends_on        = [module.vpes_batch_1]
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  subnet_zone_list  = module.vpc.subnet_zone_list
+  resource_group_id = module.resource_group.resource_group_id
+
+  cloud_services = [
+    { service_name = "container-registry" },
+    { service_name = "containers-kubernetes", vpe_name = "${var.prefix}-kubernetes" },
+    { service_name = "context-based-restrictions", vpe_name = "${var.prefix}-cbr" },
+    { service_name = "directlink" },
+    { service_name = "dns-svcs" }
+  ]
+}
+
+module "vpes_batch_3" {
+  source            = "../../"
+  depends_on        = [module.vpes_batch_2]
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  subnet_zone_list  = module.vpc.subnet_zone_list
+  resource_group_id = module.resource_group.resource_group_id
+
+  cloud_services = [
+    { service_name = "enterprise" },
+    { service_name = "global-search", vpe_name = "${var.prefix}-search" },
+    { service_name = "global-tagging", vpe_name = "${var.prefix}-tagging" },
+    { service_name = "globalcatalog" },
+    { service_name = "hs-crypto" }
+  ]
+}
+
+module "vpes_batch_4" {
+  source            = "../../"
+  depends_on        = [module.vpes_batch_3]
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  subnet_zone_list  = module.vpc.subnet_zone_list
+  resource_group_id = module.resource_group.resource_group_id
+
+  cloud_services = [
+    { service_name = "hs-crypto-cert-mgr" },
+    { service_name = "hs-crypto-ep11" },
+    { service_name = "hs-crypto-ep11-az1" },
+    { service_name = "hs-crypto-ep11-az2" },
+    { service_name = "hs-crypto-ep11-az3" }
+  ]
+}
+
+module "vpes_batch_5" {
+  source            = "../../"
+  depends_on        = [module.vpes_batch_4]
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  subnet_zone_list  = module.vpc.subnet_zone_list
+  resource_group_id = module.resource_group.resource_group_id
+
+  cloud_services = [
+    { service_name = "hs-crypto-kmip" },
+    { service_name = "hs-crypto-tke" },
+    { service_name = "iam-svcs" },
+    { service_name = "is" },
+    { service_name = "kms" }
+  ]
+}
+
+module "vpes_batch_6" {
+  source            = "../../"
+  depends_on        = [module.vpes_batch_5]
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  subnet_zone_list  = module.vpc.subnet_zone_list
+  resource_group_id = module.resource_group.resource_group_id
+
+  cloud_services = [
+    { service_name = "messaging" },
+    { service_name = "resource-controller" },
+    { service_name = "support-center" },
+    { service_name = "transit" },
+    { service_name = "user-management" }
+  ]
+}
+
+module "vpes_batch_7" {
+  source            = "../../"
+  depends_on        = [module.vpes_batch_6]
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  subnet_zone_list  = module.vpc.subnet_zone_list
+  resource_group_id = module.resource_group.resource_group_id
+
+  cloud_services = [
+    { service_name = "vmware" },
+    { service_name = "ntp" }
   ]
 }
 ##############################################################################
