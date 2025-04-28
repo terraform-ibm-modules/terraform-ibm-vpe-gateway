@@ -21,7 +21,7 @@
         "short_description": "Creates and configures Virtual Private Endpoint gateway",
         "long_description": "This architecture supports creating and configuring Virtual Private Endpoint gateway.",
         "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/blob/main/README.md",
-        "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-scc/main/images/ibm-cloud.svg",
+        "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-landing-zone-vpc/refs/heads/main/images/vpc_icon.svg",
         "provider_name": "IBM",
         "features": [
           {
@@ -106,7 +106,7 @@
                 {
                   "diagram": {
                     "caption": "VPE gateway",
-                    "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/main/reference-architecture/vpe-catalog.svg",
+                    "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/refs/heads/main/reference-architecture/vpe-gateway.svg",
                     "type": "image/svg+xml"
                   },
                   "description": "This architecture supports creating an IBM Cloud VPE gateway"
