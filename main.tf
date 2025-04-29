@@ -73,6 +73,15 @@ module "ip" {
   vpc_name         = var.vpc_name
 }
 
+###################################################################################
+# Delay to prevent VPC lock when attaching reserved IPs to VPC and creation of VPEs
+###################################################################################
+
+resource "time_sleep" "wait_for_reserved_ips" {
+  create_duration = "120s"
+  depends_on      = [module.ip]
+}
+
 ##############################################################################
 
 ##############################################################################
@@ -80,6 +89,7 @@ module "ip" {
 ##############################################################################
 
 resource "ibm_is_virtual_endpoint_gateway" "vpe" {
+  depends_on = [time_sleep.wait_for_reserved_ips]
   for_each = { # Create a map based on gateway name
     for gateway in local.gateway_list :
     (gateway.name) => gateway
