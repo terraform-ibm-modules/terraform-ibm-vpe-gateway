@@ -26,6 +26,7 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
 * [Examples](./examples)
     * [Advanced dedicated service VPE gateway](./examples/advanced)
     * [Basic multi-tenant VPE gateway](./examples/basic)
+    * [Every supported multi-tenant ("provider_cloud_service") VPE gateway](./examples/every-multi-tenant-svc)
     * [Existing Reserved IPs example](./examples/reserved-ips)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
