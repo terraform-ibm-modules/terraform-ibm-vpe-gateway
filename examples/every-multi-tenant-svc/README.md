@@ -1,4 +1,4 @@
-# Basic multi-tenant VPE gateway
+# Every supported multi-tenant ("provider_cloud_service") VPE gateway
 
 This example creates the following infrastructure:
 - A resource group, if one is not passed in.
@@ -10,3 +10,5 @@ This example creates the following infrastructure:
 > Creating all service VPEs in one apply may cause the VPC to enter "locked" state, and some endpoints may fail to be created.
 > In this scenario you can keep re-applying until all endpoints are created, or execute your `terraform apply` using the
 > `-parallelism=n` option with a small thread number to avoid the lock.
+>
+> [IBM Terraform provider issue reporting this issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6224)

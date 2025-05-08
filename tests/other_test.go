@@ -42,6 +42,8 @@ func TestRunReservedIpExample(t *testing.T) {
 // However there is an issue with the provider currently that prevents all 30+ VPEs to deploy at once, resulting in a
 // "VPC Locked" error.
 // In order to test all 30+ services, we will run this other test single-threaded (parallelism=1).
+//
+// IBM Terraform provider issue for this issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6224
 func TestRunEveryMultiTenantExample(t *testing.T) {
 	t.Parallel()
 
