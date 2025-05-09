@@ -3,7 +3,7 @@
 ##############################################################################
 
 terraform {
-  required_version = ">=1.9.0"
+  required_version = ">= 1.9.0"
   # Use "greater than or equal to" range in modules
   required_providers {
     ibm = {
