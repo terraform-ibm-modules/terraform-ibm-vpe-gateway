@@ -155,10 +155,10 @@ func TestRunUpgradeExample(t *testing.T) {
 	}
 }
 
-func TestRunEveryMultiTenantExample(t *testing.T) {
+func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "vpe-allmt", "examples/basic")
+	options := setupOptions(t, "vpe-basic", "examples/basic")
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored.")
 	assert.NotNil(t, output, "Expected some output")
