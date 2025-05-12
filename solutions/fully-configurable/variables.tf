@@ -60,6 +60,47 @@ variable "cloud_services" {
     allow_dns_resolution_binding = optional(bool, false)
   }))
   default = []
+  validation {
+    error_message = "The service you're trying to add is not supported. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). You can add unsupported services in the `cloud_service_by_crn` variable."
+    condition = length(var.cloud_services) == 0 ? true : length([
+      for service in var.cloud_services :
+      service.service_name if !contains([
+        "account-management",
+        "billing",
+        "cloud-object-storage",
+        "cloud-object-storage-config",
+        "codeengine",
+        "container-registry",
+        "containers-kubernetes",
+        "context-based-restrictions",
+        "directlink",
+        "dns-svcs",
+        "enterprise",
+        "global-search-tagging",
+        "global-search",
+        "global-tagging",
+        "globalcatalog",
+        "hs-crypto",
+        "hs-crypto-cert-mgr",
+        "hs-crypto-ep11",
+        "hs-crypto-ep11-az1",
+        "hs-crypto-ep11-az2",
+        "hs-crypto-ep11-az3",
+        "hs-crypto-kmip",
+        "hs-crypto-tke",
+        "iam-svcs",
+        "is",
+        "kms",
+        "messaging",
+        "resource-controller",
+        "support-center",
+        "transit",
+        "user-management",
+        "vmware",
+        "ntp"
+      ], service.service_name)
+    ]) == 0
+  }
 }
 
 variable "cloud_service_by_crn" {
@@ -79,6 +120,11 @@ variable "service_endpoints" {
   description = "Service endpoints to use to create endpoint gateways. Can be `public`, or `private`."
   type        = string
   default     = "private"
+
+  validation {
+    error_message = "Service endpoints can only be `public` or `private`."
+    condition     = contains(["public", "private"], var.service_endpoints)
+  }
 }
 
 variable "reserved_ips" {
