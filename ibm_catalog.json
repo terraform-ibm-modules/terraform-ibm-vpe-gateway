@@ -35,7 +35,6 @@
           "name": "fully-configurable",
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable",
-          "compliance": {},
           "configuration": [
             {
               "key": "ibmcloud_api_key"
