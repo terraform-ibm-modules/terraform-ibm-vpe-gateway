@@ -6,7 +6,6 @@ In order to create and configure the Virtual Private Endpoint gateways in your V
 
 - [cloud_services](#cloud-services) : this input parameter allows to create a VPE gateway to a IBM Cloud service by specifying its service name
 - [cloud_service_by_crn](#cloud-service-by-crn) : this input parameter allows to create a VPE gateway to a IBM Cloud service its service CRN (Cloud Resource Name)
-- [reserved_ips](#reserved-ips) : this input parameter allows to specify a set of pre-existing Reserved IPs resources for the VPC already bound to VPE gateways to skip the related deployment
 
 For more details about the IBM Cloud services, their VPE configuration information and about creating the same gateways to Non-IBM Cloud services please refer to [this documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services)
 
@@ -72,27 +71,4 @@ cloud_service_by_crn = [
     "crn": " crn:v1:bluemix:public:iam-svcs:global:::endpoint:private.iam.cloud.ibm.com"
   }
 ]
-```
-
-## Reserved IPs <a name="reserved-ips"></a>
-
-The Deployable architecture creates a set of Reserved IPs resources bound to the VPE gateways and the related subnets, dinamically computing the resulting map. If you wish to skip specific gateways Reserved IPs creation because already created in different ways, you can specify the gateway map key with the related Reserved IP instance ID to have the code to skip its deployment
-
-- Variable name: `reserved_ips`
-- Type: A map of existing reserved IP names and ids
-- Default value: An empty map (`{}`)
-
-### Example reserved IPs
-
-The following example shows values for both disk and memory for the `reserved_ips` input.
-
-```hcl
-{
-  "vpc-cloud-object-storage-1" = "0717-12345678-1234-1234-1234-123456789abc"
-  "vpc-cloud-object-storage-2" = "0727-12345678-1234-1234-1234-123456789abc"
-  "vpc-cloud-object-storage-3" = "0737-12345678-1234-1234-1234-123456789abc"
-  "vpc-kms-1" = "0717-12345678-1234-1234-1234-123456789abc"
-  "vpc-kms-2" = "0727-12345678-1234-1234-1234-123456789abc"
-  "vpc-kms-3" = "0737-12345678-1234-1234-1234-123456789abc"
-}
 ```
