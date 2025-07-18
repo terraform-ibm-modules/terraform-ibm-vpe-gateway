@@ -1,9 +1,22 @@
-# Reserved IP's Module
+# Reserved IPs Module
 
-The module creates reserved IPs (https://cloud.ibm.com/docs/vpc?topic=vpc-managing-ip-addresses) on existing subnets. Reserved IPs can be assigned to your resources, for example VPE endpoint gateways.
+The module creates a set of reserved IPs (https://cloud.ibm.com/docs/vpc?topic=vpc-managing-ip-addresses) on VPC existing subnets. Reserved IPs can be assigned to your resources, for example Virtual Private Endpoint gateways.
 
 The module supports the following actions:
 - Create reserved IP addresses
+
+It supports two different ways to specify the Reserved IPs to create:
+- by filling the input parameter `var.endpoint_ip_list` with a list of elements with the following attributes:
+   - `ip_name`: unique name to use for the key of the map representing the reserved IPs structure in output
+   - `subnet_id`: ID of the VPC subnet to create the reserved IP
+   - `name`: name of the Reserved IP resource name
+- by filling the input parameters `var.subnet_zone_list`, `var.reserved_ip_cloud_services` and `var.cloud_service_by_crn` with the respective attributes: the module logic combines the two lists `var.reserved_ip_cloud_services` and `var.cloud_service_by_crn` into a single list of services by extracting the expected services details and then combines this list with the `var.subnet_zone_list` list to allocate a Reserved IP for each subnet and for each service, by generating a unique `ip_name` key for each element of the map
+
+In both the cases the output of the module is:
+- `endpoint_ip_list` with the map of service name & subnet ID to create and bind to the Reserved IPs as map values of the related map key
+- `reserved_ip_map` with the map of the Reserved IPs resources created for each of the service name & subnet ID elements of the previous list, mapped by the unique map key.
+
+The module supports also you to associate existing Reserved IPs resources from your VPC through `var.reserved_ips` with specific gateways: in order to associate an existing Reserved IP to a specific gateway add an element to this list with two attributes, the unique map key used or generated for the `endpoint_ip_list` and the related Reserved IP instance to associate it with.
 
 ### Usage
 
@@ -98,7 +111,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). | <pre>list(<br/>    object({<br/>      name = string # service name<br/>      crn  = string # service crn<br/>    })<br/>  )</pre> | `[]` | no |
-| <a name="input_endpoint_ip_list"></a> [endpoint\_ip\_list](#input\_endpoint\_ip\_list) | List of IPs to create. Each object contains an ip name and subnet id | <pre>list(<br/>    object({<br/>      ip_name      = string # reserved ip name<br/>      subnet_id    = string # subnet id<br/>      gateway_name = string # gateway name<br/>      name         = string # ip name<br/>    })<br/>  )</pre> | `[]` | no |
+| <a name="input_endpoint_ip_list"></a> [endpoint\_ip\_list](#input\_endpoint\_ip\_list) | List of IPs to create. Each object contains an ip name and subnet id | <pre>list(<br/>    object({<br/>      ip_name   = string # reserved ip name<br/>      subnet_id = string # subnet id<br/>      name      = string # ip name<br/>    })<br/>  )</pre> | `[]` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources. Value is only used if no value is passed for the `vpe_name` option in the `reserved_ip_cloud_services` input variable. | `string` | `"vpe"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region to be used in the reserved ip naming convention. | `string` | `"us-south"` | no |
 | <a name="input_reserved_ip_cloud_services"></a> [reserved\_ip\_cloud\_services](#input\_reserved\_ip\_cloud\_services) | List of cloud services to create reserved ips for. The keys are the service names, the values (all optional) give some level of control on the created VPEs. | <pre>set(object({<br/>    service_name = string<br/>    vpe_name     = optional(string),<br/>  }))</pre> | `[]` | no |

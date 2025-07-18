@@ -65,10 +65,9 @@ variable "endpoint_ip_list" {
   description = "List of IPs to create. Each object contains an ip name and subnet id"
   type = list(
     object({
-      ip_name      = string # reserved ip name
-      subnet_id    = string # subnet id
-      gateway_name = string # gateway name
-      name         = string # ip name
+      ip_name   = string # reserved ip name
+      subnet_id = string # subnet id
+      name      = string # ip name
     })
   )
   default = []

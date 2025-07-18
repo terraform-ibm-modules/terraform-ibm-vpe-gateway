@@ -81,9 +81,6 @@
             },
             {
               "key": "service_endpoints"
-            },
-            {
-              "key": "reserved_ips"
             }
           ],
           "iam_permissions": [
