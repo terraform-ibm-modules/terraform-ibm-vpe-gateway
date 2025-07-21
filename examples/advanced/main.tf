@@ -64,11 +64,12 @@ module "vpe_security_group" {
 ##############################################################################
 
 module "postgresql_db" {
-  source            = "terraform-ibm-modules/icd-postgresql/ibm"
-  version           = "4.0.1"
-  resource_group_id = module.resource_group.resource_group_id
-  name              = "${var.prefix}-vpe-pg"
-  region            = var.region
+  source              = "terraform-ibm-modules/icd-postgresql/ibm"
+  version             = "4.1.3"
+  resource_group_id   = module.resource_group.resource_group_id
+  name                = "${var.prefix}-vpe-pg"
+  region              = var.region
+  deletion_protection = false
 }
 
 
