@@ -127,12 +127,4 @@ variable "service_endpoints" {
   }
 }
 
-variable "reserved_ips" {
-  description = "Map of existing reserved IP names and values. If you wish to create your reserved ips independently and not create new ones you can first run the `reserved-ips` submodule and then copy the output `reserved_ip_map` here. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/solutions/fully-configurable/DA-types.md#reserved_ips)."
-  type = object({
-    name = optional(string) # reserved ip name
-  })
-  default = {}
-}
-
 ##############################################################################
