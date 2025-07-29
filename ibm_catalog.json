@@ -108,7 +108,8 @@
                 "description": "This architecture supports creating an IBM Cloud VPE gateway"
               }
             ]
-          }
+          },
+          "terraform_version": "1.10.5"
         }
       ]
     }
