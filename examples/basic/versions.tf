@@ -10,7 +10,7 @@ terraform {
     ibm = {
       source = "IBM-Cloud/ibm"
       # pin to lowest vesion, required for IAM auth policy
-      version = "1.79.2"
+      version = "1.81.1"
     }
   }
 }

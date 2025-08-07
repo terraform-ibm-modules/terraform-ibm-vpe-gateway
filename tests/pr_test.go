@@ -169,8 +169,7 @@ func TestRunBasicExample(t *testing.T) {
 func getFullConfigSolutionTestVariables(mainOptions *testschematic.TestSchematicOptions, existingOptions *testhelper.TestOptions) []testschematic.TestSchematicTerraformVar {
 	// try to cover some variety of use cases
 	testCloudSvcList := []map[string]any{
-		// Avoid is until https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6224 is reolved
-		// {"service_name": "is"},
+		{"service_name": "is"},
 		{"service_name": "kms", "allow_dns_resolution_binding": true},
 		{"service_name": "cloud-object-storage", "vpe_name": mainOptions.Prefix + "-cos"},
 	}
