@@ -5,7 +5,7 @@
 variable "region" {
   description = "The region where VPC and services are deployed"
   type        = string
-  default     = "us-south"
+  default     = "ca-mon"
 }
 
 variable "prefix" {
@@ -100,6 +100,7 @@ variable "cloud_services" {
         "messaging",
         "resource-controller",
         "support-center",
+        "sysdig-monitor",
         "transit",
         "user-management",
         "vmware",

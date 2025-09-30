@@ -3,7 +3,7 @@
 ##############################################################################
 module "resource_group" {
   source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.3.0"
+  version = "1.1.6"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -26,7 +26,7 @@ module "cloud_monitoring" {
 
 module "vpc" {
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "8.3.0"
+  version           = "7.20.2"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -47,21 +47,17 @@ module "vpes" {
   vpc_id            = module.vpc.vpc_id
   subnet_zone_list  = module.vpc.subnet_zone_list
   resource_group_id = module.resource_group.resource_group_id
-  cloud_services = [
-    {
-      service_name = "sysdig-monitor"
-    }
-  ]
-  #cloud_service_by_crn = [
+  #cloud_services = [
   #  {
-  #    allow_dns_resolution_binding = false
-  #    crn = "crn:v1:bluemix:public:sysdig-monitor:ca-mon:a/abac0df06b644a9cabc6e44f55b3880e:4e33bcc8-4f60-4ab2-b778-b4a9a8e918bb::
-  #     crn = "crn:v1:bluemix:public:sysdig-monitor:eu-gb:a/abac0df06b644a9cabc6e44f55b3880e:7567b280-c7ff-4030-b45e-14d48ad3898b::"
-  ##OLD##    crn = "crn:v1:bluemix:public:sysdig-monitor:ca-mon:::endpoint:private.ca-mon.monitoring.cloud.ibm"
-  ##OLD##    crn = "crn:v1:bluemix:public:sysdig-monitor:eu-de:a/abac0df06b644a9cabc6e44f55b3880e:a4b31438-c828-4e1b-a5ba-20a90c061502::"
-  ##OLD##    crn = "crn:v1:bluemix:public:sysdig-monitor:ca-mon:a/abac0df06b644a9cabc6e44f55b3880e:6015f7c3-e38f-4070-ad43-942ba2b9bd85::"
+  #    service_name = "sysdig-monitor"
   #  }
   #]
+  cloud_service_by_crn = [
+    {
+      allow_dns_resolution_binding = false
+      crn                          = module.cloud_monitoring.crn
+    }
+  ]
 }
 
 
