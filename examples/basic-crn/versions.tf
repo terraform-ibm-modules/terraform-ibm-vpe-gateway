@@ -9,7 +9,7 @@ terraform {
   required_providers {
     ibm = {
       source = "IBM-Cloud/ibm"
-      # pin to lowest vesion, required for IAM auth policy
+      # pin to lowest version, required for IAM auth policy
       version = "1.81.1"
     }
   }

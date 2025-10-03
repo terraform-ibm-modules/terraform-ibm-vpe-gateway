@@ -14,15 +14,15 @@ module "resource_group" {
 # ( 3 subnets across the 3 AZs in the region )
 ##############################################################################
 
-module "cloud_monitoring" {
-  source            = "terraform-ibm-modules/cloud-monitoring/ibm"
-  version           = "1.8.1"
-  resource_group_id = module.resource_group.resource_group_id
-  region            = var.region
-  resource_tags     = var.resource_tags
-  instance_name     = "${var.prefix}-cloud-monitoring"
-  plan              = "graduated-tier"
-}
+#module "cloud_monitoring" {
+#  source            = "terraform-ibm-modules/cloud-monitoring/ibm"
+#  version           = "1.8.1"
+#  resource_group_id = module.resource_group.resource_group_id
+#  region            = var.region
+#  resource_tags     = var.resource_tags
+#  instance_name     = "${var.prefix}-cloud-monitoring"
+#  plan              = "graduated-tier"
+#}
 
 module "vpc" {
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
@@ -40,24 +40,27 @@ module "vpc" {
 # on VPE service side
 ##############################################################################
 module "vpes" {
-  source            = "../../"
-  region            = var.region
+  source = "../../"
+  providers = {
+    ibm = ibm.montreal
+  }
+  region            = "ca-mon"
   prefix            = var.prefix
   vpc_name          = module.vpc.vpc_name
   vpc_id            = module.vpc.vpc_id
   subnet_zone_list  = module.vpc.subnet_zone_list
   resource_group_id = module.resource_group.resource_group_id
-  #cloud_services = [
-  #  {
-  #    service_name = "sysdig-monitor"
-  #  }
-  #]
-  cloud_service_by_crn = [
+  cloud_services = [
     {
-      allow_dns_resolution_binding = false
-      crn                          = module.cloud_monitoring.crn
+      service_name = "sysdig-monitor"
     }
   ]
+  #cloud_service_by_crn = [
+  #  {
+  #    allow_dns_resolution_binding = false
+  #    crn                          = "crn:v1:bluemix:public:sysdig-monitor:eu-gb:a/abac0df06b644a9cabc6e44f55b3880e:1ad66bfa-67cd-45da-af2d-7789d66044eb::"
+  #  }
+  #]
 }
 
 
