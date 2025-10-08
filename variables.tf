@@ -66,6 +66,7 @@ variable "cloud_services" {
     allow_dns_resolution_binding = optional(bool, false)
   }))
   default = []
+
   validation {
     error_message = "The service you're trying to add is not supported. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). You can add unsupported services in the `cloud_service_by_crn` variable."
     condition = length(var.cloud_services) == 0 ? true : length([
@@ -100,12 +101,21 @@ variable "cloud_services" {
         "messaging",
         "resource-controller",
         "support-center",
+        "sysdig-monitor",
         "transit",
         "user-management",
         "vmware",
         "ntp"
       ], service.service_name)
     ]) == 0
+  }
+
+  validation {
+    condition = length(var.cloud_services) == 0 ? true : length([
+      for service in var.cloud_services :
+      service.service_name if length(regexall("sysdig-monitor", service.service_name)) > 0 && var.region != "ca-mon"
+    ]) == 0
+    error_message = "IBM Cloud Monitoring in regions other than Montreal is supported by removing `sysdig-monitor` and adding the instance CRN to the `cloud_service_by_crn` variable input"
   }
 }
 
@@ -120,6 +130,14 @@ variable "cloud_service_by_crn" {
     })
   )
   default = []
+
+  validation {
+    condition = length(var.cloud_service_by_crn) == 0 ? true : length([
+      for service_crn in var.cloud_service_by_crn :
+      service_crn.crn if length(regexall(":sysdig-monitor:ca-mon:", service_crn.crn)) > 0
+    ]) == 0
+    error_message = "IBM Cloud Monitoring in Montreal is supported by removing the sysdig-monitor CRN and adding `sysdig-monitor` to the `cloud_services` variable input"
+  }
 }
 
 variable "service_endpoints" {

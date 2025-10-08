@@ -1,6 +1,6 @@
 # Configuring complex inputs for Virtual Private Endpoint Gateways
 
-IBM Cloud® Virtual Private Endpoints (VPE) for VPC enables you to connect to supported IBM Cloud services from your Virtual Privte Cloud (VPC) network by using the IP addresses of your choosing, allocated from a subnet within your VPC. For more details about Virtual Private Endpoint Gateways please refer to this [documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-about-vpe)
+IBM Cloud® Virtual Private Endpoints (VPE) for VPC enables you to connect to supported IBM Cloud services from your Virtual Private Cloud (VPC) network by using the IP addresses of your choosing, allocated from a subnet within your VPC. For more details about Virtual Private Endpoint Gateways please refer to this [documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-about-vpe)
 
 IBM Cloud services either offer a service specific target or an instance specific target for the VPE gateway. In order to target a service specific endpoint, the service should be included in the `cloud_services` block. In order to target an instance specific endpoint the service CRN should be included in the `cloud_service_by_crn` block.
 
@@ -24,7 +24,7 @@ By setting up this input parameter you can create VPE gateways in your VPC insta
 ### cloud_service attributes
 
 - `service_name` (required): The IBM Cloud service name as per [this documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services) or the name value returned by the CLI command `ibmcloud is endpoint-gateway-targets`
-- `vpe_name` (optional): The desired name to assigne to the VPE gateway. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
+- `vpe_name` (optional): The desired name to assign to the VPE gateway. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
 - `allow_dns_resolution_binding` (optional): Indicates whether to allow this endpoint gateway to participate in DNS resolution bindings. For more details please refer to this [documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-dns-sharing-configure-hub&interface=ui). If not set default value is `true`.
 
 ### Example for cloud_services input parameter
@@ -52,8 +52,8 @@ By setting up this input parameter you can create VPE gateways in your VPC insta
 
 ### Options for cloud_service_by_crn
 
-- `crn` (mandatory): IBM Cloud service CRN as per [this documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services))or the CRN value returned by the CLI command `ibmcloud is endpoint-gateway-targets`
-- `vpe_name` (optional): The desired name to assigne to the VPE gateway. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
+- `crn` (mandatory): IBM Cloud service CRN as per [this documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services) or the CRN value returned by the CLI command `ibmcloud is endpoint-gateway-targets`
+- `vpe_name` (optional): The desired name to assign to the VPE gateway. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
 - `service_name` (optional): The name of the service used to compute the name of the VPE gateway. If not provided the name is extracted from the CRN.
 - `allow_dns_resolution_binding` (optional): Indicates whether to allow this endpoint gateway to participate in DNS resolution bindings. For more details please refer to this [documentation page](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-dns-sharing-configure-hub&interface=ui). If not set default value is `true`.
 
