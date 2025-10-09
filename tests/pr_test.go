@@ -41,6 +41,23 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+func setupMontrealOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:      t,
+		TerraformDir: dir,
+		Prefix:       prefix,
+		Region:       "ca-mon",
+		IgnoreUpdates: testhelper.Exemptions{ // Ignore for consistency check
+			List: []string{
+				"time_sleep.sleep_time",
+			},
+		},
+		ResourceGroup: resourceGroup,
+	})
+	return options
+}
+
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
@@ -159,6 +176,15 @@ func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 
 	options := setupOptions(t, "vpe-basic", "examples/basic")
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored.")
+	assert.NotNil(t, output, "Expected some output")
+}
+
+func TestRunMontrealExample(t *testing.T) {
+	t.Parallel()
+
+	options := setupMontrealOptions(t, "vpe-ca-mon", "examples/montreal-monitoring")
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored.")
 	assert.NotNil(t, output, "Expected some output")

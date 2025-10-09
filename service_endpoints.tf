@@ -37,6 +37,7 @@ locals {
     messaging             = "crn:v1:bluemix:public:messaging:global:::endpoint:${local.endpoint_prefix}messaging.cloud.ibm.com"
     resource-controller   = "crn:v1:bluemix:public:resource-controller:global:::endpoint:${local.endpoint_prefix}resource-controller.cloud.ibm.com"
     support-center        = "crn:v1:bluemix:public:support:global:::endpoint:private.support-center.cloud.ibm.com"
+    sysdig-monitor        = "crn:v1:bluemix:public:sysdig-monitor:ca-mon:::endpoint:${local.endpoint_prefix}ca-mon.monitoring.cloud.ibm.com"
     transit               = "crn:v1:bluemix:public:transit:global:::endpoint:${local.endpoint_prefix}transit.cloud.ibm.com"
     user-management       = "crn:v1:bluemix:public:user-management:global:::endpoint:${local.endpoint_prefix}user-management.cloud.ibm.com"
     vmware                = "crn:v1:bluemix:public:vmware:${var.region}:::endpoint:api.${local.endpoint_prefix}${var.region}.vmware.cloud.ibm.com"

@@ -101,12 +101,12 @@ module "vpes" {
   ]
   service_endpoints = var.service_endpoints
   #vpe_names            = local.vpe_names
-  #  See comments below (resource "time_sleep" "sleep_time") for explaination on why this is needed.
+  #  See comments below (resource "time_sleep" "sleep_time") for explanation on why this is needed.
   depends_on = [time_sleep.sleep_time]
 }
 
 ## This sleep serve two purposes:
-# 1. Give some extra time after postgresql db creation, and before creating the VPE targetting it. This works around the error "Service does not support VPE extensions."
+# 1. Give some extra time after postgresql db creation, and before creating the VPE targeting it. This works around the error "Service does not support VPE extensions."
 # 2. Give time on deletion between the VPE destruction and the destruction of the SG that is attached to the VPE. This works around the error "Target not found"
 resource "time_sleep" "sleep_time" {
   depends_on       = [module.vpe_security_group.security_group_id, module.postgresql_db]
