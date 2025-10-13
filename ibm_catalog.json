@@ -112,7 +112,7 @@
               {
                 "diagram": {
                   "caption": "VPE gateway",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/refs/heads/main/reference-architecture/vpe-gateway.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/refs/heads/main/reference-architectures/vpe-gateway.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "This architecture supports creating an IBM Cloud VPE gateway"
