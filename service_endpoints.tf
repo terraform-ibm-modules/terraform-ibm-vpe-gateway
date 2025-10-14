@@ -24,7 +24,7 @@ locals {
     global-tagging        = "crn:v1:bluemix:public:ghost-tags:global:::endpoint:tags.${local.endpoint_prefix}global-search-tagging.cloud.ibm.com"
     globalcatalog         = "crn:v1:bluemix:public:globalcatalog:global:::endpoint:${local.endpoint_prefix}globalcatalog.cloud.ibm.com"
     hs-crypto             = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:api.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
-    hs-crypto-cert-mgr    = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:cert-mgr.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
+    hs-crypto-cert-mgr    = var.region == "eu-fr2" ? "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:cert_mgr.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com" : "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:cert-mgr.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
     hs-crypto-ep11        = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:ep11.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
     hs-crypto-ep11-az1    = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:ep11-az1.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
     hs-crypto-ep11-az2    = "crn:v1:bluemix:public:hs-crypto:${var.region}:::endpoint:ep11-az2.${local.endpoint_prefix}${var.region}.hs-crypto.cloud.ibm.com"
