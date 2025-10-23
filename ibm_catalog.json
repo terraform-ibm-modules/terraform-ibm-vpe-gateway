@@ -70,7 +70,14 @@
             },
             {
               "key": "prefix",
-              "required": true
+              "required": true,
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "Prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It must not end with a hyphen('-'), and cannot contain consecutive hyphens ('--'). It should not exceed 16 characters.",
+                  "value": "^$|^__NULL__$|^[a-z](?!.*--)(?:[a-z0-9-]{0,14}[a-z0-9])?$"
+                }
+              ]
             },
             {
               "key": "vpc_name",
@@ -87,7 +94,14 @@
               "key": "cloud_services"
             },
             {
-              "key": "cloud_service_by_crn"
+              "key": "cloud_service_by_crn",
+              "value_constraints": [
+                {
+                  "type": "regex",
+                  "description": "The value provided for 'cloud_service_by_crn' is not valid.",
+                  "value": "^crn:v1:[^:]+:[^:]+:[^:]+:[^:]+:a/[0-9a-f]{32}(:[^:]*)*:{0,2}$"
+                }
+              ]
             },
             {
               "key": "service_endpoints"
