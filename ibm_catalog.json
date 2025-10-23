@@ -99,7 +99,7 @@
                 {
                   "type": "regex",
                   "description": "The value provided for 'cloud_service_by_crn' is not valid.",
-                  "value": "^crn:v1:[^:]+:[^:]+:[^:]+:[^:]+:a/[0-9a-f]{32}(:[^:]*)*:{0,2}$"
+                  "value": "$|^__NULL__$|^\\[\\]$|^crn:v1:[^:]+:[^:]+:[^:]+:[^:]+:a/[0-9a-f]{32}(:[^:]*)*:{0,2}$"
                 }
               ]
             },

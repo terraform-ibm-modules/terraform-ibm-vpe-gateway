@@ -128,14 +128,16 @@ variable "cloud_service_by_crn" {
   )
   default = []
   validation {
-    condition = alltrue([
-      for service in var.cloud_service_by_crn : can(
-        regex(
-          "^crn:v1:[^:]+:[^:]+:[^:]+:[^:]+:a/[0-9a-f]{32}(:[^:]*)*:{0,2}$",
-          service.crn
+    condition = (
+      length(var.cloud_service_by_crn) == 0 ? true : alltrue([
+        for service in var.cloud_service_by_crn : can(
+          regex(
+            "^crn:v1:[^:]+:[^:]+:[^:]+:[^:]+:a/[0-9a-f]{32}(:[^:]*)*:{0,2}$",
+            service.crn
+          )
         )
-      )
-    ])
+      ])
+    )
     error_message = "The provided environment CRN in the input 'cloud_service_by_crn' in not valid."
   }
 }
