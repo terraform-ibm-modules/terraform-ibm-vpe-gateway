@@ -17,7 +17,7 @@ module "resource_group" {
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "8.3.0"
+  version           = "8.6.0"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -32,15 +32,13 @@ module "vpc" {
 ##############################################################################
 
 data "ibm_is_vpc" "vpc" {
-  # Explicit depends as the vpc_name is known prior to VPC creation
-  depends_on = [
-    module.vpc
-  ]
-  name = var.vpc_id != null ? var.vpc_id : module.vpc[0].vpc_name
+  count = var.vpc_id != null ? 1 : 0
+  name  = var.vpc_id
 }
 
 data "ibm_is_security_group" "default_sg" {
-  name = data.ibm_is_vpc.vpc.default_security_group_name
+  count = var.vpc_id != null ? 1 : 0
+  name  = data.ibm_is_vpc.vpc[0].default_security_group_name
 }
 
 module "vpe_security_group" {
@@ -52,7 +50,7 @@ module "vpe_security_group" {
   security_group_rules = [{
     name      = "allow-all-default-sg-inbound"
     direction = "inbound"
-    remote    = data.ibm_is_security_group.default_sg.id
+    remote    = var.vpc_id != null ? data.ibm_is_security_group.default_sg[0].id : module.vpc[0].vpc_data.default_security_group
   }]
 
   resource_group = module.resource_group.resource_group_id
