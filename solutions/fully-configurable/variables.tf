@@ -127,7 +127,6 @@ variable "cloud_service_by_crn" {
     })
   )
   default = []
-
   validation {
     condition = (
       length(var.cloud_service_by_crn) == 0 ? true : alltrue([
