@@ -94,14 +94,7 @@
               "key": "cloud_services"
             },
             {
-              "key": "cloud_service_by_crn",
-              "value_constraints": [
-                {
-                  "type": "regex",
-                  "description": "The value provided for 'cloud_service_by_crn' is not valid.",
-                  "value": "^__NULL__$|^\\[\\]$|^crn:v1:[^:]+:[^:]+:[^:]+:[^:]+:a/[0-9a-f]{32}(:[^:]*)*:{0,2}$"
-                }
-              ]
+              "key": "cloud_service_by_crn"
             },
             {
               "key": "service_endpoints"
