@@ -138,6 +138,20 @@ variable "cloud_service_by_crn" {
     ]) == 0
     error_message = "IBM Cloud Monitoring in Montreal is supported by removing the sysdig-monitor CRN and adding `sysdig-monitor` to the `cloud_services` variable input"
   }
+
+  validation {
+    condition = (
+      length(var.cloud_service_by_crn) == 0 ? true : alltrue([
+        for service in var.cloud_service_by_crn : can(
+          regex(
+            "^crn:v\\d(?::(?:([^:]*)(?:[^:]|$))?){8}$",
+            service.crn
+          )
+        )
+      ])
+    )
+    error_message = "The provided environment CRN in the input 'cloud_service_by_crn' in not valid."
+  }
 }
 
 variable "service_endpoints" {
