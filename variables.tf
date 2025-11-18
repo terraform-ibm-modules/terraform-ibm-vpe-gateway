@@ -144,7 +144,7 @@ variable "cloud_service_by_crn" {
       length(var.cloud_service_by_crn) == 0 ? true : alltrue([
         for service in var.cloud_service_by_crn : can(
           regex(
-            "^crn:v\\d(?::(?:([^:]*)(?:[^:]|$))?){8}$",
+            "^crn:v\\d(?::(?:(?:[^:]*)(?:[^:]|$))?){8}$",
             service.crn
           )
         )
