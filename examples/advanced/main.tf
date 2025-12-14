@@ -3,7 +3,7 @@
 ##############################################################################
 module "resource_group" {
   source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.4.0"
+  version = "1.4.6"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -17,7 +17,7 @@ module "resource_group" {
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "8.9.2"
+  version           = "8.10.1"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -43,7 +43,7 @@ data "ibm_is_security_group" "default_sg" {
 
 module "vpe_security_group" {
   source                       = "terraform-ibm-modules/security-group/ibm"
-  version                      = "2.8.0"
+  version                      = "2.8.6"
   security_group_name          = "${var.prefix}-vpe-sg"
   add_ibm_cloud_internal_rules = false # No need for the internal ibm cloud rules for SG associated with VPEs
 
@@ -63,7 +63,7 @@ module "vpe_security_group" {
 
 module "postgresql_db" {
   source              = "terraform-ibm-modules/icd-postgresql/ibm"
-  version             = "4.4.0"
+  version             = "4.4.3"
   resource_group_id   = module.resource_group.resource_group_id
   name                = "${var.prefix}-vpe-pg"
   region              = var.region
