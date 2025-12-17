@@ -39,6 +39,7 @@
           "label": "Fully Configurable",
           "name": "fully-configurable",
           "install_type": "fullstack",
+          "short_description": "Ideal for users who want to route network traffic over the dedicated, isolated IBM Cloud private backbone network rather than the public internet.",
           "working_directory": "solutions/fully-configurable",
           "configuration": [
             {
