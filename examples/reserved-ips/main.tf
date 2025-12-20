@@ -45,7 +45,7 @@ data "ibm_is_security_group" "default_sg" {
 
 module "vpe_security_group" {
   source                       = "terraform-ibm-modules/security-group/ibm"
-  version                      = "2.8.7"
+  version                      = "2.8.8"
   security_group_name          = "${var.prefix}-vpe-sg"
   add_ibm_cloud_internal_rules = false # No need for the internal ibm cloud rules for SG associated with VPEs
 
