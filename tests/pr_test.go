@@ -196,7 +196,7 @@ func getFullConfigSolutionTestVariables(mainOptions *testschematic.TestSchematic
 	// try to cover some variety of use cases
 	testCloudSvcList := []map[string]any{
 		{"service_name": "is"},
-		{"service_name": "kms", "allow_dns_resolution_binding": true},
+		{"service_name": "kms", "dns_resolution_binding_mode": "primary"},
 		{"service_name": "cloud-object-storage", "vpe_name": mainOptions.Prefix + "-cos"},
 	}
 
