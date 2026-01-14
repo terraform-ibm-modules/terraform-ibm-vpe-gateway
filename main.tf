@@ -10,19 +10,19 @@ locals {
     # Create object for each service
     for service in var.cloud_services :
     {
-      name                         = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
-      service                      = service.service_name
-      crn                          = local.service_to_endpoint_map[service.service_name]
-      allow_dns_resolution_binding = service.allow_dns_resolution_binding
+      name                        = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
+      service                     = service.service_name
+      crn                         = local.service_to_endpoint_map[service.service_name]
+      dns_resolution_binding_mode = service.dns_resolution_binding_mode
     }
     ],
     [
       for service in var.cloud_service_by_crn :
       {
-        name                         = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
-        service                      = null
-        crn                          = service.crn
-        allow_dns_resolution_binding = service.allow_dns_resolution_binding
+        name                        = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
+        service                     = null
+        crn                         = service.crn
+        dns_resolution_binding_mode = service.dns_resolution_binding_mode
       }
     ]
   )
@@ -95,7 +95,7 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
     crn           = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? each.value.crn : null
     resource_type = length(regexall("crn:v1:([^:]*:){6}", each.value.crn)) > 0 ? strcontains(each.value.crn, "private-path-service-gateway") ? "private_path_service_gateway" : "provider_cloud_service" : "provider_infrastructure_service"
   }
-  allow_dns_resolution_binding = each.value.allow_dns_resolution_binding
+  dns_resolution_binding_mode = each.value.dns_resolution_binding_mode
 }
 
 ##############################################################################
