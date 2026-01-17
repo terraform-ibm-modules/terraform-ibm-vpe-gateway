@@ -1,5 +1,10 @@
 # Existing Reserved IPs example
 
+<!-- BEGIN SCHEMATICS DEPLOY HOOK -->
+<a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-reserved-ips-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/reserved-ips"><img src="https://img.shields.io/badge/Deploy%20with IBM%20Cloud%20Schematics-0f62fe?logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom;"></a>
+<!-- END SCHEMATICS DEPLOY HOOK -->
+
+
 This example creates reserved ips in the example and passes those values to the main modules `reserved_ips` variable which will use those existing reserved ips instead of creating new values.
 
 This example creates the following infrastructure:
@@ -13,3 +18,7 @@ This example creates the following infrastructure:
     - Each of the two virtual private endpoint gateways are attached to the three VPC subnets.
     - The new security group is attached to the two VPE gateways.
     - Passes existing reserved ip values to be used instead of creating new ones.
+
+<!-- BEGIN SCHEMATICS DEPLOY TIP HOOK -->
+:information_source: Ctrl/Cmd+Click or right-click on the Schematics deploy button to open in a new tab
+<!-- END SCHEMATICS DEPLOY TIP HOOK -->
