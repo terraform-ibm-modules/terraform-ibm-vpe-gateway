@@ -30,7 +30,7 @@ module "vpc" {
 # on VPE service side
 ##############################################################################
 module "vpes" {
-  source            = "../../"
+  source            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway?ref=main"
   region            = var.region
   prefix            = var.prefix
   vpc_name          = module.vpc.vpc_name
