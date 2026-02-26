@@ -10,7 +10,7 @@ terraform {
     ibm = {
       source = "IBM-Cloud/ibm"
       # pin above lowest version, required for postgresql and IAM auth policy
-      version = ">=1.86.1"
+      version = ">=1.87.3"
     }
     time = {
       source  = "hashicorp/time"
