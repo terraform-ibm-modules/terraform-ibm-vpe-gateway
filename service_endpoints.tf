@@ -54,6 +54,7 @@ locals {
     "eu-de"    = "de.icr.io"  # eu-central
     "eu-gb"    = "uk.icr.io"  # uk-south
     "eu-fr2"   = "fr2.icr.io" # eu-fr2
+    "ca-mon"   = "ca2.icr.io" # ca-mon
     "ca-tor"   = "ca.icr.io"  # ca-tor
     "br-sao"   = "br.icr.io"  # br-sao
     "us-south" = "us.icr.io"  # us-south
