@@ -12,6 +12,23 @@ import (
 
 const reservedIpExampleTerraformDir = "examples/reserved-ips"
 
+func setupTempOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:      t,
+		TerraformDir: dir,
+		Prefix:       prefix,
+		Region:       "us-east",
+		IgnoreUpdates: testhelper.Exemptions{ // Ignore for consistency check
+			List: []string{
+				"time_sleep.sleep_time",
+			},
+		},
+		ResourceGroup: resourceGroup,
+	})
+	return options
+}
+
 func TestRunReservedIpExample(t *testing.T) {
 	t.Parallel()
 
@@ -44,10 +61,14 @@ func TestRunReservedIpExample(t *testing.T) {
 // In order to test all 30+ services, we will run this other test single-threaded (parallelism=1).
 //
 // IBM Terraform provider issue for this issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6224
+//
+// sysdig-monitor multi-tenant is not currently supported in us-south (Dallas) or jp-tok (Tokyo) so this test
+// will fail module validation in the module. To avoid random selection of the regions temporarily select us-east (Washington)
+// Replace setupTempOptions with setupOptions when Dallas and Tokyo support multi-tenant
 func TestRunEveryMultiTenantExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "vpe-allmt", "examples/every-multi-tenant-svc")
+	options := setupTempOptions(t, "vpe-allmt", "examples/every-multi-tenant-svc")
 
 	// need to do setup so that TerraformOptions is created
 	options.TestSetup()

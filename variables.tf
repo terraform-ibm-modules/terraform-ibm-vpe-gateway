@@ -113,9 +113,9 @@ variable "cloud_services" {
   validation {
     condition = length(var.cloud_services) == 0 ? true : length([
       for service in var.cloud_services :
-      service.service_name if length(regexall("sysdig-monitor", service.service_name)) > 0 && var.region != "ca-mon"
+      service.service_name if length(regexall("sysdig-monitor", service.service_name)) > 0 && (var.region == "us-south" || var.region == "jp-tok")
     ]) == 0
-    error_message = "IBM Cloud Monitoring in regions other than Montreal is supported by removing `sysdig-monitor` and adding the instance CRN to the `cloud_service_by_crn` variable input"
+    error_message = "IBM Cloud Monitoring in us-south (Dallas) and jp-tok (Tokyo) regions are supported by removing `sysdig-monitor` and adding the instance CRN to the `cloud_service_by_crn` variable input"
   }
 
   validation {
