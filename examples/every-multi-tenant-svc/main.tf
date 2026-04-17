@@ -129,6 +129,9 @@ module "vpes" {
       service_name = "support-center"
     },
     {
+      service_name = "sysdig-monitor"
+    },
+    {
       service_name = "transit"
     },
     {
