@@ -62,7 +62,7 @@ func TestRunReservedIpExample(t *testing.T) {
 //
 // IBM Terraform provider issue for this issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6224
 //
-// sysdig-monitor multi-tenant is not currently supported in us-south (Dallas) or jp-tok (Tokyo) so this test
+// sysdig-monitor multi-tenant is not currently supported in us-south (Dallas) or so this test
 // will fail module validation in the module. To avoid random selection of the regions temporarily select us-east (Washington)
 // Replace setupTempOptions with setupOptions when Dallas and Tokyo support multi-tenant
 func TestRunEveryMultiTenantExample(t *testing.T) {
