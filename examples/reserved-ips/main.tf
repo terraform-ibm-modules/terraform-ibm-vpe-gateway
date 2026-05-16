@@ -17,7 +17,7 @@ module "resource_group" {
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "8.17.2"
+  version           = "8.19.0"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -45,7 +45,7 @@ data "ibm_is_security_group" "default_sg" {
 
 module "vpe_security_group" {
   source                       = "terraform-ibm-modules/security-group/ibm"
-  version                      = "2.9.0"
+  version                      = "2.10.0"
   security_group_name          = "${var.prefix}-vpe-sg"
   add_ibm_cloud_internal_rules = false # No need for the internal ibm cloud rules for SG associated with VPEs
 
