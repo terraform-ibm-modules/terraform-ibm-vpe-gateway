@@ -2,6 +2,7 @@
 package test
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -126,7 +127,7 @@ func TestRunAdvancedExample(t *testing.T) {
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
 	// checking vpe_ips to exist
-	outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+	outputs := terraform.OutputAllContext(options.Testing, context.Background(), options.TerraformOptions)
 	expectedOutputs := []string{"vpe_ips"}
 	_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
 	assert.NoErrorf(t, outputErr, "Some outputs not found or nil")
