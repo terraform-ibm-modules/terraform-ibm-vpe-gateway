@@ -2,6 +2,7 @@
 package test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -38,7 +39,7 @@ func TestRunReservedIpExample(t *testing.T) {
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
 	// checking reserved_ips to exist
-	outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+	outputs := terraform.OutputAllContext(options.Testing, context.Background(), options.TerraformOptions)
 	expectedOutputs := []string{"reserved_ips"}
 	_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
 	assert.NoErrorf(t, outputErr, "Some outputs not found or nil")
