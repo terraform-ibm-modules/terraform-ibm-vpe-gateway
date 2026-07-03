@@ -21,7 +21,7 @@ module "vpc" {
   region            = var.region
   prefix            = var.prefix
   name              = "t"
-  tags              = var.resource_tags
+  resource_tags     = var.resource_tags
 }
 
 ##############################################################################

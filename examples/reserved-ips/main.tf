@@ -22,7 +22,7 @@ module "vpc" {
   region            = var.region
   prefix            = var.prefix
   name              = var.vpc_name
-  tags              = var.resource_tags
+  resource_tags     = var.resource_tags
 }
 
 ##############################################################################
