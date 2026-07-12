@@ -17,7 +17,7 @@ module "resource_group" {
 module "vpc" {
   count             = var.vpc_id != null ? 0 : 1
   source            = "terraform-ibm-modules/landing-zone-vpc/ibm"
-  version           = "9.1.1"
+  version           = "9.1.2"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
   prefix            = var.prefix
@@ -63,7 +63,7 @@ module "vpe_security_group" {
 
 module "postgresql_db" {
   source              = "terraform-ibm-modules/icd-postgresql/ibm"
-  version             = "4.15.1"
+  version             = "4.15.2"
   resource_group_id   = module.resource_group.resource_group_id
   name                = "${var.prefix}-vpe-pg"
   region              = var.region
