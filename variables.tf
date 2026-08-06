@@ -111,14 +111,6 @@ variable "cloud_services" {
   }
 
   validation {
-    condition = length(var.cloud_services) == 0 ? true : length([
-      for service in var.cloud_services :
-      service.service_name if length(regexall("sysdig-monitor", service.service_name)) > 0 && var.region == "us-south"
-    ]) == 0
-    error_message = "IBM Cloud Monitoring in us-south (Dallas) region is supported by removing `sysdig-monitor` and adding the instance CRN to the `cloud_service_by_crn` variable input"
-  }
-
-  validation {
     error_message = "The specified dns_resolution_binding_mode is not valid. Allowable values are: disabled, per_resource_binding, primary."
     condition = length(var.cloud_services) == 0 ? true : length([
       for service in var.cloud_services :
