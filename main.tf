@@ -5,58 +5,97 @@
 # NOTE: VPE Service Endpoint configuration can be found in service_endpoints.tf
 
 locals {
-  # List of Gateways to create
-  gateway_list = concat([
-    # Create object for each service
-    for service in var.cloud_services :
-    {
-      name                        = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
-      service                     = service.service_name
-      crn                         = local.service_to_endpoint_map[service.service_name]
-      dns_resolution_binding_mode = service.dns_resolution_binding_mode
-    }
+  # ---------------------------------------------------------------------------
+  # Helpers for deriving a gateway name from a cloud_service_by_crn entry
+  # ---------------------------------------------------------------------------
+  crn_svc_name = { # map: crn -> derived service-name segment
+    for service in var.cloud_service_by_crn :
+    service.crn => (service.service_name != null ? service.service_name : element(split(":", service.crn), 4))
+  }
+
+  crn_gw_name = { # map: crn -> computed gateway name
+    for service in var.cloud_service_by_crn :
+    service.crn => (service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${local.crn_svc_name[service.crn]}")
+  }
+
+  # ---------------------------------------------------------------------------
+  # Gateways that should be CREATED by this module (no existing_vpe_id)
+  # ---------------------------------------------------------------------------
+  gateway_list_create = concat(
+    [
+      for service in var.cloud_services :
+      {
+        name                        = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
+        service                     = service.service_name
+        crn                         = local.service_to_endpoint_map[service.service_name]
+        dns_resolution_binding_mode = service.dns_resolution_binding_mode
+      }
     ],
     [
       for service in var.cloud_service_by_crn :
       {
-        name                        = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}" # service-name part of crn - see https://cloud.ibm.com/docs/account?topic=account-crn
+        name                        = local.crn_gw_name[service.crn]
         service                     = null
         crn                         = service.crn
         dns_resolution_binding_mode = service.dns_resolution_binding_mode
       }
+      if service.existing_vpe_id == null
     ]
   )
 
-  # List of IPs to create
+  # ---------------------------------------------------------------------------
+  # Gateways that already exist (existing_vpe_id is provided) — not created by this module
+  # ---------------------------------------------------------------------------
+  gateway_list_existing = [
+    for service in var.cloud_service_by_crn :
+    {
+      name = local.crn_gw_name[service.crn]
+    }
+    if service.existing_vpe_id != null
+  ]
+
+  # ---------------------------------------------------------------------------
+  # Full endpoint-IP list (unchanged logic — covers both new and existing gateways)
+  # ---------------------------------------------------------------------------
   endpoint_ip_list = flatten([
-    # Create object for each subnet
     for subnet in var.subnet_zone_list :
-    concat([
-      for service in var.cloud_services :
-      {
-        ip_name      = "${subnet.name}-${service.service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
-        subnet_id    = subnet.id
-        gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
-        name         = service.vpe_name != null ? "${service.vpe_name}-${replace(subnet.zone, "/${var.region}-/", "")}" : "${var.prefix}-${var.vpc_name}-${service.service_name}-${replace(subnet.zone, "/${var.region}-/", "")}"
-      }
+    concat(
+      [
+        for service in var.cloud_services :
+        {
+          ip_name      = "${subnet.name}-${service.service_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          subnet_id    = subnet.id
+          gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name}"
+          name         = service.vpe_name != null ? "${service.vpe_name}-${replace(subnet.zone, "/${var.region}-/", "")}" : "${var.prefix}-${var.vpc_name}-${service.service_name}-${replace(subnet.zone, "/${var.region}-/", "")}"
+        }
       ],
       [
         for service in var.cloud_service_by_crn :
         {
-          ip_name      = service.vpe_name != null ? "${subnet.name}-${service.vpe_name}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip" : "${subnet.name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
+          ip_name      = "${subnet.name}-${local.crn_svc_name[service.crn]}-gateway-${replace(subnet.zone, "/${var.region}-/", "")}-ip"
           subnet_id    = subnet.id
-          gateway_name = service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}"
-          name         = service.vpe_name != null ? "${service.vpe_name}-${replace(subnet.zone, "/${var.region}-/", "")}" : "${var.prefix}-${var.vpc_name}-${service.service_name != null ? service.service_name : element(split(":", service.crn), 4)}-${replace(subnet.zone, "/${var.region}-/", "")}"
+          gateway_name = local.crn_gw_name[service.crn]
+          name         = service.vpe_name != null ? "${service.vpe_name}-${replace(subnet.zone, "/${var.region}-/", "")}" : "${var.prefix}-${var.vpc_name}-${local.crn_svc_name[service.crn]}-${replace(subnet.zone, "/${var.region}-/", "")}"
         }
-    ])
+      ]
+    )
   ])
 
-  # Convert the virtual_endpoint_gateway output from list to a map
-  vpe_map = {
-    for gateway in ibm_is_virtual_endpoint_gateway.vpe :
-    (gateway.name) => gateway
-  }
-
+  # ---------------------------------------------------------------------------
+  # Unified vpe_map: merges created resources + existing data sources
+  # ---------------------------------------------------------------------------
+  vpe_map = merge(
+    # Gateways created by this module
+    {
+      for gateway in ibm_is_virtual_endpoint_gateway.vpe :
+      (gateway.name) => gateway
+    },
+    # Pre-existing gateways resolved via data source
+    {
+      for entry in local.gateway_list_existing :
+      (entry.name) => data.ibm_is_virtual_endpoint_gateway.vpe_existing[entry.name]
+    }
+  )
 }
 
 ##############################################################################
@@ -76,12 +115,12 @@ module "ip" {
 ##############################################################################
 
 ##############################################################################
-# Create Endpoint Gateways
+# Create Endpoint Gateways (only for entries without existing_vpe_id)
 ##############################################################################
 
 resource "ibm_is_virtual_endpoint_gateway" "vpe" {
-  for_each = { # Create a map based on gateway name
-    for gateway in local.gateway_list :
+  for_each = {
+    for gateway in local.gateway_list_create :
     (gateway.name) => gateway
   }
   name            = each.key
@@ -101,12 +140,25 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
 ##############################################################################
 
 ##############################################################################
+# Look up pre-existing Endpoint Gateways by name
+##############################################################################
+
+data "ibm_is_virtual_endpoint_gateway" "vpe_existing" {
+  for_each = {
+    for entry in local.gateway_list_existing :
+    (entry.name) => entry
+  }
+  name = each.key
+}
+
+##############################################################################
+
+##############################################################################
 # Attach Endpoint Gateways to Reserved IPs
 ##############################################################################
 
 resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
   for_each = {
-    # Create a map based on endpoint IP
     for gateway_ip in local.endpoint_ip_list :
     (gateway_ip.ip_name) => gateway_ip
   }
@@ -124,4 +176,14 @@ data "ibm_is_virtual_endpoint_gateway" "vpe" {
   depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
   for_each   = ibm_is_virtual_endpoint_gateway.vpe
   name       = each.key
+}
+
+# Reload pre-existing gateways after IP attachment so vpe_ips output reflects all bound IPs
+data "ibm_is_virtual_endpoint_gateway" "vpe_existing_reload" {
+  depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
+  for_each = {
+    for entry in local.gateway_list_existing :
+    (entry.name) => entry
+  }
+  name = each.key
 }

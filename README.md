@@ -43,6 +43,10 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-every-multi-tenant-svc-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/every-multi-tenant-svc"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
+        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/existing-vpe">Existing VPE Gateway adoption example</a>
+        <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-existing-vpe-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/existing-vpe"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
+      </li>
+      <li>
         <a href="https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/reserved-ips">Existing Reserved IPs example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-reserved-ips-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/reserved-ips"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
@@ -59,6 +63,66 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
 <!-- END OVERVIEW HOOK -->
 
 ## terraform-ibm-vpe-gateway
+
+### Adopting an existing (shared) VPE Gateway
+
+Set `existing_vpe_id` on a `cloud_service_by_crn` entry to adopt a VPE Gateway
+that already exists in the VPC instead of creating a new one. The module will:
+
+- **skip** creating an `ibm_is_virtual_endpoint_gateway` resource for that entry,
+- **create and manage** the `ibm_is_subnet_reserved_ip` and
+  `ibm_is_virtual_endpoint_gateway_ip` bindings for the subnets you specify, and
+- **not destroy** the gateway on `terraform destroy` (only the IPs owned by this
+  module call are removed).
+
+This enables the **shared VPE Gateway** topology where multiple workspaces
+(e.g. several IKS/ROKS cluster workspaces) each bind their own subnets to a
+single gateway for a given service:
+
+```hcl
+# ── Owner workspace — creates and owns the gateway ───────────────────────────
+module "vpe_owner" {
+  source           = "terraform-ibm-modules/vpe-gateway/ibm"
+  version          = "X.X.X"
+  region           = "us-south"
+  prefix           = "owner"
+  vpc_name         = "my-vpc"
+  vpc_id           = ibm_is_vpc.vpc.id
+  subnet_zone_list = local.owner_subnet_zone_list
+  cloud_service_by_crn = [
+    {
+      crn          = "crn:v1:bluemix:public:backuprecovery:us-south:a/..."
+      service_name = "backup-recovery"
+    }
+  ]
+}
+
+# ── Consumer workspace — adopts the gateway, manages only its own IPs ─────────
+data "ibm_is_virtual_endpoint_gateway" "shared_brs" {
+  name = "owner-my-vpc-backup-recovery"
+}
+
+module "vpe_consumer" {
+  source           = "terraform-ibm-modules/vpe-gateway/ibm"
+  version          = "X.X.X"
+  region           = "us-south"
+  prefix           = "consumer"
+  vpc_name         = "my-vpc"
+  vpc_id           = ibm_is_vpc.vpc.id
+  subnet_zone_list = local.consumer_subnet_zone_list
+  cloud_service_by_crn = [
+    {
+      crn             = data.ibm_is_virtual_endpoint_gateway.shared_brs.target[0].crn
+      vpe_name        = "owner-my-vpc-backup-recovery"  # must match existing gateway name
+      service_name    = "backup-recovery"
+      existing_vpe_id = data.ibm_is_virtual_endpoint_gateway.shared_brs.id
+    }
+  ]
+}
+```
+
+See the [existing-vpe example](examples/existing-vpe) for a full working
+configuration.
 
 ### Usage
 
@@ -145,12 +209,14 @@ You need the following permissions to run this module.
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway) | resource |
 | [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
+| [ibm_is_virtual_endpoint_gateway.vpe_existing](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
+| [ibm_is_virtual_endpoint_gateway.vpe_existing_reload](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. | <pre>set(<br/>    object({<br/>      crn                         = string<br/>      vpe_name                    = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br/>      service_name                = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.<br/>      dns_resolution_binding_mode = optional(string, "primary")<br/>    })<br/>  )</pre> | `[]` | no |
+| <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. Set `existing_vpe_id` to use a pre-existing gateway instead of creating a new one; the gateway itself will not be destroyed on `terraform destroy`. | <pre>set(<br/>    object({<br/>      crn                         = string<br/>      vpe_name                    = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br/>      service_name                = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.<br/>      existing_vpe_id             = optional(string) # ID of a pre-existing VPE Gateway. When set, no new gateway is created; only reserved IPs and gateway-IP bindings are managed.<br/>      dns_resolution_binding_mode = optional(string, "primary")<br/>    })<br/>  )</pre> | `[]` | no |
 | <a name="input_cloud_services"></a> [cloud\_services](#input\_cloud\_services) | The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. | <pre>set(object({<br/>    service_name                = string<br/>    vpe_name                    = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br/>    dns_resolution_binding_mode = optional(string, "disabled")<br/>  }))</pre> | `[]` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources. Value is only used if no value is passed for the `vpe_name` option in the `cloud_services` input variable. | `string` | `"vpe"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The region where VPC and services are deployed | `string` | `"us-south"` | no |
