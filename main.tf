@@ -5,22 +5,19 @@
 # NOTE: VPE Service Endpoint configuration can be found in service_endpoints.tf
 
 locals {
-  # ---------------------------------------------------------------------------
-  # Helpers for deriving a gateway name from a cloud_service_by_crn entry
-  # ---------------------------------------------------------------------------
-  crn_svc_name = { # map: crn -> derived service-name segment
+  # crn -> derived service-name segment
+  crn_svc_name = {
     for service in var.cloud_service_by_crn :
     service.crn => (service.service_name != null ? service.service_name : element(split(":", service.crn), 4))
   }
 
-  crn_gw_name = { # map: crn -> computed gateway name
+  # crn -> computed gateway name
+  crn_gw_name = {
     for service in var.cloud_service_by_crn :
     service.crn => (service.vpe_name != null ? service.vpe_name : "${var.prefix}-${var.vpc_name}-${local.crn_svc_name[service.crn]}")
   }
 
-  # ---------------------------------------------------------------------------
-  # Gateways that should be CREATED by this module (no existing_vpe_id)
-  # ---------------------------------------------------------------------------
+  # Gateways to create (no existing_vpe_id)
   gateway_list_create = concat(
     [
       for service in var.cloud_services :
@@ -43,9 +40,7 @@ locals {
     ]
   )
 
-  # ---------------------------------------------------------------------------
-  # Gateways that already exist (existing_vpe_id is provided) — not created by this module
-  # ---------------------------------------------------------------------------
+  # Pre-existing gateways (existing_vpe_id provided) — not created by this module
   gateway_list_existing = [
     for service in var.cloud_service_by_crn :
     {
@@ -54,9 +49,7 @@ locals {
     if service.existing_vpe_id != null
   ]
 
-  # ---------------------------------------------------------------------------
-  # Full endpoint-IP list (unchanged logic — covers both new and existing gateways)
-  # ---------------------------------------------------------------------------
+  # List of IPs to create
   endpoint_ip_list = flatten([
     for subnet in var.subnet_zone_list :
     concat(
@@ -81,16 +74,12 @@ locals {
     )
   ])
 
-  # ---------------------------------------------------------------------------
-  # Unified vpe_map: merges created resources + existing data sources
-  # ---------------------------------------------------------------------------
+  # Unified map of all gateways (created + pre-existing)
   vpe_map = merge(
-    # Gateways created by this module
     {
       for gateway in ibm_is_virtual_endpoint_gateway.vpe :
       (gateway.name) => gateway
     },
-    # Pre-existing gateways resolved via data source
     {
       for entry in local.gateway_list_existing :
       (entry.name) => data.ibm_is_virtual_endpoint_gateway.vpe_existing[entry.name]
@@ -178,7 +167,7 @@ data "ibm_is_virtual_endpoint_gateway" "vpe" {
   name       = each.key
 }
 
-# Reload pre-existing gateways after IP attachment so vpe_ips output reflects all bound IPs
+# Reload pre-existing gateways after IP attachment
 data "ibm_is_virtual_endpoint_gateway" "vpe_existing_reload" {
   depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
   for_each = {

@@ -1,17 +1,5 @@
 ##############################################################################
 # Existing VPE Gateway example
-#
-# This example demonstrates the "shared VPE Gateway" pattern:
-#   - Workspace A (owner) creates a VPE Gateway for a service (e.g.
-#     cloud-object-storage) and manages it fully.
-#   - Workspace B (consumer) reuses that same existing gateway by passing its
-#     name via `vpe_name` and `existing_vpe_id`. Workspace B only creates and
-#     manages its own reserved-IP bindings; the gateway itself is NOT destroyed
-#     when workspace B runs `terraform destroy`.
-#
-# In this example both roles are shown in a single configuration for
-# illustration purposes. In real use they would be separate Terraform root
-# modules / workspaces sharing state via remote_state or data sources.
 ##############################################################################
 
 ##############################################################################
@@ -26,7 +14,7 @@ module "resource_group" {
 }
 
 ##############################################################################
-# Create a VPC (3 subnets across 3 AZs)
+# VPC
 ##############################################################################
 
 module "vpc" {
@@ -40,9 +28,7 @@ module "vpc" {
 }
 
 ##############################################################################
-# ── OWNER workspace ──────────────────────────────────────────────────────────
-# Creates the VPE Gateway for the shared service (cloud-object-storage here).
-# In a real topology this would live in its own root module / workspace.
+# Owner — creates and fully manages the VPE Gateway
 ##############################################################################
 
 module "vpe_owner" {
@@ -55,25 +41,16 @@ module "vpe_owner" {
   resource_group_id = module.resource_group.resource_group_id
   cloud_services = [
     {
-      # The owner creates and fully manages this gateway.
       service_name = "cloud-object-storage"
     }
   ]
 }
 
 ##############################################################################
-# ── CONSUMER workspace ───────────────────────────────────────────────────────
-# Reuses the existing gateway created by the owner and attaches its own
-# reserved IPs to it. On `terraform destroy` only the reserved IPs owned by
-# this module call are removed; the gateway itself is left intact.
-#
-# In a real consumer workspace the gateway name would come from a remote state
-# output or a convention agreed between teams.
+# Consumer — reuses the existing gateway, manages only its own reserved IPs
 ##############################################################################
 
-# Look up the existing gateway by name so the consumer module can pass its CRN.
-# depends_on ensures this data source is not evaluated until the owner module
-# has fully applied (gateway stable).
+# Look up the existing gateway by name; depends_on ensures it exists first
 data "ibm_is_virtual_endpoint_gateway" "shared_cos" {
   depends_on = [module.vpe_owner]
   name       = "${var.prefix}-vpc-cloud-object-storage"
@@ -90,20 +67,12 @@ module "vpe_consumer" {
 
   cloud_service_by_crn = [
     {
-      # Use the existing gateway instead of creating a new one.
-      # Only reserved-IP bindings are created/destroyed by this module call.
-      crn          = data.ibm_is_virtual_endpoint_gateway.shared_cos.target[0].crn
-      vpe_name     = "${var.prefix}-vpc-cloud-object-storage" # must match the existing gateway name exactly
-      service_name = "cloud-object-storage"
-      # existing_vpe_id is no longer used by the root module (lookup is by name),
-      # but the field is kept here to document intent and satisfy the variable contract.
+      crn             = data.ibm_is_virtual_endpoint_gateway.shared_cos.target[0].crn
+      vpe_name        = "${var.prefix}-vpc-cloud-object-storage" # must match the existing gateway name
+      service_name    = "cloud-object-storage"
       existing_vpe_id = data.ibm_is_virtual_endpoint_gateway.shared_cos.id
     }
   ]
-
-  # Ensure the consumer module runs only after the owner gateway is fully
-  # stable and the shared_cos data source has resolved.
-  depends_on = [module.vpe_owner]
 }
 
 ##############################################################################
