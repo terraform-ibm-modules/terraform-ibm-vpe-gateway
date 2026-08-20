@@ -98,6 +98,8 @@ module "vpes" {
     }
   ]
   service_endpoints = var.service_endpoints
+  resource_tags     = var.resource_tags
+  access_tags       = var.access_tags
   #vpe_names            = local.vpe_names
   #  See comments below (resource "time_sleep" "sleep_time") for explanation on why this is needed.
   depends_on = [time_sleep.sleep_time]

@@ -105,6 +105,12 @@
             },
             {
               "key": "service_endpoints"
+            },
+            {
+              "key": "resource_tags"
+            },
+            {
+              "key": "access_tags"
             }
           ],
           "iam_permissions": [

@@ -37,6 +37,7 @@ module "vpes" {
   vpc_id            = module.vpc.vpc_id
   subnet_zone_list  = module.vpc.subnet_zone_list
   resource_group_id = module.resource_group.resource_group_id
+  resource_tags     = var.resource_tags
   cloud_services = [
     {
       service_name = "is"
