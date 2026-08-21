@@ -180,6 +180,7 @@ variable "service_endpoints" {
 
 variable "resource_tags" {
   type        = list(string)
+  nullable    = false
   description = "Add user resource tags to the VPE to organize, track, and manage costs. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#tag-types)."
   default     = []
 
@@ -191,14 +192,15 @@ variable "resource_tags" {
 
 variable "access_tags" {
   type        = list(string)
+  nullable    = false
   description = "Add access management tags to the VPE to control access. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create-access-console)."
   default     = []
 
   validation {
     condition = alltrue([
-      for tag in var.access_tags : can(regex("[\\w\\-_\\.]+:[\\w\\-_\\.]+", tag)) && length(tag) <= 128
+      for tag in var.access_tags : can(regex("^[\\w\\-_\\.]+:[\\w\\-_\\.]+$", tag)) && length(tag) <= 128
     ])
-    error_message = "Tags must match the regular expression `\"[\\w\\-_\\.]+:[\\w\\-_\\.]+\"`. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#limits)."
+    error_message = "Tags must match the regular expression `\"^[\\w\\-_\\.]+:[\\w\\-_\\.]+$\"`. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#limits)."
   }
 }
 

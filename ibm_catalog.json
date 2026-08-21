@@ -107,10 +107,26 @@
               "key": "service_endpoints"
             },
             {
-              "key": "resource_tags"
+              "key": "resource_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "type": "array",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "access_tags"
+              "key": "access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "type": "array",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             }
           ],
           "iam_permissions": [

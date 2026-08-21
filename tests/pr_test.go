@@ -186,6 +186,7 @@ func getFullConfigSolutionTestVariables(mainOptions *testschematic.TestSchematic
 		{Name: "prefix", Value: mainOptions.Prefix, DataType: "string"},
 		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
 		{Name: "resource_tags", Value: mainOptions.Tags, DataType: "list(string)"},
+		{Name: "access_tags", Value: permanentResources["accessTags"], DataType: "list(string)"},
 		{Name: "vpc_name", Value: existingOptions.LastTestTerraformOutputs["vpc_name"], DataType: "string"},
 		{Name: "subnet_ids", Value: existingOptions.LastTestTerraformOutputs["subnet_ids"], DataType: "list(string)"},
 		{Name: "cloud_services", Value: testCloudSvcList, DataType: "set(object)"},
