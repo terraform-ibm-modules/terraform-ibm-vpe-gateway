@@ -26,3 +26,8 @@ variable "resource_tags" {
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
+
+variable "existing_vpe_name" {
+  type        = string
+  description = "Name of the pre-existing VPE Gateway to reuse. The consumer module will bind reserved IPs to this gateway without creating a new one."
+}

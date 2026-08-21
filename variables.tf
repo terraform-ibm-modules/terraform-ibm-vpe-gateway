@@ -59,10 +59,11 @@ variable "security_group_ids" {
 
 
 variable "cloud_services" {
-  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
+  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. Set `existing_vpe_id` to use a pre-existing gateway instead of creating a new one; the gateway itself will not be destroyed on `terraform destroy`."
   type = set(object({
     service_name                = string
     vpe_name                    = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
+    existing_vpe_id             = optional(string)  # ID of a pre-existing VPE Gateway. When set, no new gateway is created; only reserved IPs and gateway-IP bindings are managed.
     dns_resolution_binding_mode = optional(string, "disabled")
   }))
   default = []
