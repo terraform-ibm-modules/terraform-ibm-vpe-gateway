@@ -88,6 +88,8 @@ resource "ibm_is_virtual_endpoint_gateway" "vpe" {
   vpc             = var.vpc_id
   resource_group  = var.resource_group_id
   security_groups = var.security_group_ids
+  tags            = var.resource_tags
+  access_tags     = var.access_tags
 
   # check if target is a CRN and handle accordingly
   target {
