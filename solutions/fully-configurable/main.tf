@@ -45,5 +45,7 @@ module "vpe" {
   cloud_services       = var.cloud_services
   cloud_service_by_crn = var.cloud_service_by_crn
   service_endpoints    = var.service_endpoints
+  resource_tags        = var.resource_tags
+  access_tags          = var.access_tags
   reserved_ips         = {} # from a DA usage perspective this map is not needed
 }

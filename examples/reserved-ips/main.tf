@@ -90,6 +90,8 @@ module "vpes" {
   resource_group_id  = module.resource_group.resource_group_id
   security_group_ids = var.security_group_ids != null ? var.security_group_ids : [module.vpe_security_group.security_group_id]
   service_endpoints  = var.service_endpoints
+  resource_tags      = var.resource_tags
+  access_tags        = var.access_tags
   reserved_ips       = module.ips.reserved_ip_map
 }
 
