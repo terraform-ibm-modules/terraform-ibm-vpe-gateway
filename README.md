@@ -43,10 +43,6 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-every-multi-tenant-svc-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/every-multi-tenant-svc"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
-        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/existing-vpe">Existing VPE Gateway example</a>
-        <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-existing-vpe-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/existing-vpe"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
-      </li>
-      <li>
         <a href="https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/reserved-ips">Existing Reserved IPs example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-reserved-ips-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/reserved-ips"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
@@ -63,66 +59,6 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
 <!-- END OVERVIEW HOOK -->
 
 ## terraform-ibm-vpe-gateway
-
-### Adopting an existing (shared) VPE Gateway
-
-Set `existing_vpe_id` on a `cloud_service_by_crn` entry to adopt a VPE Gateway
-that already exists in the VPC instead of creating a new one. The module will:
-
-- **skip** creating an `ibm_is_virtual_endpoint_gateway` resource for that entry,
-- **create and manage** the `ibm_is_subnet_reserved_ip` and
-  `ibm_is_virtual_endpoint_gateway_ip` bindings for the subnets you specify, and
-- **not destroy** the gateway on `terraform destroy` (only the IPs owned by this
-  module call are removed).
-
-This enables the **shared VPE Gateway** topology where multiple workspaces
-(e.g. several IKS/ROKS cluster workspaces) each bind their own subnets to a
-single gateway for a given service:
-
-```hcl
-# ── Owner workspace — creates and owns the gateway ───────────────────────────
-module "vpe_owner" {
-  source           = "terraform-ibm-modules/vpe-gateway/ibm"
-  version          = "X.X.X"
-  region           = "us-south"
-  prefix           = "owner"
-  vpc_name         = "my-vpc"
-  vpc_id           = ibm_is_vpc.vpc.id
-  subnet_zone_list = local.owner_subnet_zone_list
-  cloud_service_by_crn = [
-    {
-      crn          = "crn:v1:bluemix:public:backuprecovery:us-south:a/..."
-      service_name = "backup-recovery"
-    }
-  ]
-}
-
-# ── Consumer workspace — adopts the gateway, manages only its own IPs ─────────
-data "ibm_is_virtual_endpoint_gateway" "shared_brs" {
-  name = "owner-my-vpc-backup-recovery"
-}
-
-module "vpe_consumer" {
-  source           = "terraform-ibm-modules/vpe-gateway/ibm"
-  version          = "X.X.X"
-  region           = "us-south"
-  prefix           = "consumer"
-  vpc_name         = "my-vpc"
-  vpc_id           = ibm_is_vpc.vpc.id
-  subnet_zone_list = local.consumer_subnet_zone_list
-  cloud_service_by_crn = [
-    {
-      crn             = data.ibm_is_virtual_endpoint_gateway.shared_brs.target[0].crn
-      vpe_name        = "owner-my-vpc-backup-recovery"  # must match existing gateway name
-      service_name    = "backup-recovery"
-      existing_vpe_id = data.ibm_is_virtual_endpoint_gateway.shared_brs.id
-    }
-  ]
-}
-```
-
-See the [existing-vpe example](examples/existing-vpe) for a full working
-configuration.
 
 ### Usage
 
@@ -209,8 +145,6 @@ You need the following permissions to run this module.
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway) | resource |
 | [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
-| [ibm_is_virtual_endpoint_gateway.vpe_existing](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
-| [ibm_is_virtual_endpoint_gateway.vpe_existing_reload](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
 
 ### Inputs
 

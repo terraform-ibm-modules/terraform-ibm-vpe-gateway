@@ -13,6 +13,7 @@ variable "region" {
 variable "prefix" {
   description = "The prefix that you would like to append to your resources"
   type        = string
+  default     = "vpe-shared-owner"
 }
 
 variable "resource_group" {
@@ -25,9 +26,18 @@ variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
   default     = []
+  nullable    = false
 }
 
-variable "existing_vpe_name" {
+variable "access_tags" {
+  type        = list(string)
+  description = "Optional list of access management tags to be added to created resources"
+  default     = []
+  nullable    = false
+}
+
+variable "service_name" {
   type        = string
-  description = "Name of the pre-existing VPE Gateway to reuse. The consumer module will bind reserved IPs to this gateway without creating a new one."
+  description = "The service name of the VPE Gateway to create (e.g. kms, cloud-object-storage)"
+  default     = "kms"
 }

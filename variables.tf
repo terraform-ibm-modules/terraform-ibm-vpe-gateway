@@ -59,12 +59,12 @@ variable "security_group_ids" {
 
 
 variable "cloud_services" {
-  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. Set `existing_vpe_id` to use a pre-existing gateway instead of creating a new one; the gateway itself will not be destroyed on `terraform destroy`."
+  description = "The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
   type = set(object({
     service_name                = string
     vpe_name                    = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
-    existing_vpe_id             = optional(string)  # ID of a pre-existing VPE Gateway. When set, no new gateway is created; only reserved IPs and gateway-IP bindings are managed.
     dns_resolution_binding_mode = optional(string, "disabled")
+    existing_vpe_id             = optional(string) # NEW: adopt this gateway instead of creating one
   }))
   default = []
 
@@ -125,14 +125,14 @@ variable "cloud_services" {
 }
 
 variable "cloud_service_by_crn" {
-  description = "The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. Set `existing_vpe_id` to use a pre-existing gateway instead of creating a new one; the gateway itself will not be destroyed on `terraform destroy`."
+  description = "The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time."
   type = set(
     object({
       crn                         = string
       vpe_name                    = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
       service_name                = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.
-      existing_vpe_id             = optional(string) # ID of a pre-existing VPE Gateway. When set, no new gateway is created; only reserved IPs and gateway-IP bindings are managed.
       dns_resolution_binding_mode = optional(string, "primary")
+      existing_vpe_id             = optional(string) # NEW: adopt this gateway instead of creating one
     })
   )
   default = []
