@@ -64,7 +64,7 @@ variable "cloud_services" {
     service_name                = string
     vpe_name                    = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
     dns_resolution_binding_mode = optional(string, "disabled")
-    existing_vpe_id             = optional(string) # NEW: adopt this gateway instead of creating one
+    existing_vpe_id             = optional(string) # If set, no new VPE gateway is created; this existing gateway ID is used instead.
   }))
   default = []
 
@@ -122,6 +122,14 @@ variable "cloud_services" {
       ], service.dns_resolution_binding_mode)
     ]) == 0
   }
+
+  validation {
+    error_message = "When existing_vpe_id is set, vpe_name must also be set so the gateway can be looked up by name."
+    condition = length(var.cloud_services) == 0 ? true : alltrue([
+      for service in var.cloud_services :
+      service.existing_vpe_id == null || service.vpe_name != null
+    ])
+  }
 }
 
 variable "cloud_service_by_crn" {
@@ -132,7 +140,7 @@ variable "cloud_service_by_crn" {
       vpe_name                    = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
       service_name                = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.
       dns_resolution_binding_mode = optional(string, "primary")
-      existing_vpe_id             = optional(string) # NEW: adopt this gateway instead of creating one
+      existing_vpe_id             = optional(string) # If set, no new VPE gateway is created; this existing gateway ID is used instead.
     })
   )
   default = []
@@ -169,6 +177,14 @@ variable "cloud_service_by_crn" {
         "primary"
       ], service.dns_resolution_binding_mode)
     ]) == 0
+  }
+
+  validation {
+    error_message = "When existing_vpe_id is set, vpe_name must also be set so the gateway can be looked up by name."
+    condition = length(var.cloud_service_by_crn) == 0 ? true : alltrue([
+      for service in var.cloud_service_by_crn :
+      service.existing_vpe_id == null || service.vpe_name != null
+    ])
   }
 }
 

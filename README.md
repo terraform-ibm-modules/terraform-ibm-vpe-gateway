@@ -114,6 +114,36 @@ module "vpes" {
 }
 ```
 
+### Adopting an existing VPE gateway
+
+Use `existing_vpe_id` to adopt a pre-existing gateway — the module manages only the reserved IPs and bindings, and never creates or destroys the gateway itself.
+
+```hcl
+module "vpes" {
+  source            = "terraform-ibm-modules/vpe-gateway/ibm"
+  version           = "X.X.X"
+  region            = "us-south"
+  prefix            = "my-prefix"
+  vpc_name          = "my-vpc"            # existing vpc name
+  vpc_id            = "<vpc-id>"          # existing vpc id
+  subnet_zone_list  = var.subnet_zone_list
+  resource_group_id = var.resource_group_id
+
+  cloud_services = [
+    {
+      service_name    = "kms"
+      vpe_name        = "my-kms-gateway"    # must match the existing gateway name
+      existing_vpe_id = "<existing-gateway-id>"
+    }
+  ]
+}
+```
+
+- `vpe_name` is required when `existing_vpe_id` is set.
+- Pass only subnet list not already bound in the existing workspace — each subnet gets exactly one reserved IP.
+- `terraform destroy` removes only the reserved IPs created by this call; the gateway is unaffected.
+- `vpe_ips` and `crn` outputs work correctly for the adopted gateway.
+
 ### Required IAM access policies
 You need the following permissions to run this module.
 
