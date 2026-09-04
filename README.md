@@ -43,10 +43,6 @@ An IBM Provider [issue](https://github.com/IBM-Cloud/terraform-provider-ibm/issu
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-every-multi-tenant-svc-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/every-multi-tenant-svc"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
-        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/existing-vpe">Existing VPE gateway example</a>
-        <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-existing-vpe-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/existing-vpe"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
-      </li>
-      <li>
         <a href="https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/reserved-ips">Existing Reserved IPs example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=vpe-gateway-reserved-ips-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-vpe-gateway/tree/main/examples/reserved-ips"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
@@ -130,7 +126,7 @@ module "vpes" {
   prefix            = "my-prefix"
   vpc_name          = "my-vpc"            # existing vpc name
   vpc_id            = "<vpc-id>"          # existing vpc id
-  subnet_zone_list  = var.subnet_zone_list
+  subnet_zone_list  = var.subnet_zone_list # subnets not already bound to the existing gateway
   resource_group_id = var.resource_group_id
 
   cloud_services = [
