@@ -14,6 +14,7 @@ locals {
       service                     = service.service_name
       crn                         = local.service_to_endpoint_map[service.service_name]
       dns_resolution_binding_mode = service.dns_resolution_binding_mode
+      existing_vpe_id             = service.existing_vpe_id
     }
     ],
     [
@@ -23,6 +24,7 @@ locals {
         service                     = null
         crn                         = service.crn
         dns_resolution_binding_mode = service.dns_resolution_binding_mode
+        existing_vpe_id             = service.existing_vpe_id
       }
     ]
   )
@@ -51,11 +53,19 @@ locals {
     ])
   ])
 
-  # Convert the virtual_endpoint_gateway output from list to a map
-  vpe_map = {
-    for gateway in ibm_is_virtual_endpoint_gateway.vpe :
-    (gateway.name) => gateway
-  }
+  # Convert the virtual_endpoint_gateway output from list to a map,
+  # merging newly created gateways with any pre-existing ones supplied via existing_vpe_id.
+  vpe_map = merge(
+    {
+      for gateway in ibm_is_virtual_endpoint_gateway.vpe :
+      (gateway.name) => gateway
+    },
+    {
+      for gateway in local.gateway_list :
+      (gateway.name) => { id = gateway.existing_vpe_id, name = gateway.name }
+      if gateway.existing_vpe_id != null
+    }
+  )
 
 }
 
@@ -80,9 +90,10 @@ module "ip" {
 ##############################################################################
 
 resource "ibm_is_virtual_endpoint_gateway" "vpe" {
-  for_each = { # Create a map based on gateway name
+  for_each = { # Create a map based on gateway name, skip entries with an existing VPE id
     for gateway in local.gateway_list :
     (gateway.name) => gateway
+    if gateway.existing_vpe_id == null
   }
   name            = each.key
   vpc             = var.vpc_id
@@ -122,8 +133,21 @@ resource "ibm_is_virtual_endpoint_gateway_ip" "endpoint_gateway_ip" {
 # Datasource to load endpoint gateways details once resources are fully created
 ##############################################################################
 
+# Newly created gateways - looked up by name after IPs are attached
 data "ibm_is_virtual_endpoint_gateway" "vpe" {
   depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
   for_each   = ibm_is_virtual_endpoint_gateway.vpe
   name       = each.key
+}
+
+# Adopted (existing) gateways - looked up by name after IPs are attached.
+# vpe_name is always set for these entries (enforced by variable validation).
+data "ibm_is_virtual_endpoint_gateway" "vpe_existing" {
+  depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
+  for_each = {
+    for gateway in local.gateway_list :
+    (gateway.name) => gateway
+    if gateway.existing_vpe_id != null
+  }
+  name = each.key
 }
