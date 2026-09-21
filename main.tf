@@ -141,7 +141,8 @@ data "ibm_is_virtual_endpoint_gateway" "vpe" {
 }
 
 # Adopted (existing) gateways - looked up by name after IPs are attached.
-# vpe_name is always set for these entries (enforced by variable validation).
+# vpe_name is required when existing_vpe_id is set (enforced by variable validation),
+# so gateway.name always equals the supplied vpe_name here.
 data "ibm_is_virtual_endpoint_gateway" "vpe_existing" {
   depends_on = [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip]
   for_each = {

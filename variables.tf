@@ -64,7 +64,12 @@ variable "cloud_services" {
     service_name                = string
     vpe_name                    = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
     dns_resolution_binding_mode = optional(string, "disabled")
-    existing_vpe_id             = optional(string) # If set, no new VPE gateway is created; this existing gateway ID is used instead.
+    existing_vpe_id             = optional(string)
+    # If set, no new VPE gateway is created; the existing gateway is adopted.
+    # vpe_name MUST also be set (enforced by validation) — it is used to look up
+    # the gateway via data source after IP bindings are complete.
+    # NOTE: vpe_ips output will include only the reserved IPs created by this module
+    # invocation, not any pre-existing IPs on the gateway.
   }))
   default = []
 
@@ -140,7 +145,12 @@ variable "cloud_service_by_crn" {
       vpe_name                    = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.
       service_name                = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.
       dns_resolution_binding_mode = optional(string, "primary")
-      existing_vpe_id             = optional(string) # If set, no new VPE gateway is created; this existing gateway ID is used instead.
+      existing_vpe_id             = optional(string)
+      # If set, no new VPE gateway is created; the existing gateway is adopted.
+      # vpe_name MUST also be set (enforced by validation) — it is used to look up
+      # the gateway via data source after IP bindings are complete.
+      # NOTE: vpe_ips output will include only the reserved IPs created by this module
+      # invocation, not any pre-existing IPs on the gateway.
     })
   )
   default = []

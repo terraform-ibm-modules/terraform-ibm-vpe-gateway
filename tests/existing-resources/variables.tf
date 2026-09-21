@@ -25,3 +25,9 @@ variable "resource_tags" {
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
+
+variable "create_vpe" {
+  type        = bool
+  description = "Whether to create a VPE gateway on zone-1. Set to true only for TestRunExistingGateway."
+  default     = false
+}

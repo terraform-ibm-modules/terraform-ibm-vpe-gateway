@@ -25,3 +25,21 @@ module "vpc" {
 }
 
 ##############################################################################
+# Optionally create a VPE gateway on zone-1 subnet only.
+# Used by TestRunExistingGateway to provide an existing_vpe_id for adoption.
+# Other tests leave create_vpe=false (default) — zero impact.
+##############################################################################
+
+module "vpe" {
+  count             = var.create_vpe ? 1 : 0
+  source            = "../../"
+  region            = var.region
+  prefix            = var.prefix
+  vpc_name          = module.vpc.vpc_name
+  vpc_id            = module.vpc.vpc_id
+  resource_group_id = module.resource_group.resource_group_id
+  subnet_zone_list  = [module.vpc.subnet_zone_list[0]]
+  cloud_services = [
+    { service_name = "kms" }
+  ]
+}

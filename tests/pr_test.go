@@ -165,6 +165,90 @@ func TestRunBasicExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 }
 
+// adoptionTestServiceName is the service name hardcoded in tests/existing-resources/main.tf.
+// Using a constant here avoids brittle string parsing of the gateway name.
+const adoptionTestServiceName = "kms"
+
+func TestRunExistingGateway(t *testing.T) {
+	t.Parallel()
+
+	// --------------------------------------------------------------------------
+	// Stage 0: Pre-create VPC + gateway on zone-1 (tests/existing-resources)
+	// create_vpe=true creates a kms gateway on zone-1 only
+	// --------------------------------------------------------------------------
+	vpcOptions := setupOptions(t, "vpe-ex", existingVpcTerraformDir)
+	vpcOptions.TerraformVars = map[string]interface{}{
+		"region":         region,
+		"prefix":         vpcOptions.Prefix,
+		"resource_group": resourceGroup,
+		"create_vpe":     true,
+	}
+	vpcOptions.SkipTestTearDown = true
+	_, vpcErr := vpcOptions.RunTest()
+	defer vpcOptions.TestTearDown() // Destroy VPC + gateway last
+	require.NoError(t, vpcErr, "Failed to create VPC and initial VPE gateway")
+
+	vpcOutputs := vpcOptions.LastTestTerraformOutputs
+	vpcName := vpcOutputs["vpc_name"].(string)
+
+	// Gateway ID and name from Stage 0 outputs
+	gatewayIDsRaw := vpcOutputs["vpe_gateway_ids"].(map[string]interface{})
+	require.NotEmpty(t, gatewayIDsRaw, "Expected gateway IDs from Stage 0")
+	var gatewayName, gatewayID string
+	for n, id := range gatewayIDsRaw {
+		gatewayName = n
+		gatewayID = id.(string)
+		break
+	}
+
+	// Original CRN — used to verify gateway was NOT recreated after adoption
+	originalCrnsRaw, ok := vpcOutputs["vpe_crn"].([]interface{})
+	require.True(t, ok, "vpe_crn output must be a list")
+	require.NotEmpty(t, originalCrnsRaw, "Expected VPE CRN from Stage 0")
+
+	// Unbound subnets (zones 2 & 3) — Stage 1 attaches IPs here
+	unboundRaw := vpcOutputs["unbound_subnet_zone_list"].([]interface{})
+	require.NotEmpty(t, unboundRaw, "Expected unbound subnets from Stage 0")
+	unboundSubnets := []map[string]interface{}{}
+	for _, s := range unboundRaw {
+		sub := s.(map[string]interface{})
+		unboundSubnets = append(unboundSubnets, map[string]interface{}{
+			"name": sub["name"],
+			"id":   sub["id"],
+			"zone": sub["zone"],
+		})
+	}
+
+	// --------------------------------------------------------------------------
+	// Stage 1: Adopt the gateway — attach IPs to zones 2 & 3
+	// --------------------------------------------------------------------------
+	adoptOptions := setupOptions(t, "vpe-adopt", "examples/existing-vpe")
+	adoptOptions.TerraformVars = map[string]interface{}{
+		"existing_vpc_name": vpcName,
+		"region":            region,
+		"prefix":            adoptOptions.Prefix,
+		"subnet_zone_list":  unboundSubnets,
+		"cloud_services": []map[string]interface{}{
+			{
+				"service_name":    adoptionTestServiceName, // constant — avoids fragile Split("-") parsing
+				"vpe_name":        gatewayName,
+				"existing_vpe_id": gatewayID,
+			},
+		},
+	}
+	adoptOptions.SkipTestTearDown = true
+	_, adoptErr := adoptOptions.RunTest()
+	defer adoptOptions.TestTearDown() // Destroy adopted IPs only
+	require.NoError(t, adoptErr, "Failed to adopt existing VPE gateway")
+
+	// Verify CRN unchanged — gateway was adopted, not recreated
+	adoptOutputs := terraform.OutputAllContext(adoptOptions.Testing, context.Background(), adoptOptions.TerraformOptions)
+	adoptedCrnsRaw, ok := adoptOutputs["adopted_crn"].([]interface{})
+	require.True(t, ok, "adopted_crn output must be a list")
+	require.NotEmpty(t, adoptedCrnsRaw, "Expected adopted VPE CRN to be present")
+	require.Equal(t, originalCrnsRaw[0], adoptedCrnsRaw[0], "Adopted gateway CRN must match original — gateway should not have been recreated")
+}
+
 // helper function to set up inputs for full config solution test, will help keep it consistent
 // between normal and upgrade tests
 func getFullConfigSolutionTestVariables(mainOptions *testschematic.TestSchematicOptions, existingOptions *testhelper.TestOptions) []testschematic.TestSchematicTerraformVar {
