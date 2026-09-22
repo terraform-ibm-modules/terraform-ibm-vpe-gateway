@@ -28,6 +28,6 @@ variable "resource_tags" {
 
 variable "create_vpe" {
   type        = bool
-  description = "Whether to create a VPE gateway on zone-1. Set to true only for TestRunExistingGateway."
+  description = "Flag to create a VPE gateway. If true it is created on zone-1."
   default     = false
 }
