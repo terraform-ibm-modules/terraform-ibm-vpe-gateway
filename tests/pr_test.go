@@ -165,6 +165,48 @@ func TestRunBasicExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 }
 
+func TestRunExistingVpeExample(t *testing.T) {
+	t.Parallel()
+
+	// Deploy existing resources (VPC + KMS gateway on zone-1) needed by the existing-vpe example
+	existingResourceOptions := setupOptions(t, "vpe-exist", existingVpcTerraformDir)
+	existingResourceOptions.TerraformVars["create_vpe"] = true
+	existingResourceOptions.SkipTestTearDown = true
+	_, existDeployErr := existingResourceOptions.RunTest()
+	defer existingResourceOptions.TestTearDown()
+	require.NoError(t, existDeployErr, "error creating needed existing VPC and VPE gateway resources")
+
+	existingOutputs := existingResourceOptions.LastTestTerraformOutputs
+
+	// cloud_services input for adoption — adopt the existing vpe gateway created above
+	gatewayIDs := existingOutputs["vpe_gateway_ids"].(map[string]interface{})
+	require.NotEmpty(t, gatewayIDs, "expected vpe_gateway_ids output from existing resources")
+	var existingVpeName, existingVpeID string
+	for n, id := range gatewayIDs {
+		existingVpeName = n
+		existingVpeID = id.(string)
+		break
+	}
+
+	// Run the existing-vpe example against the existing vpe
+	options := setupOptions(t, "vpe-exist", "examples/existing-vpe")
+	options.TerraformVars = map[string]interface{}{
+		"existing_vpc_name": existingOutputs["vpc_name"],
+		"subnet_zone_list":  existingOutputs["unbound_subnet_zone_list"],
+		"cloud_services": []map[string]interface{}{
+			{
+				"service_name":    "kms",
+				"vpe_name":        existingVpeName,
+				"existing_vpe_id": existingVpeID,
+			},
+		},
+	}
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
+
 // helper function to set up inputs for full config solution test, will help keep it consistent
 // between normal and upgrade tests
 func getFullConfigSolutionTestVariables(mainOptions *testschematic.TestSchematicOptions, existingOptions *testhelper.TestOptions) []testschematic.TestSchematicTerraformVar {

@@ -25,3 +25,9 @@ variable "resource_tags" {
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
+
+variable "create_vpe" {
+  type        = bool
+  description = "Flag to create a VPE gateway. If true it is created on zone-1."
+  default     = false
+}

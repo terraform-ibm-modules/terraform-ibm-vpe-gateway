@@ -27,3 +27,23 @@ output "resource_group_name" {
   description = "Resource Group Name of resources"
   value       = module.resource_group.resource_group_name
 }
+
+output "vpe_crn" {
+  description = "CRN of the created VPE gateway"
+  value       = var.create_vpe ? module.vpe[0].crn : null
+}
+
+output "vpe_ips" {
+  description = "Reserved IPs of the VPE gateway"
+  value       = var.create_vpe ? module.vpe[0].vpe_ips : null
+}
+
+output "vpe_gateway_ids" {
+  description = "Map of gateway name to gateway ID"
+  value       = var.create_vpe ? module.vpe[0].gateway_ids : null
+}
+
+output "unbound_subnet_zone_list" {
+  description = "Subnets not bound to the VPE gateway"
+  value       = var.create_vpe ? slice(module.vpc.subnet_zone_list, 1, length(module.vpc.subnet_zone_list)) : null
+}
