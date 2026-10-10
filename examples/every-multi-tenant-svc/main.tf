@@ -89,30 +89,6 @@ module "vpes" {
       service_name = "globalcatalog"
     },
     {
-      service_name = "hs-crypto"
-    },
-    {
-      service_name = "hs-crypto-cert-mgr"
-    },
-    {
-      service_name = "hs-crypto-ep11"
-    },
-    {
-      service_name = "hs-crypto-ep11-az1"
-    },
-    {
-      service_name = "hs-crypto-ep11-az2"
-    },
-    {
-      service_name = "hs-crypto-ep11-az3"
-    },
-    {
-      service_name = "hs-crypto-kmip"
-    },
-    {
-      service_name = "hs-crypto-tke"
-    },
-    {
       service_name = "iam-svcs"
     },
     {
