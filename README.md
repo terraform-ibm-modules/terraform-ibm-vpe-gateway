@@ -158,20 +158,20 @@ You need the following permissions to run this module.
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.87.3, <3.0.0 |
 
 ### Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_ip"></a> [ip](#module\_ip) | ./modules/reserved-ips | n/a |
 
 ### Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway) | resource |
 | [ibm_is_virtual_endpoint_gateway_ip.endpoint_gateway_ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_virtual_endpoint_gateway_ip) | resource |
 | [ibm_is_virtual_endpoint_gateway.vpe](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/is_virtual_endpoint_gateway) | data source |
@@ -180,7 +180,7 @@ You need the following permissions to run this module.
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_access_tags"></a> [access\_tags](#input\_access\_tags) | Add access management tags to the VPE to control access. [Learn more](https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create-access-console). | `list(string)` | `[]` | no |
 | <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | The list of cloud service CRNs used to create endpoint gateways. Use this list to identify services that are not supported by service name in the `cloud_services` variable. For a list of supported services, see [VPE-enabled services](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). If `service_name` is not specified, the CRN is used to find the name. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. | <pre>set(<br/>    object({<br/>      crn                         = string<br/>      vpe_name                    = optional(string) # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br/>      service_name                = optional(string) # Name of the service used to compute the name of the VPE. If not specified, the service name will be obtained from the crn.<br/>      dns_resolution_binding_mode = optional(string, "primary")<br/>      existing_vpe_id             = optional(string)<br/>      # If set, no new VPE gateway is created; the existing gateway is adopted.<br/>      # vpe_name MUST also be set (enforced by validation) — it is used to look up<br/>      # the gateway via data source after IP bindings are complete.<br/>      # NOTE: vpe_ips output will include only the reserved IPs created by this module<br/>      # invocation, not any pre-existing IPs on the gateway.<br/>    })<br/>  )</pre> | `[]` | no |
 | <a name="input_cloud_services"></a> [cloud\_services](#input\_cloud\_services) | The list of cloud services used to create endpoint gateways. If `vpe_name` is not specified in the list, VPE names are created in the format `<prefix>-<vpc_name>-<service_name>`. The value that you specify for `vpc_name` must be known at Terraform plan time. | <pre>set(object({<br/>    service_name                = string<br/>    vpe_name                    = optional(string), # Full control on the VPE name. If not specified, the VPE name will be computed based on prefix, vpc name and service name.<br/>    dns_resolution_binding_mode = optional(string, "disabled")<br/>    existing_vpe_id             = optional(string)<br/>    # If set, no new VPE gateway is created; the existing gateway is adopted.<br/>    # vpe_name MUST also be set (enforced by validation) — it is used to look up<br/>    # the gateway via data source after IP bindings are complete.<br/>    # NOTE: vpe_ips output will include only the reserved IPs created by this module<br/>    # invocation, not any pre-existing IPs on the gateway.<br/>  }))</pre> | `[]` | no |
@@ -198,7 +198,7 @@ You need the following permissions to run this module.
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the endpoint gateway |
 | <a name="output_gateway_ids"></a> [gateway\_ids](#output\_gateway\_ids) | Map of gateway name to gateway ID for all created endpoint gateways |
 | <a name="output_vpe_ips"></a> [vpe\_ips](#output\_vpe\_ips) | The endpoint gateway reserved ips. For adopted gateways (existing\_vpe\_id set), only the reserved IPs created by this module invocation are returned. |

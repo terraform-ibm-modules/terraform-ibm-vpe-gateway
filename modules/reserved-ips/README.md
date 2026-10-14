@@ -92,7 +92,7 @@ You need the following permissions to run this module.
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.87.3, <3.0.0 |
 
@@ -103,13 +103,13 @@ No modules.
 ### Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [ibm_is_subnet_reserved_ip.ip](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/is_subnet_reserved_ip) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_cloud_service_by_crn"></a> [cloud\_service\_by\_crn](#input\_cloud\_service\_by\_crn) | List of cloud service CRNs. Each CRN will have a unique endpoint gateways created. For a list of supported services, see the docs [here](https://cloud.ibm.com/docs/vpc?topic=vpc-vpe-supported-services). | <pre>list(<br/>    object({<br/>      name = string # service name<br/>      crn  = string # service crn<br/>    })<br/>  )</pre> | `[]` | no |
 | <a name="input_endpoint_ip_list"></a> [endpoint\_ip\_list](#input\_endpoint\_ip\_list) | List of IPs to create. Each object contains an ip name and subnet id | <pre>list(<br/>    object({<br/>      ip_name   = string # reserved ip name<br/>      subnet_id = string # subnet id<br/>      name      = string # ip name<br/>    })<br/>  )</pre> | `[]` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that you would like to append to your resources. Value is only used if no value is passed for the `vpe_name` option in the `reserved_ip_cloud_services` input variable. | `string` | `"vpe"` | no |
@@ -122,7 +122,7 @@ No modules.
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_endpoint_ip_list"></a> [endpoint\_ip\_list](#output\_endpoint\_ip\_list) | The endpoint gateway reserved ips |
 | <a name="output_reserved_ip_map"></a> [reserved\_ip\_map](#output\_reserved\_ip\_map) | The endpoint gateway reserved ips |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
