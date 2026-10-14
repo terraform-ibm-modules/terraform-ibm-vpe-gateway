@@ -1,3 +1,24 @@
+#############################################################################
+# HPCS Deprecation Warning Check
+#############################################################################
+
+check "warn_hpcs_deprecation" {
+  assert {
+    condition = !(
+      anytrue([
+        for service in var.cloud_services :
+        can(regex(".*hs-crypto.*", service.service_name))
+      ]) ||
+      anytrue([
+        for service in var.cloud_service_by_crn :
+        can(regex(".*hs-crypto.*", service.crn)) ||
+        (service.service_name != null && can(regex(".*hs-crypto.*", service.service_name)))
+      ])
+    )
+    error_message = "WARNING (Non-fatal, execution will continue): Hyper Protect Crypto Services (hs-crypto) is enabled in the configuration. Note that IBM Cloud Hyper Protect Crypto Services is deprecated. Consider migrating to a supported alternative."
+  }
+}
+
 ##############################################################################
 # VPE Locals
 ##############################################################################
