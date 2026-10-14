@@ -15,7 +15,7 @@ check "warn_hpcs_deprecation" {
         (service.service_name != null && can(regex(".*hs-crypto.*", service.service_name)))
       ])
     )
-    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) service or CRN was provided. Note that IBM Cloud Hyper Protect Crypto Services is deprecated. Consider migrating to a supported alternative."
+    error_message = "WARNING (Non-fatal, execution will continue): Hyper Protect Crypto Services (hs-crypto) is enabled in the configuration. Note that IBM Cloud Hyper Protect Crypto Services is deprecated. Consider migrating to a supported alternative."
   }
 }
 
