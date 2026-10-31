@@ -63,7 +63,7 @@ module "vpe_security_group" {
 
 module "postgresql_db" {
   source              = "terraform-ibm-modules/icd-postgresql/ibm"
-  version             = "5.4.1"
+  version             = "5.4.2"
   resource_group_id   = module.resource_group.resource_group_id
   name                = "${var.prefix}-vpe-pg"
   region              = var.region
